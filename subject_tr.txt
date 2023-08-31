@@ -1,0 +1,74 @@
+-Program name: ircserv
+-Turn in files: Makefile, *.{h, hpp}, *.cpp, *.tpp, *.ipp, an optional configuration file
+-Makefile: NAME, all, clean, fclean, re
+-Arguments:
+	port: The listening port
+	password: The connection password
+-External functs:
+	Everything in C++ 98.
+	socket, close, setsockopt, getsockname,
+	getprotobyname, gethostbyname, getaddrinfo,
+	freeaddrinfo, bind, connect, listen, accept,
+	htons, htonl, ntohs, ntohl, inet_addr, inet_ntoa,
+	send, recv, signal, lseek, fstat, fcntl, poll (or equivalent)
+-Libft authorized: n/a
+-Description: An IRC server in C++ 98
+
+Bir client geliştirmemelisiniz.
+Sunucudan sunucuya iletişimle ilgilenmemelisiniz.
+Yürütülebilir dosyanız aşağıdaki gibi çalıştırılacaktır:
+./ircserv <bağlantı noktası> <şifre>
+• port: IRC sunucunuzun gelen IRC bağlantılarını dinleyeceği port numarası.
+• şifre: Bağlantı şifresi. Sunucunuza bağlanmaya çalışan herhangi bir IRC istemcisi buna ihtiyaç duyacaktır.
+
+(i)
+Konuda ve değerlendirme ölçeğinde poll() adı geçse bile,
+select(), kqueue() veya epoll() gibi herhangi bir eşdeğeri kullanabilirsiniz.
+
+Gereksinimler
+• Sunucu aynı anda birden fazla istemciyi işleyebilmeli ve hiçbir zaman kilitlenmemelidir.
+• Çatallamaya izin verilmez. Tüm G/Ç işlemleri engellemesiz olmalıdır.
+• Tüm bu işlemleri (okuma, yazma, aynı zamanda dinleme vb.) gerçekleştirmek için yalnızca 1 poll() (veya eşdeğeri) kullanılabilir.
+
+(!)
+Engellenmeyen dosya tanımlayıcıları kullanmanız gerektiğinden, poll() (veya eşdeğeri) olmadan okuma/alma veya yazma/gönderme işlevlerini kullanmak mümkündür ve sunucunuz engellemez.
+Ancak daha fazla sistem kaynağı tüketir. Bu nedenle, herhangi bir dosya tanımlayıcıyı poll() (veya eşdeğeri) kullanmadan okumaya/almaya veya yazmaya/göndermeye çalışırsanız notunuz 0 olacaktır.
+
+• Birkaç IRC istemcisi mevcuttur. Referans olarak bunlardan birini seçmelisiniz. Değerlendirme sürecinde referans müşteriniz kullanılacaktır.
+• Referans istemcinizin sunucunuza herhangi bir hatayla karşılaşmadan bağlanabilmesi gerekmektedir.
+• İstemci ve sunucu arasındaki iletişim TCP/IP (v4 veya v6) üzerinden yapılmalıdır.
+• Referans istemcinizi sunucunuzla kullanmak, onu herhangi bir resmi IRC sunucusuyla kullanmaya benzer olmalıdır. Ancak yalnızca aşağıdaki özellikleri uygulamanız gerekir:
+◦ Referans istemcinizi kullanarak kimlik doğrulaması yapabilmeniz, bir takma ad, kullanıcı adı belirleyebilmeniz, bir kanala katılabilmeniz, özel mesajlar gönderip alabilmeniz gerekir.
+◦ Bir istemciden bir kanala gönderilen tüm mesajların, kanala katılan diğer tüm istemcilere iletilmesi gerekir.
+◦ Operatörleriniz ve düzenli kullanıcılarınız olmalı.
+◦ Daha sonra operatörlere özel komutları uygulamanız gerekmektedir.
+• Elbette temiz bir kod yazmanız bekleniyor.
+
+Yalnızca MacOS için
+MacOS write() işlevini diğer Unix işletim sistemleriyle aynı şekilde uygulamadığından, fcntl() işlevini kullanmanıza izin verilir.
+Diğer Unix işletim sistemlerine benzer bir davranış elde etmek için dosya tanımlayıcılarını engellemesiz modda kullanmanız gerekir.
+
+(!)
+Ancak fcntl() işlevini yalnızca aşağıdaki şekilde kullanmanıza izin verilir:
+fcntl(fd, F_SETFL, O_NONBLOCK);
+Başka bayrak yasaktır.
+
+Test örneği
+Olası her hatayı ve sorunu (kısmi veri alma, düşük bant genişliği vb.) kesinlikle doğrulayın.
+Sunucunuzun kendisine gönderdiğiniz her şeyi doğru şekilde işlediğinden emin olmak için nc kullanılarak aşağıdaki basit test yapılabilir:
+\$> nc 127.0.0.1 6667
+com^Dman^Dd
+\$>
+
+Komutu birkaç parça halinde göndermek için ctrl+D tuşlarını kullanın: 'com', ardından 'man' ve ardından 'd\n'.
+Bir komutu işlemek için, önce onu yeniden oluşturmak üzere alınan paketleri toplamanız gerekir.
+
+Bonus kısmı
+IRC sunucunuza daha fazla benzemesi ve gerçek IRC sunucusuna benzemesi için ekleyebileceğiniz ekstra özellikler şunlardır:
+• Dosya aktarımını yönetin.
+• Bir bot.
+
+(!)
+Bonus kısmı yalnızca zorunlu kısmın MÜKEMMEL olması durumunda değerlendirilecektir.
+Mükemmel, zorunlu olan kısmın bütünleşik olarak yapılmış olduğu ve arızalanmadan çalıştığı anlamına gelir.
+TÜM zorunlu şartları geçemediyseniz, bonus bölümünüz hiçbir şekilde değerlendirilmeyecektir.
