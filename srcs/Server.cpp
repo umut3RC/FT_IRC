@@ -1,4 +1,4 @@
-#include "Server.hpp"
+#include "../include/Server.hpp"
 
 Server::Server( char **av )
 {
@@ -25,5 +25,9 @@ Server::~Server( void )
 
 Server &Server::operator=( const Server &src);
 {
-	
+	this->_port = src._port;
+	this->_passwd = src._passwd;
+	this->_sockfd = src._sockfd;
+	this->_svclientnum = src._svclientnum;
+	this->_chnum = src._chnum;
 }

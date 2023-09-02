@@ -1,16 +1,19 @@
-NAME = ircserv
-FLAGS = -Wall -Wextra -Werror -std=c++98
-SRC = *.cpp
-INC = *.hpp
 CC = c++
+CPPFLAG = -Wall -Wextra -Werror -std=c++98
+NAME = ircserv
+SRC = srcs/*.cpp
+HEADERS = include/*.hpp
 
 all: $(NAME)
 
-$(NAME): $(SRC) $(INC)
-	$(CC) $(FLAGS) $(SRC) -o $(NAME)
+$(NAME): $(SRC) $(HEADERS)
+	$(CC) $(CPPFLAG) $(SRC) -o $(NAME)
 clean:
-	@rm -f *.o
+	@rm -rf *.o
+
 fclean: clean
 	@rm -rf $(NAME)
 
 re: fclean all
+
+re:all re clean fclean

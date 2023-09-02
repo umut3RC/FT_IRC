@@ -1,4 +1,4 @@
-#include "Server.hpp"
+#include "../include/Server.hpp"
 
 int	main (int argc, char **argv)
 {
@@ -12,7 +12,6 @@ int	main (int argc, char **argv)
 		std::cerr << e.what() << '\n';
 	}catch(const std::string& e){
 		std::cerr << e << '\n';
-		return (2);
 	}
 	return (0);
 }

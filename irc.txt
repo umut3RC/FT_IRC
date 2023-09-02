@@ -1,0 +1,117 @@
+-SOCKET
+Soket veya Socket bilgisayar işlemleri veya bilgisayarlar arası işlemler için kullanılan haberleşme dosyalarıdır.
+
+-Soket programlama nedir?
+Soket programlama temel olarak alıcı ve gönderici arasındaki iletişim yönetmek için kullanılan programlama tekniğine denir.
+*Soket programlama bilgisayarlar arası veri haberleşmesinde kullanılır.
+*HTTP, FTP, SMTP gibi iletişim protokolleri soket yapısı üzerine inşa edilmiştir.
+*Ayrıca kendi kurallarımızı belirleyerek chat-sohbet, dosya transferi gibi uygulamalar yapılabilir.
+
+-Basit soket örneği:
+<-SERVER->------------------------------------------------------------------V
+#include <iostream>
+#include <cstring>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+int main() {
+	// Soket değişkenleri
+	int serverSocket, clientSocket;
+	sockaddr_in serverAddr, clientAddr;
+	socklen_t clientAddrSize = sizeof(clientAddr);
+	char buffer[1024];
+
+	// Sunucu soketini oluşturma
+	serverSocket = socket(AF_INET, SOCK_STREAM, 0); // bir fd dönüyor.
+	/*
+		tanım : int sockfd = socket(domain, type, protocol)
+		socket: Br soket nesnesi oluşturur ve bu nesneye bir dosya tanımlayıcısı (file descriptor) atar. Bu dosya tanımlayıcısı, soket üzerinden iletişim kurmak ve işlem yapmak için kullanılır.
+		AF_INET: Adres ailesi (address family) olarak kullanılır ve IPv4 adreslerini kullanarak ağ iletişimi sağlar.
+		SOCK_STREAM: İletişimin yüksek güvenilirlik ve bağlantı tabanlı olduğunu belirtir. Bu, TCP (Transmission Control Protocol) protokolünü kullanarak güvenilir ve sıralı veri iletişimini ifade eder. İstemciler ve sunucular genellikle SOCK_STREAM kullanarak birbirleriyle iletişim kurarlar.
+		0 (protocol): Tip parametresini belirtilen adres ailesi ve soket türü ile ilişkilendirmek için kullanılır. Bu genellikle kullanılan bir yöntemdir ve çoğu zaman bu parametreyi 0 olarak bırakabilirsiniz.
+	*/
+	if (serverSocket == -1) {
+		std::cerr << "Error creating server socket." << std::endl;
+		return 1;
+	}
+
+	// Sunucu adresini ayarlama
+	serverAddr.sin_family = AF_INET;	//soket adresinin aile türünü belirtir. Burada AF_INET, IPv4 adres ailesini temsil eder. Sunucu, bu aile türünü kullanarak IPv4 adresleri ile iletişim kurar.
+	serverAddr.sin_port = htons(8080);	//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
+	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
+
+	// Sunucu soketini bağlama
+	if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1)
+	{
+		std::cerr << "Error binding server socket." << std::endl;
+		return 1;
+	}
+	/*
+		int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+
+		bind: Bu işlev, sunucu soketini bir IP adresi ve port ile ilişkilendirir. Bu sayede sunucu, belirtilen IP adresi ve port üzerinden gelen bağlantıları dinlemeye başlar.
+		serverSocket(sockfd): Bağlama işlemi gerçekleştirilecek olan sunucu soketini temsil eder. Bu soket, önceden socket işlemini kullanarak oluşturulmuş bir sokettir.
+		(struct sockaddr *)&serverAddr: bind işlevinin ikinci argümanı, sockaddr türünde bir adresi (address) belirtir. Bu tür, IP adresi ve port bilgilerini içerir. Ancak, bind işlevi sockaddr türünden bir yapıyı bekler, bu nedenle serverAddr adlı bir sockaddr_in yapısının tür dönüşümü kullanılır. sockaddr_in yapısı, IPv4 adreslerini ve portlarını temsil eden özel bir yapıdır.
+		sizeof(serverAddr)(socklen_t addrlen): bind işleminin üçüncü argümanı, serverAddr yapısının boyutunu belirtir. Bu, işlemin serverAddr yapısının tam boyutunu bildiğini ve bu yapıyı veri hedefine kopyalayabileceği anlamına gelir.
+	*/
+
+	// Bekleme ve bağlantı kabul etme
+	listen(serverSocket, 5);
+	std::cout << "Server is listening on port 8080..." << std::endl;
+
+	// İstemci bağlantısını kabul etme
+	clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddr, &clientAddrSize);
+	if (clientSocket == -1) {
+		std::cerr << "Error accepting client connection." << std::endl;
+		return 1;
+	}
+
+	// İstemciden gelen veriyi okuma ve ekrana yazdırma
+	recv(clientSocket, buffer, sizeof(buffer), 0);
+	std::cout << "Client says: " << buffer << std::endl;
+
+	// İstemciye yanıt gönderme
+	const char *response = "Hello from server!";
+	send(clientSocket, response, strlen(response), 0);
+
+	// Soketleri kapatma
+	close(clientSocket);
+	close(serverSocket);
+
+	return 0;
+}
+<-SERVER->------------------------------------------------------------------^
+<-CLIENT->------------------------------------------------------------------V
+<-CLIENT->------------------------------------------------------------------^
+
+
+
+
+
+
+
+1. `socket`: Creates a socket and returns a file descriptor used for network communication.
+2. `close`: Closes the specified file descriptor.
+3. `setsockopt`: Sets socket options.
+4. `getsockname`: Retrieves the address of a socket and returns it in a struct sockaddr data structure.
+5. `getprotobyname`: Gets the protocol number based on the protocol name.
+6. `gethostbyname`: Gets the IP address based on the host name.
+7. `getaddrinfo`: Used to obtain information about a host and service based on host name and service name.
+8. `freeaddrinfo`: Frees the memory allocated for the addrinfo structure created by getaddrinfo.
+9. `bind`: Associates a socket with an address and port.
+10. `connect`: Establishes a connection to a server using a socket.
+11. `listen`: Marks the socket as a passive socket and starts listening for incoming connections.
+12. `accept`: Accepts an incoming connection and returns a new socket descriptor for communication.
+13. `htons`: Converts a 16-bit value to network byte order.
+14. `htonl`: Converts a 32-bit value to network byte order.
+15. `ntohs`: Converts a 16-bit value to host byte order.
+16. `ntohl`: Converts a 32-bit value to host byte order.
+17. `inet_addr`: Converts an IPv4 address from a string to an integer.
+18. `inet_ntoa`: Converts an IPv4 address from an integer to a string.
+19. `send`: Sends data from a socket.
+20. `recv`: Receives data from a socket.
+21. `signal`: Sets a signal handler function.
+22. `lseek`: Changes the file offset of an open file.
+23. `fstat`: Retrieves information about a file.
+24. `fcntl`: Performs various operations on a file descriptor.
+25. `poll`: Monitors multiple file descriptors to determine which ones are ready for I/O operations.
