@@ -56,11 +56,19 @@ int main() {
 	*/
 
 	// Bekleme ve bağlantı kabul etme
-	listen(serverSocket, 5);
+	listen(serverSocket, 5);// 5 -> eşzamanlı olarak kabul edilebilecek bağlantıların maksimum sayısını belirtir.
 	std::cout << "Server is listening on port 8080..." << std::endl;
 
 	// İstemci bağlantısını kabul etme
 	clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddr, &clientAddrSize);
+	/*
+		Sunucu tarafında gelen istemci bağlantılarını kabul etmek ve bir yeni soket oluşturarak iletişim kurmaya başlamak için kullanılır. İşte bu kodun açıklamaları:
+		accept: Bu işlev, sunucu tarafındaki soketin beklemekte olan bağlantıları kabul etmesini sağlar. Yani, istemcilerin sunucuya bağlanma isteğini kabul eder ve bir yeni soket oluşturur. Bu yeni soket, belirli istemci ile iletişim kurmak için kullanılır.
+		serverSocket: Bağlantıları kabul etmek için kullanılan sunucu soketini temsil eder. Bu soket, daha önce socket, bind ve listen işlevleri ile oluşturulmuş bir sokettir.
+		(struct sockaddr *)&clientAddr: Bağlantı isteğini yapan istemcinin bilgilerini içeren bir yapıdır. accept işlemi bu bilgileri clientAddr yapısına kopyalar. Bu bilgiler, istemci ile iletişim kurmak için kullanılır.
+		&clientAddrSize: Bu, clientAddr yapısının boyutunu belirtir ve işlevin bu yapının ne kadar yer kapladığını bilmesini sağlar.
+		accept işlemi, bir istemcinin bağlantı isteğini kabul eder, yeni bir soket oluşturur ve bu soketi kullanarak sunucu ile istemci arasında iletişim kurmaya başlar. Bu nedenle, her yeni istemci bağlantısı için accept işlemi çağrılır ve yeni soket oluşturulur. Bu yeni soket, sunucu ile belirli bir istemci arasındaki iletişimi yönetir.
+	*/
 	if (clientSocket == -1) {
 		std::cerr << "Error accepting client connection." << std::endl;
 		return 1;
@@ -81,7 +89,57 @@ int main() {
 	return 0;
 }
 <-SERVER->------------------------------------------------------------------^
+
 <-CLIENT->------------------------------------------------------------------V
+#include <iostream>
+#include <cstring>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+int main() {
+	// Soket değişkeni
+	int clientSocket;
+	sockaddr_in serverAddr;
+	char buffer[1024];
+
+	// İstemci soketini oluşturma
+	clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (clientSocket == -1) {
+		std::cerr << "Error creating client socket." << std::endl;
+		return 1;
+	}
+
+	// Sunucu adresini ayarlama
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_port = htons(8080);
+	inet_pton(AF_INET, "127.0.0.1", &(serverAddr.sin_addr));
+
+	// Sunucuya bağlanma
+	if (connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1) {
+		std::cerr << "Error connecting to server." << std::endl;
+		return 1;
+	}
+	/*
+	connect: Bu işlev, istemci tarafındaki soketin belirli bir sunucu ile bağlantı kurmasını sağlar. İstemci, sunucu ile iletişim kurmak istediğinde connect işlemini kullanarak bağlantıyı başlatır.
+	clientSocket: Bağlantıyı başlatan istemci soketini temsil eder. Bu soket, daha önce socket işlevi ile oluşturulmuş bir sokettir.
+	(struct sockaddr *)&serverAddr: Bağlanılacak sunucunun adres bilgilerini içeren bir yapıdır. connect işlemi bu yapıyı kullanarak sunucu ile iletişim kurar.
+	sizeof(serverAddr): Sunucu adres yapısının boyutunu belirtir. Bu, connect işleminin sunucu adres yapısını doğru şekilde işlemesini sağlar.
+	connect işlemi, istemcinin belirli bir sunucuya bağlanmasını sağlar. Bu işlem, sunucu adresini ve port numarasını kullanarak belirli bir sunucu ile iletişim kurar. Bağlantı başarıyla kurulduğunda, istemci ve sunucu arasında veri alışverişi yapabilirler.
+	*/
+
+	// Sunucuya veri gönderme
+	const char *message = "Hello from client!";
+	send(clientSocket, message, strlen(message), 0);
+
+	// Sunucudan gelen yanıtı okuma ve ekrana yazdırma
+	recv(clientSocket, buffer, sizeof(buffer), 0);
+	std::cout << "Server says: " << buffer << std::endl;
+
+	// Soketi kapatma
+	close(clientSocket);
+
+	return 0;
+}
 <-CLIENT->------------------------------------------------------------------^
 
 

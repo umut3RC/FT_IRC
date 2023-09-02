@@ -6,8 +6,8 @@ int	main (int argc, char **argv)
 	{
 		if (argc != 3)
 			throw ("Error!\nInvalid input format! (exp: ./ircserv <port> <password>)\n");
-		Server	server;
-		server.;
+		Server	server(argv);
+		server.sstart();
 	}catch(const std::exception& e){
 		std::cerr << e.what() << '\n';
 	}catch(const std::string& e){

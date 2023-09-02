@@ -34,6 +34,7 @@ class Server
 		Server( char **av );
 		~Server( void );
 		Server( const Server &src );
+		void sstart( void );
 
 		Server &operator=( const Server &src);
 
