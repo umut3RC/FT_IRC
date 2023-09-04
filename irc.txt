@@ -16,13 +16,13 @@ Soket programlama temel olarak alıcı ve gönderici arasındaki iletişim yöne
 
 int main() {
 	// Soket değişkenleri
-	int serverSocket, clientSocket;
+	int serverSocketFD, clientSocket;
 	sockaddr_in serverAddr, clientAddr;
 	socklen_t clientAddrSize = sizeof(clientAddr);
 	char buffer[1024];
 
 	// Sunucu soketini oluşturma
-	serverSocket = socket(AF_INET, SOCK_STREAM, 0); // bir fd dönüyor.
+	serverSocketFD = socket(AF_INET, SOCK_STREAM, 0); // bir fd dönüyor.
 	/*
 		tanım : int sockfd = socket(domain, type, protocol)
 		socket: Br soket nesnesi oluşturur ve bu nesneye bir dosya tanımlayıcısı (file descriptor) atar. Bu dosya tanımlayıcısı, soket üzerinden iletişim kurmak ve işlem yapmak için kullanılır.
@@ -30,18 +30,18 @@ int main() {
 		SOCK_STREAM: İletişimin yüksek güvenilirlik ve bağlantı tabanlı olduğunu belirtir. Bu, TCP (Transmission Control Protocol) protokolünü kullanarak güvenilir ve sıralı veri iletişimini ifade eder. İstemciler ve sunucular genellikle SOCK_STREAM kullanarak birbirleriyle iletişim kurarlar.
 		0 (protocol): Tip parametresini belirtilen adres ailesi ve soket türü ile ilişkilendirmek için kullanılır. Bu genellikle kullanılan bir yöntemdir ve çoğu zaman bu parametreyi 0 olarak bırakabilirsiniz.
 	*/
-	if (serverSocket == -1) {
+	if (serverSocketFD == -1) {
 		std::cerr << "Error creating server socket." << std::endl;
 		return 1;
 	}
 
 	// Sunucu adresini ayarlama
-	serverAddr.sin_family = AF_INET;	//soket adresinin aile türünü belirtir. Burada AF_INET, IPv4 adres ailesini temsil eder. Sunucu, bu aile türünü kullanarak IPv4 adresleri ile iletişim kurar.
-	serverAddr.sin_port = htons(8080);	//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
+	serverAddr.sin_family = AF_INET;			//soket adresinin aile türünü belirtir. Burada AF_INET, IPv4 adres ailesini temsil eder. Sunucu, bu aile türünü kullanarak IPv4 adresleri ile iletişim kurar.
+	serverAddr.sin_port = htons(8080);			//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
 	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
 
 	// Sunucu soketini bağlama
-	if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1)
+	if (bind(serverSocketFD, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1)
 	{
 		std::cerr << "Error binding server socket." << std::endl;
 		return 1;
@@ -50,21 +50,21 @@ int main() {
 		int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 
 		bind: Bu işlev, sunucu soketini bir IP adresi ve port ile ilişkilendirir. Bu sayede sunucu, belirtilen IP adresi ve port üzerinden gelen bağlantıları dinlemeye başlar.
-		serverSocket(sockfd): Bağlama işlemi gerçekleştirilecek olan sunucu soketini temsil eder. Bu soket, önceden socket işlemini kullanarak oluşturulmuş bir sokettir.
+		serverSocketFD(sockfd): Bağlama işlemi gerçekleştirilecek olan sunucu soketini temsil eder. Bu soket, önceden socket işlemini kullanarak oluşturulmuş bir sokettir.
 		(struct sockaddr *)&serverAddr: bind işlevinin ikinci argümanı, sockaddr türünde bir adresi (address) belirtir. Bu tür, IP adresi ve port bilgilerini içerir. Ancak, bind işlevi sockaddr türünden bir yapıyı bekler, bu nedenle serverAddr adlı bir sockaddr_in yapısının tür dönüşümü kullanılır. sockaddr_in yapısı, IPv4 adreslerini ve portlarını temsil eden özel bir yapıdır.
 		sizeof(serverAddr)(socklen_t addrlen): bind işleminin üçüncü argümanı, serverAddr yapısının boyutunu belirtir. Bu, işlemin serverAddr yapısının tam boyutunu bildiğini ve bu yapıyı veri hedefine kopyalayabileceği anlamına gelir.
 	*/
 
 	// Bekleme ve bağlantı kabul etme
-	listen(serverSocket, 5);// 5 -> eşzamanlı olarak kabul edilebilecek bağlantıların maksimum sayısını belirtir.
+	listen(serverSocketFD, 5);// 5 -> eşzamanlı olarak kabul edilebilecek bağlantıların maksimum sayısını belirtir.
 	std::cout << "Server is listening on port 8080..." << std::endl;
 
 	// İstemci bağlantısını kabul etme
-	clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddr, &clientAddrSize);
+	clientSocket = accept(serverSocketFD, (struct sockaddr *)&clientAddr, &clientAddrSize);
 	/*
 		Sunucu tarafında gelen istemci bağlantılarını kabul etmek ve bir yeni soket oluşturarak iletişim kurmaya başlamak için kullanılır. İşte bu kodun açıklamaları:
 		accept: Bu işlev, sunucu tarafındaki soketin beklemekte olan bağlantıları kabul etmesini sağlar. Yani, istemcilerin sunucuya bağlanma isteğini kabul eder ve bir yeni soket oluşturur. Bu yeni soket, belirli istemci ile iletişim kurmak için kullanılır.
-		serverSocket: Bağlantıları kabul etmek için kullanılan sunucu soketini temsil eder. Bu soket, daha önce socket, bind ve listen işlevleri ile oluşturulmuş bir sokettir.
+		serverSocketFD: Bağlantıları kabul etmek için kullanılan sunucu soketini temsil eder. Bu soket, daha önce socket, bind ve listen işlevleri ile oluşturulmuş bir sokettir.
 		(struct sockaddr *)&clientAddr: Bağlantı isteğini yapan istemcinin bilgilerini içeren bir yapıdır. accept işlemi bu bilgileri clientAddr yapısına kopyalar. Bu bilgiler, istemci ile iletişim kurmak için kullanılır.
 		&clientAddrSize: Bu, clientAddr yapısının boyutunu belirtir ve işlevin bu yapının ne kadar yer kapladığını bilmesini sağlar.
 		accept işlemi, bir istemcinin bağlantı isteğini kabul eder, yeni bir soket oluşturur ve bu soketi kullanarak sunucu ile istemci arasında iletişim kurmaya başlar. Bu nedenle, her yeni istemci bağlantısı için accept işlemi çağrılır ve yeni soket oluşturulur. Bu yeni soket, sunucu ile belirli bir istemci arasındaki iletişimi yönetir.
@@ -84,7 +84,7 @@ int main() {
 
 	// Soketleri kapatma
 	close(clientSocket);
-	close(serverSocket);
+	close(serverSocketFD);
 
 	return 0;
 }

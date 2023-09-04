@@ -9,9 +9,11 @@ int	main (int argc, char **argv)
 		Server	server(argv);
 		server.sstart();
 	}catch(const std::exception& e){
-		std::cerr << e.what() << '\n';
-	}catch(const std::string& e){
-		std::cerr << e << '\n';
+		std::cerr << e.what();
+	}catch(const char *e){
+		std::cerr << e;
+	}catch( ... ){
+		std::cerr << "Error! Unkown error" << '\n';
 	}
 	return (0);
 }
