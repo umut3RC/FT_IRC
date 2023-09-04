@@ -17,5 +17,8 @@
 #include <string>
 #include <cstring>
 
+std::vector<std::string> splitString(const std::string& input, char delimiter);
+void	checkServerCommands(std::string cmd);
+void	signalHandler( int s );
 
 #endif

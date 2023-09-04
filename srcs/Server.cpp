@@ -4,7 +4,11 @@ Server::Server( const Server &src )
 {*this = src;}
 
 Server::~Server( void )
-{std::cout << "Server closed. Have a good day!\n";}
+{
+	std::cout << "Server closed. Have a good day!\n";
+	close(client._clientFd);
+	close(_sockfd);
+}
 
 Server::Server( char **av )
 {
@@ -22,6 +26,7 @@ Server::Server( char **av )
 
 void Server::sstart( void )
 {
+	signal(SIGINT, signalHandler);
 	std::cout << "Socket connecting.\n";
 	_sockAddr.sin_family = AF_INET;	//soket adresinin aile türünü belirtir. Burada AF_INET, IPv4 adres ailesini temsil eder. Sunucu, bu aile türünü kullanarak IPv4 adresleri ile iletişim kurar.
 	_sockAddr.sin_port = htons(_port);	//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
@@ -29,7 +34,12 @@ void Server::sstart( void )
 
 	// Sunucu soketini bağlama
 	if (bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr)) == -1)
+	{
 		throw("Error!\n Bind the server socket failed\n");
+		close(client._clientFd);
+		close(_sockfd);
+		bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr));
+	}
 	listen(_sockfd, 10);
 	std::cout << "Listening on port " << _port << std::endl;
 	// client._clientFd = accept(_sockfd, (struct sockaddr *)&client._clientAddr, sizeof(client._clientAddr));
@@ -39,11 +49,23 @@ void Server::sstart( void )
 	// İstemciden gelen veriyi okuma ve ekrana yazdırma
 	while (1)
 	{
+		std::vector<std::string> clientMsgSplit;
+		std::vector<std::string>::iterator clientMsgSplit_iter;
 		recv(client._clientFd, buffer, sizeof(buffer), 0);
-		std::cout << "From client: " << buffer << std::endl;
+		// std::cout << "From client: " << buffer << std::endl;
+		// std::cout << ">>****>" << buffer << "<****<<";
+
+		clientMsgSplit = splitString(buffer, '\n');
+		clientMsgSplit_iter = clientMsgSplit.begin();
+		while (clientMsgSplit_iter != clientMsgSplit.end())
+		{
+			// std::cout << ">>**>>" << *clientMsgSplit_iter << "<<**<<\n";
+			checkServerCommands(*clientMsgSplit_iter);
+			++clientMsgSplit_iter;
+		}
 		// İstemciye yanıt gönderme
-		const char *response = "Hello from server!";
-		send(client._clientFd, response, strlen(response), 0);
+		// const char *response = "Hello from server!";
+		// send(client._clientFd, response, strlen(response), 0);
 	}
 	// Soketleri kapatma
 	close(client._clientFd);

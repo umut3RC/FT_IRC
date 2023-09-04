@@ -7,7 +7,7 @@ HEADERS = include/*.hpp
 all: $(NAME)
 
 $(NAME): $(SRC) $(HEADERS)
-	$(CC) $(CPPFLAG) $(SRC) -o $(NAME)
+	@$(CC) $(CPPFLAG) $(SRC) -o $(NAME)
 clean:
 	@rm -rf *.o
 

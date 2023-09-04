@@ -7,13 +7,14 @@
 class Server
 {
 	public:
-		Client client;
 		int	_port;
 		int	_passwd;
 		int	_sockfd;
-		sockaddr_in	_sockAddr;
 		int	_svclientnum;
 		int	_chnum;
+
+		Client	client;
+		sockaddr_in	_sockAddr;
 		char	buffer[1024];
 
 		Server( char **av );
