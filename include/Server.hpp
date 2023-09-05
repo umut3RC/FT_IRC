@@ -10,13 +10,17 @@ class Server
 		int	_port;
 		int	_passwd;
 		int	_sockfd;
+		int	_chNum;
 		int	_svclientnum;
-		int	_chnum;
-
-		Client	client;
-		sockaddr_in	_sockAddr;
+		
 		char	buffer[1024];
 
+		std::vector<Client>	clients;
+		std::vector<pollfd>	pollFd;
+		struct sockaddr_in	_sockAddr;
+
+		void Poll( void );
+		int Hexchat( void );
 		Server( char **av );
 		~Server( void );
 		Server( const Server &src );
