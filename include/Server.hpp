@@ -3,6 +3,7 @@
 
 #include "utils.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class Server
 {
@@ -11,16 +12,19 @@ class Server
 		int	_passwd;
 		int	_sockfd;
 		int	_chNum;
-		int	_svclientnum;
-		
+		int	_srvClientNum;
 		char	buffer[1024];
+		std::vector<std::string>	inputs;
+		std::vector<Client>			clients;
+		std::vector<pollfd>			pollFd;
+		std::vector<Channel>		channels;
+		struct sockaddr_in			_sockAddr;
 
-		std::vector<Client>	clients;
-		std::vector<pollfd>	pollFd;
-		struct sockaddr_in	_sockAddr;
+		void	quit(Client &client);
+		void	Poll( void );
+		int	Hexchat( void );
+		std::string	getprefix(Client &client);
 
-		void Poll( void );
-		int Hexchat( void );
 		Server( char **av );
 		~Server( void );
 		Server( const Server &src );

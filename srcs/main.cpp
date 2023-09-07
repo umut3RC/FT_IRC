@@ -5,8 +5,8 @@ int	main (int argc, char **argv)
 	try
 	{
 		if (argc != 3)
-			throw ("Error!\nInvalid input format! (exp: ./ircserv <port> <password>)\n");
-		Server	server(argv);
+			throw std::runtime_error("Error!\nInvalid input format! (exp: ./ircserv <port> <password>)\n");
+		Server	server(argv);// <-- soket oluşturuldu;
 		server.sstart();
 	}catch(const std::exception& e){
 		std::cerr << e.what();

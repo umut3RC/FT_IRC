@@ -11,10 +11,10 @@ class Client
 		int	num;
 		int	status;
 		int	c_pass;
-		bool	_nickfirst;
+		bool	_nickNamefirst;
 		bool	passchk;
 	
-		std::string	_nickNmae;
+		std::string	_nickName;
 		std::string	_userName;
 		std::string	_host;
 };
