@@ -22,7 +22,9 @@ class Server
 
 		void	quit(Client &client);
 		void	Poll( void );
-		int	Hexchat( void );
+		void	loop( void );
+		void	commandHandler( void );
+		void	runCommand(Client &client);
 		std::string	getprefix(Client &client);
 
 		Server( char **av );

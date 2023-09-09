@@ -18,6 +18,8 @@
 #include <cstring>
 
 std::vector<std::string> splitString(const std::string& input, char delimiter);
+void	ToLower(std::string &s);
+void	ToUpper(std::string &s);
 void	checkServerCommands(std::string cmd);
 void	signalHandler( int s );
 

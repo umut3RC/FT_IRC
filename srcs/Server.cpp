@@ -5,13 +5,13 @@ Server::Server( const Server &src )
 
 Server::~Server( void )
 {
-	std::cout << "Server closed. Have a good day!\n";
+	std::cout << "IRC: Server closed. Have a good day!\n";
 	close(_sockfd);
 }
 
 Server::Server( char **av )
 {
-	std::cout << "Socket starting . . .\n";
+	std::cout << "IRC: Socket starting . . .\n";
 	_port = std::atoi(av[1]);
 	_passwd = std::atoi(av[2]);
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -20,13 +20,13 @@ Server::Server( char **av )
 	if (_sockfd == -1)
 		throw std::runtime_error("Error!\nSocket could not be created!\n");
 	else
-		std::cout << "Socket created successfully!\n";
+		std::cout << "IRC: Socket created successfully!\n";
 }
 
 void	Server::sstart( void )
 {
 	signal(SIGINT, signalHandler);
-	std::cout << "Socket connecting.\n";
+	std::cout << "IRC: Socket connecting.\n";
 	_sockAddr.sin_family = AF_INET;	//soket adresinin aile türünü belirtir. Burada AF_INET, IPv4 adres ailesini temsil eder. Sunucu, bu aile türünü kullanarak IPv4 adresleri ile iletişim kurar.
 	_sockAddr.sin_port = htons(_port);	//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
 	_sockAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
@@ -42,16 +42,11 @@ void	Server::sstart( void )
 
 	if (listen(_sockfd, 10) == -1)
 		throw std::runtime_error("Error!\n Listening failed\n");
-	std::cout << "Listening on port " << _port << std::endl;
+	std::cout << "IRC: Listening on port " << _port << std::endl;
 	// client._clientFd = accept(_sockfd, (struct sockaddr *)&client._clientAddr, sizeof(client._clientAddr));
 	
 	Poll();
-	
-	while (true)
-	{
-		if (!Hexchat())
-			break;
-	}
+	loop();
 	
 	// client._clientFd = accept(_sockfd, NULL, NULL);
 	// if (client._clientFd == -1)
@@ -91,63 +86,65 @@ std::string Server::getprefix(Client &client)
 	return (ret);
 }
 
-int	Server::Hexchat( void )
+void	Server::loop( void )
 {
 	Client	client;
 	pollfd	pfd;
 	int	clientSockFd;
 	int	retRead;
-
-	if (poll(pollFd.data(), pollFd.size(), -1) == -1)
-		throw std::runtime_error("Error!\npoll didn't listen.\n");
-	for (size_t i = 0; i < pollFd.size(); ++i)
+	while (1)
 	{
-		if (pollFd[i].revents & POLLHUP)
+		if (poll(pollFd.data(), pollFd.size(), -1) == -1)
+			throw std::runtime_error("Error!\npoll didn't listen.\n");
+		for (size_t i = 0; i < pollFd.size(); ++i)
 		{
-			quit(clients[i - 1]);
-			break;
-		}
-		if (pollFd[i].revents & POLLIN)
-		{
-			if (pollFd[i].fd == _sockfd)
+			if (pollFd[i].revents & POLLHUP)
 			{
-				clientSockFd = accept(_sockfd, NULL, NULL);
-				if (clientSockFd == -1)
-					throw std::runtime_error("Error!\nAccepting client can not connection\n");
-				pfd.fd = clientSockFd;
-				pfd.events = POLLIN;
-				pfd.revents = 0;
-				pollFd.push_back(pfd);
-				clients.push_back(client);
-				clients[_srvClientNum].fd = clientSockFd;
-				clients[_srvClientNum]._nickNamefirst = false;
-				clients[_srvClientNum].passchk = false;
-				clients[_srvClientNum].status = 2;
-				_srvClientNum++;
-				std::cout << "New client connected\n";;
+				quit(clients[i - 1]);
+				break;
 			}
-			else
+			if (pollFd[i].revents & POLLIN)
 			{
-				retRead = recv(pollFd[i].fd, buffer, sizeof(buffer), 0);
-				if (retRead == -1)
-					throw std::runtime_error("Error!\nCould not read from the client.\n");
-				else if (retRead == 0)
+				if (pollFd[i].fd == _sockfd)
 				{
-					std::cerr << "Client connection closed." << std::endl;
-					quit(clients[i - 1]);
-					return 1;
+					clientSockFd = accept(_sockfd, NULL, NULL);
+					if (clientSockFd == -1)
+						throw std::runtime_error("Error!\nAccepting client can not connection\n");
+					pfd.fd = clientSockFd;
+					pfd.events = POLLIN;
+					pfd.revents = 0;
+					pollFd.push_back(pfd);
+					clients.push_back(client);
+					clients[_srvClientNum].fd = clientSockFd;
+					clients[_srvClientNum]._nickNamefirst = false;
+					clients[_srvClientNum].passchk = false;
+					clients[_srvClientNum].status = 2;
+					_srvClientNum++;
+					std::cout << "IRC: New client connected\n";
 				}
-				// else
-				// {
-				// 	buffer[retRead] = '\0';
-				// 	clients[i - 1].num = i - 1;
-				// 	ft_cmndhndlr();
-				// 	ft_execute(clients[i - 1]);
-				// }
+				else
+				{
+					retRead = recv(pollFd[i].fd, buffer, sizeof(buffer), 0);
+					if (retRead == -1)
+						throw std::runtime_error("Error!\nCan't read from the client.\n");
+					else if (retRead == 0)
+					{
+						std::cerr << "IRC: Client connection closed." << std::endl;
+						quit(clients[i - 1]);
+						return;
+					}
+					else
+					{
+						buffer[retRead] = '\0';
+						clients[i - 1].num = i - 1;
+						commandHandler();
+						runCommand(clients[i - 1]);
+					}
+				}
 			}
 		}
 	}
-	return (false);
+	// close(pollFd);
 }
 
 void	Server::Poll( void )
@@ -219,4 +216,64 @@ void	Server::quit(Client &client)
 		}
 	}
 	return;
+}
+
+void	Server::commandHandler( void )
+{
+	int	i;
+
+	i = 0;
+	char* str = strtok(buffer, " \n");
+	while (str != NULL)
+	{
+		inputs.push_back(str);
+		i++;
+		str = strtok(NULL, " \n");
+	}
+}
+
+void Server::runCommand(Client &client)
+{
+	std::string msg;
+	ToLower(inputs[0]);
+	if (sizeof(client) < 1)
+		std::cout << "hmm\n";
+	// for (unsigned long int i = 0; i < inputs.size(); i++){
+	// 	if (inputs[i] == "PASS"){
+	// 		client.passchk = true;
+	// 		if (atoi(inputs[i + 1].c_str()) != _passwd){
+	// 			msg = "ERROR! Password incorrect\n";
+	// 			send(client.fd, msg.c_str(), msg.length(), 0);
+	// 			msg.clear();
+	// 			quit(client);
+	// 		}
+	// 	}
+	// }
+	for(unsigned long int i = 0; i < inputs.size(); i++){
+		if (inputs[i] == "cap")
+			std::cout << "IRC cap\n";
+		if (inputs[i] == "nick")
+			std::cout << "IRC nick\n";
+		if (inputs[i] == "join")
+			std::cout << "IRC join\n";
+		if (inputs[i] == "privmsg")
+			std::cout << "IRC privmsg\n";
+		if (inputs[i] == "quit")
+			std::cout << "IRC quit\n";
+		if (inputs[i] == "ping")
+			std::cout << "IRC ping\n";
+		if (inputs[i] == "pass")
+			std::cout << "IRC pass\n";
+		if (inputs[i] == "kick")
+			std::cout << "IRC kick\n";
+		if (inputs[i] == "user")
+			std::cout << "IRC user\n";
+		if (inputs[i] == "mode")
+			std::cout << "IRC mode\n";
+		if (inputs[i] == "invite")
+			std::cout << "IRC invite\n";
+		if (inputs[i] == "notice")
+			std::cout << "IRC notice\n";
+	}
+	inputs.clear();
 }

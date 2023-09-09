@@ -143,11 +143,6 @@ int main() {
 <-CLIENT->------------------------------------------------------------------^
 
 
-
-
-
-
-
 1. `socket`: Creates a socket and returns a file descriptor used for network communication.
 2. `close`: Closes the specified file descriptor.
 3. `setsockopt`: Sets socket options.

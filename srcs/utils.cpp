@@ -21,3 +21,15 @@ void	signalHandler( int s )
 	std::cout << "Bye!\n";
 	exit(s);
 }
+
+void	ToLower(std::string &s)
+{
+	for (int i=0; s[i]; i++)
+		s[i] = tolower(s[i]);
+}
+
+void	ToUpper(std::string &s)
+{
+	for (int i=0; s[i]; i++)
+		s[i] = toupper(s[i]);
+}
