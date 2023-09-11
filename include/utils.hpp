@@ -12,15 +12,18 @@
 #include <netinet/in.h> // struct sockaddr_in
 #include <vector>
 #include <map>
+#include <functional>
 #include <algorithm> // std::transform
 #include <cctype>    // std::toupper
 #include <string>
 #include <cstring>
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
 std::vector<std::string> splitString(const std::string& input, char delimiter);
 void	ToLower(std::string &s);
 void	ToUpper(std::string &s);
-void	checkServerCommands(std::string cmd);
 void	signalHandler( int s );
 
 #endif

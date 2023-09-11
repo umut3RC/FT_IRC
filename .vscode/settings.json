@@ -1,6 +1,5 @@
 {
 	"files.associations": {
-		"exception": "cpp",
 		"__bit_reference": "cpp",
 		"__config": "cpp",
 		"__debug": "cpp",
@@ -34,6 +33,7 @@
 		"ctime": "cpp",
 		"cwchar": "cpp",
 		"cwctype": "cpp",
+		"exception": "cpp",
 		"functional": "cpp",
 		"initializer_list": "cpp",
 		"ios": "cpp",
@@ -62,7 +62,5 @@
 		"unordered_map": "cpp",
 		"utility": "cpp",
 		"vector": "cpp"
-	},
-	"C_Cpp.errorSquiggles": "enabled",
-	"C_Cpp.default.compilerPath": "/usr/bin/g++"
+	}
 }

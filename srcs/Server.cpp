@@ -17,6 +17,7 @@ Server::Server( char **av )
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	_srvClientNum = 0;
 	_chNum = 0;
+	setCommands();
 	if (_sockfd == -1)
 		throw std::runtime_error("Error!\nSocket could not be created!\n");
 	else
@@ -100,7 +101,7 @@ void	Server::loop( void )
 		{
 			if (pollFd[i].revents & POLLHUP)
 			{
-				quit(clients[i - 1]);
+				quit_command(clients[i - 1]);
 				break;
 			}
 			if (pollFd[i].revents & POLLIN)
@@ -120,7 +121,7 @@ void	Server::loop( void )
 					clients[_srvClientNum].passchk = false;
 					clients[_srvClientNum].status = 2;
 					_srvClientNum++;
-					std::cout << "IRC: New client connected\n";
+					std::cout << "IRC: New client (" << clients[_srvClientNum]._nickName << ") connected\n";
 				}
 				else
 				{
@@ -130,15 +131,21 @@ void	Server::loop( void )
 					else if (retRead == 0)
 					{
 						std::cerr << "IRC: Client connection closed." << std::endl;
-						quit(clients[i - 1]);
+						quit_command(clients[i - 1]);
 						return;
 					}
 					else
 					{
 						buffer[retRead] = '\0';
 						clients[i - 1].num = i - 1;
-						commandHandler();
-						runCommand(clients[i - 1]);
+						try
+						{
+							commandHandler();
+							runCommand(clients[i - 1]);
+						}
+						catch(const std::exception &e){
+							std::cout << e.what() << std::endl;
+						}
 					}
 				}
 			}
@@ -166,114 +173,4 @@ Server	&Server::operator=( const Server &src)
 	return (*this);
 }
 
-void	Server::quit(Client &client)
-{
-	std::vector<Client>::iterator it;
 
-	std::cout << "-QUIT-\n";
-	for (unsigned long int i = 0; i < channels.size(); i++)
-	{
-		for (unsigned long int j = 0 ; j < channels[i].chnclients.size(); j++)
-		{
-			if (channels[i].chnclients[j]._nickName == client._nickName)
-			{
-				if (channels[i]._admin == client._nickName)
-				{
-					std::cout << channels[i]._admin << '\n';
-					it = channels[i].chnclients.begin() + i;
-					it++;
-					channels[i]._admin = it->_nickName;
-					std::cout << channels[i]._admin << '\n';
-				}
-				channels[i].chnclients.erase(channels[i].chnclients.begin() + i);
-				channels[i]._clientnum--;
-				if (channels[i].chnclients.size() == 0)
-					channels.erase(channels.begin() + i);
-			}
-		}	
-	}
-
-	for (unsigned long int i = 0 ; i < pollFd.size() ; i++)
-	{
-		if (client.fd == pollFd[i].fd)
-		{
-			std::string msg = ":" + getprefix(client) + " QUIT :Leaving " + inputs[inputs.size() - 1] + "\n";
-			send(client.fd, msg.c_str(), msg.length(), 0);
-			close(pollFd[i].fd);
-			pollFd.erase(pollFd.begin() + i);
-			break;
-		}
-	}
-
-	for (int i = 0; i < _srvClientNum; i++)
-	{
-		if (clients[i]._nickName == client._nickName){
-			std::vector<Client>::iterator it;
-			it = clients.begin() + i;
-			std::cout << it->_nickName << '\n';
-			clients.erase(clients.begin() + i);
-			_srvClientNum--;
-		}
-	}
-	return;
-}
-
-void	Server::commandHandler( void )
-{
-	int	i;
-
-	i = 0;
-	char* str = strtok(buffer, " \n");
-	while (str != NULL)
-	{
-		inputs.push_back(str);
-		i++;
-		str = strtok(NULL, " \n");
-	}
-}
-
-void Server::runCommand(Client &client)
-{
-	std::string msg;
-	ToLower(inputs[0]);
-	if (sizeof(client) < 1)
-		std::cout << "hmm\n";
-	// for (unsigned long int i = 0; i < inputs.size(); i++){
-	// 	if (inputs[i] == "PASS"){
-	// 		client.passchk = true;
-	// 		if (atoi(inputs[i + 1].c_str()) != _passwd){
-	// 			msg = "ERROR! Password incorrect\n";
-	// 			send(client.fd, msg.c_str(), msg.length(), 0);
-	// 			msg.clear();
-	// 			quit(client);
-	// 		}
-	// 	}
-	// }
-	for(unsigned long int i = 0; i < inputs.size(); i++){
-		if (inputs[i] == "cap")
-			std::cout << "IRC cap\n";
-		if (inputs[i] == "nick")
-			std::cout << "IRC nick\n";
-		if (inputs[i] == "join")
-			std::cout << "IRC join\n";
-		if (inputs[i] == "privmsg")
-			std::cout << "IRC privmsg\n";
-		if (inputs[i] == "quit")
-			std::cout << "IRC quit\n";
-		if (inputs[i] == "ping")
-			std::cout << "IRC ping\n";
-		if (inputs[i] == "pass")
-			std::cout << "IRC pass\n";
-		if (inputs[i] == "kick")
-			std::cout << "IRC kick\n";
-		if (inputs[i] == "user")
-			std::cout << "IRC user\n";
-		if (inputs[i] == "mode")
-			std::cout << "IRC mode\n";
-		if (inputs[i] == "invite")
-			std::cout << "IRC invite\n";
-		if (inputs[i] == "notice")
-			std::cout << "IRC notice\n";
-	}
-	inputs.clear();
-}

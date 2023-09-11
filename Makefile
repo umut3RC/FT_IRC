@@ -1,7 +1,7 @@
 CC = c++
 CPPFLAG = -Wall -Wextra -Werror -std=c++98
 NAME = ircserv
-SRC = srcs/*.cpp
+SRC = srcs/*.cpp srcs/commands/*.cpp
 HEADERS = include/*.hpp
 
 all: $(NAME)
