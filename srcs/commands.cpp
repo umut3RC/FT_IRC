@@ -16,23 +16,14 @@ void	Server::commandHandler( void )
 
 void	Server::setCommands()
 {
-	commands["QUIT"] = &Server::quit_command;
 	commands["CAP"] = &Server::cap_command;
+	commands["QUIT"] = &Server::quit_command;
 	commands["USER"] = &Server::user_command;
 	commands["JOIN"] = &Server::join_command;
-	// commands["QUIT"] = &Server::quit_command;
-	// commands["NICK"] = &Server::nick;
-	// commands["PASS"] = &Server::pass;
-	// commands["USER"] = &Server::user;
-	// commands["KICK"] = &Server::kick;
-	// commands["PART"] = &Server::part;
-	// commands["PING"] = &Server::ping;
-	// commands["PRIVMSG"] = &Server::privmsg;
-	// commands["NOTICE"] = &Server::notice;
-	// commands["MODE"] = &Server::mode;
-	// commands["WHO"] = &Server::who;
+	commands["PING"] = &Server::ping_command;
+	commands["NICK"] = &Server::nick_command;
+	commands["PASS"] = &Server::pass_command;
 }
-
 void Server::runCommand(Client &client)
 {
 	std::string msg;
@@ -52,14 +43,23 @@ void Server::runCommand(Client &client)
 	// }
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
-		std::cout << inputs[i] << "<------------------commandssssssss\n";
-		commands[inputs[i]];
-		if (inputs[i] == "NICK")
-			std::cout << "IRC nick\n";
+		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;
+		std::cout << inputs[i] << "<---<*>\n";
+		for (itCF = commands.begin(); itCF != commands.end(); ++itCF)
+		{
+			if (itCF->first.compare(inputs[i]) == 0)
+			{
+				(this->*(itCF->second))(client);
+			}
+		}
+		// commands[inputs[i]](client);
+
+		// if (itCF == commands.end())
+		// {
+		// 	std::cout << "Sen hayırdır.\n";
+		// }
 		if (inputs[i] == "PRIVMSG")
 			std::cout << "IRC privmsg\n";
-		if (inputs[i] == "PING")
-			std::cout << "IRC ping\n";
 		if (inputs[i] == "PASS")
 			std::cout << "IRC pass\n";
 		if (inputs[i] == "KICK")

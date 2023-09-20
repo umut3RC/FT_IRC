@@ -22,6 +22,10 @@ Server::Server( char **av )
 		throw std::runtime_error("Error!\nSocket could not be created!\n");
 	else
 		std::cout << "IRC: Socket created successfully!\n";
+
+	// SILINECEK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)=/)&!'+!'^
+	int val = 1;
+	(setsockopt(this->_sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)));
 }
 
 void	Server::sstart( void )
@@ -33,16 +37,17 @@ void	Server::sstart( void )
 	_sockAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
 
 	// Sunucu soketini bağlama
-	if (bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr)) == -1)
-	{
-		throw std::runtime_error("Error!\n Bind the server socket failed\n");
-		// close(client._clientFd);
-		// close(_sockfd);
-		// bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr));
-	}
+	execute(bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr)), "Error!\nBind the server socket failed\n");
+	// if (bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr)) == -1)
+	// {
+	// 	throw std::runtime_error("Error!\nBind the server socket failed\n");
+	// 	// close(client._clientFd);
+	// 	// close(_sockfd);
+	// 	// bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr));
+	// }
 
 	if (listen(_sockfd, 10) == -1)
-		throw std::runtime_error("Error!\n Listening failed\n");
+		throw std::runtime_error("Error!\nListening failed\n");
 	std::cout << "IRC: Listening on port " << _port << std::endl;
 	// client._clientFd = accept(_sockfd, (struct sockaddr *)&client._clientAddr, sizeof(client._clientAddr));
 	
@@ -120,8 +125,8 @@ void	Server::loop( void )
 					clients[_srvClientNum]._nickNamefirst = false;
 					clients[_srvClientNum].passchk = false;
 					clients[_srvClientNum].status = 2;
-					_srvClientNum++;
 					std::cout << "IRC: New client (" << clients[_srvClientNum]._nickName << ") connected\n";
+					_srvClientNum++;
 				}
 				else
 				{

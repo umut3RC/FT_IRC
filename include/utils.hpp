@@ -14,16 +14,19 @@
 #include <map>
 #include <functional>
 #include <algorithm> // std::transform
-#include <cctype>    // std::toupper
+#include <cctype>	// std::toupper
 #include <string>
 #include <cstring>
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 
+#define ERR_NEEDMOREPARAMS(prefix, command) "461 " + prefix + " " +  command + " :Not enough parameters"
+
 std::vector<std::string> splitString(const std::string& input, char delimiter);
 void	ToLower(std::string &s);
 void	ToUpper(std::string &s);
 void	signalHandler( int s );
+void	execute(int ret, std::string err);
 
 #endif

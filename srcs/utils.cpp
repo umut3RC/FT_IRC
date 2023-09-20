@@ -33,3 +33,9 @@ void	ToUpper(std::string &s)
 	for (int i=0; s[i]; i++)
 		s[i] = toupper(s[i]);
 }
+
+void	execute(int ret, std::string err)
+{
+	if (ret < 0)
+		throw std::runtime_error(err);
+}

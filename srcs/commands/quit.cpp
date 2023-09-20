@@ -4,7 +4,7 @@ void	Server::quit_command(Client &client)
 {
 	std::vector<Client>::iterator it;
 
-	std::cout << "-QUIT-\n";
+	std::cout << "IRC: Called QUIT command\n";
 	for (unsigned long int i = 0; i < channels.size(); i++)
 	{
 		for (unsigned long int j = 0 ; j < channels[i].chnclients.size(); j++)

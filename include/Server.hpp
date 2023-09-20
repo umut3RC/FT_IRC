@@ -5,6 +5,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+
 class Server
 {
 	public:
@@ -33,7 +34,11 @@ class Server
 		void	quit_command(Client &client);
 		void	cap_command(Client &client);
 		void	user_command(Client &client);
+		void	ping_command(Client &client);
 		void	join_command( Client &client );
+		void	nick_command( Client &client );
+		void	mode_command( Client &client );
+		void	pass_command( Client &client );
 
 		Server( char **av );
 		~Server( void );

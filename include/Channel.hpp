@@ -14,13 +14,13 @@ public:
 	std::string					_admin;
 	std::vector<std::string>	_whitelist;
 	std::vector<Client>			chnclients;
-	int							chmaxuser;
+	int							maxUser;
 	int							passprotected;
 	int							_clientnum;
 	bool						ifn;
 	bool						ifp;
 
-	Channel(std::string name) : _chname(name) {_clientnum = 0; passprotected = 0; chmaxuser = 0; ifn = 0; ifp = 0;};
+	Channel(std::string name) : _chname(name) {_clientnum = 0; passprotected = 0; maxUser = 0; ifn = 0; ifp = 0;};
 };
 
 #endif

@@ -2,18 +2,38 @@
 
 void Server::user_command(Client &client)
 {
-	std::string msg;
-
-	if (inputs.size() != 5)
+	// std::cout << "IRC: Called USER command\n";
+	// std::string msg = ":" + getprefix(client) + " " + "001 Welcome\r\n";
+	// send(client.fd, msg.c_str(), msg.size(), 0);
+	if (inputs.size() > 5)
 	{
-		msg = ":" + getprefix(client) + " 461 " + client._nickName + " USER :Not enough parameters";
+		std::vector<std::string>::iterator it = inputs.begin();
+		std::vector<std::string>::iterator it2;
+		it2 = it;
+		it++;
+
+		while (it != inputs.end()){
+			if (*it == "USER"){
+				it++;
+				it2++;
+				client._userName = *it;
+			}
+			else if ((*it)[0] == ':'){
+				client._host = *it2;
+				break;
+			}
+			else{
+				it++;
+				it2++;
+			}
+		}
+		std::string msg = "Welcome to irc server!\n";
 		send(client.fd, msg.c_str(), msg.length(), 0);
-		return;
 	}
-	client._userName = inputs[1];
-	client._host = inputs[2];
-	// _clients[fd]->setUserName(token[1]);
-	// _clients[fd]->setRealName(token[4].substr(token[4][0] == ':', token[4].size()));
-	msg = ":"  +getprefix(client) + " 001 " + client._nickName + " :Welcome to IRC";
-	send(client.fd, msg.c_str(), msg.length(), 0);
+	else
+	{
+		std::string msg = "ERROR! paramaters should be like this USER <kullanıcı adı> <gerçek ad> <sunucu adı> :<kullanıcı hakkında diğer ayrıntılar>\n";
+		send(client.fd, msg.c_str(), msg.length(), 0);
+		msg.clear();
+	}
 }

@@ -22,20 +22,174 @@ Kanal ismi, istemcinin katılmak istediği kanalın adıdır. Kanal ismi, # işa
 4.Kanala tüm kullanıcılara katılış bildirimi gönderin. Bu, kanalda bulunan tüm kullanıcılara, istemcinin kanala katıldığını bildiren bir mesaj göndermeyi içerir.
 
 */
+// void	Server::join_command( Client &client )
+// {
+// 	std::string msg = getprefix(client);
+
+// 	// std::cout << "IRC: Called JOIN command\n";
+// 	// const char* join_command = "JOIN #a 1234 #a\r\n"; // Örnek bir oda adı
+// 	// try
+// 	// {
+// 	// 	send(client.fd, join_command, strlen(join_command), 0);
+// 	// }
+// 	// catch(const std::exception& e)
+// 	// {
+// 	// 	std::cerr << e.what() << '\n';
+// 	// }
+// 	// std::cout << inputs.size() << "IiIIIHIHIHIHIHIHIHI\n";
+// 	if (inputs.size() > 3)
+// 	{
+// 		throw std::runtime_error("Error!\nInvalid JOIN syntax!\nUSE:/join <channel> <channel passwd>\n");
+// 		msg = "join args must be like this /join <channel> <channel passwd>\n";
+// 		if (send(client.fd, msg.c_str(), msg.length(), 0) < 0)
+// 		{
+// 			msg.clear();
+// 			throw std::runtime_error("Error!\nDidn't sended!\n");
+// 		}
+// 	}
+// 	if (inputs[1][0] != '#')
+// 		inputs[1] = '#' + inputs[1];
+// 	for (unsigned long int i = 0; i < channels.size(); i++)
+// 	{
+// 		if (!strncmp(inputs[1].c_str(), channels[i]._chname.c_str(), inputs[1].length()))
+// 		{
+// 			std::cout << "found?";
+// 			if (channels[i].passprotected == 1){
+// 				if (strncmp(inputs[2].c_str(), channels[i]._chpasswd.c_str(), channels[i]._chpasswd.length()))
+// 				{
+// 					std::cout << "join if pass check!1\n"; 
+// 					msg = "ERROR! PLEASE JOIN WITH CHANNEL PASSWORD!\n";
+// 					execute(send(client.fd, msg.c_str(), msg.length(), 0), "Error!\nDidn't sended!\n");
+// 					msg.clear();
+// 					// if ( < 0)
+// 					// {
+// 					// 	msg.clear();
+// 					// 	throw std::runtime_error("Error!\nDidn't sended!\n");
+// 					// }
+// 				}
+// 			}
+// 			if (channels[i].maxUser == channels[i]._clientnum)
+// 			{
+// 				msg = "ERROR! YOU CANNOT JOIN THIS CHANNEL USER LIMIT REACHED\n";
+// 				if (send(client.fd, msg.c_str(), msg.length(), 0) < 0)
+// 				{
+// 					msg.clear();
+// 					throw std::runtime_error("Error!\nDidn't sended!\n");
+// 				}
+// 			}
+// 			if (channels[i].ifp == 1){
+// 				std::cout << "ifp == 1\n";
+// 				if (channels[i]._whitelist.empty()){
+// 					msg = "ERROR! this is a invite only channel!\n";
+// 					if (send(client.fd, msg.c_str(), msg.length(), 0) < 0)
+// 					{
+// 						msg.clear();
+// 						throw std::runtime_error("Error!\nDidn't sended!\n");
+// 					}
+// 				}
+// 				for (unsigned long int l = 0; l < channels[i]._whitelist.size(); l++)
+// 				{
+// 					if (!strncmp(channels[i]._whitelist[l].c_str(), client._nickName.c_str(), channels[i]._whitelist[l].length()) && !channels[i]._whitelist.empty()){
+// 						channels[i].chnclients.push_back(client);
+// 						channels[i]._clientnum++;
+// 						msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+// 						for (int j = 0; j < channels[i]._clientnum; j++){
+// 							if (send(client.fd, msg.c_str(), msg.length(), 0) < 0)
+// 							{
+// 								throw std::runtime_error("Error!\nDidn't sended!\n");
+// 							}
+// 						}
+// 						msg.clear();
+// 						return;
+// 					}
+// 					else{
+// 						msg = "ERROR! this is a invite only channel!\n";
+// 						if (send(client.fd, msg.c_str(), msg.length(), 0) < 0)
+// 						{
+// 							msg.clear();
+// 							throw std::runtime_error("Error!\nDidn't sended!\n");
+// 						}
+// 					}
+// 				}
+// 			}
+// 			channels[i].chnclients.push_back(client);
+// 			channels[i]._clientnum++;
+// 			std::cout << "CLNUM:" << channels[i]._clientnum << std::endl;
+// 			msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+// 			for (int j = 0; j < channels[i]._clientnum; j++){
+// 				if (send(channels[i].chnclients[j].fd, msg.c_str(), msg.length(), 0) < 0)
+// 					throw std::runtime_error("Error!\nDidn't sended!\n");
+// 			}
+// 			return;
+// 		}
+// 	}
+// 	Channel newCh(inputs[1]);
+// 	if (inputs.size() == 2)
+// 		newCh._chpasswd = inputs[2];
+// 	newCh._chname = inputs[1];
+// 	newCh.chnclients.push_back(client);
+// 	newCh._clientnum++;
+// 	newCh._admin = client._nickName;
+// 	channels.push_back(newCh);
+// 	_chNum++;
+// 	msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+// 	std::cout << "MSG->>>>>" << msg << "\n";
+// 	send(client.fd, msg.c_str(), msg.length(), 0);
+// 	msg.clear();
+// }
+//-----------------------------------------------------------
+// void	Server::join_command( Client &client )
+// {
+// 	std::string	msg;
+
+// 	if (token.size() < 2)//az arguman
+// 	{
+// 		_clients[fd]->clientMsgSender(fd, ERR_NEEDMOREPARAMS(_clients[fd]->getNickName(), "PASS")); return ; }
+
+// 	token[1] = (token[1][0] != '#' ? "#" + token[1] : token[1]);
+// 	for (size_t i = 0 ; i < _clients[fd]->_channels.size() ; i++) //aradığı kanal içinde kendisi varmı
+// 	{
+// 		if (_clients[fd]->_channels[i]->getName() == token[1]) {
+// 			msg = "You're already on this channel!"; ft_write(fd, msg); return ; } }
+
+// 	if (_channels.find(token[1]) == _channels.end())//kanal bulunamazsa oluştur
+// 	{
+// 		msg = token[1] + " creating channel..."; ft_write(fd, msg);
+// 		msg = "Admin login"; ft_write(fd, msg);
+// 		_channels[token[1]] = new Channel(_clients[fd], token[1], token.size() > 2 ? token[2] : "");
+// 		_clients[fd]->_channels.push_back(_channels[token[1]]);
+// 		_clients[fd]->casting(fd, _channels[token[1]]->_channelClients, RPL_JOIN(_clients[fd]->getPrefixName(), token[1]) + " :" + _clients[fd]->getNickName());
+// 		return ;//                                                     ":" + source + " JOIN :" + channel                                                       	
+// 	}
+	
+// 	if (_channels[token[1]]->getClientCount() >= _channels[token[1]]->getMaxClientCount()) {
+// 		msg = "Channel is full!"; ft_write(fd, msg); }
+// 	else if (!(_channels[token[1]]->getPassword().empty()) && _channels[token[1]]->getPassword() != token[2]) {
+// 		msg = "Failed, password error!"; ft_write(fd, msg); }
+// 	else
+// 	{
+// 		_channels[token[1]]->_channelClients.push_back(_clients[fd]);
+// 		_clients[fd]->_channels.push_back(_channels[token[1]]);
+// 		_channels[token[1]]->setClientCount(_channels[token[1]]->getClientCount() + 1);
+// 		_clients[fd]->casting(fd, _channels[token[1]]->_channelClients, RPL_JOIN(_clients[fd]->getPrefixName(), token[1]) + " :" + _clients[fd]->getNickName());
+// 	}
+// }
+//------------------------------------------------------------------------
+
+
 void	Server::join_command( Client &client )
 {
+	std::cout << "Client wanna join->" << client._nickName << "\n" << client._userName << "\n";
+	std::string joinMessage = "JOIN #a uercan";
+	send (client.fd, joinMessage.c_str(), joinMessage.length(), 0);
+	std::cout << "JOIN FONKSIYONU" << '\n';
 	std::string chn = getprefix(client);
-
-	std::cout << "IRC: JOIN command\n";
-	if (inputs.size() > 3)
-	{
-		throw std::runtime_error("Error!\nInvalid JOIN syntax!\nUSE:/join <channel> <channel passwd>\n");
+	if (inputs.size() > 3){
+		std::cerr << "join ARG Error!" << std::endl;
 		chn = "join args must be like this /join <channel> <channel passwd>\n";
-		if (send(client.fd, chn.c_str(), chn.length(), 0) < 0)
-		{
-			chn.clear();
-			throw std::runtime_error("Error!\nDidn't sended!\n");
-		}
+		send(client.fd, chn.c_str(), chn.length(), 0);
+		chn.clear();
+		return;
 	}
 	if (inputs[1][0] != '#')
 		inputs[1] = '#' + inputs[1];
@@ -44,58 +198,42 @@ void	Server::join_command( Client &client )
 		if (!strncmp(inputs[1].c_str(), channels[i]._chname.c_str(), inputs[1].length()))
 		{
 			if (channels[i].passprotected == 1){
-				if (strncmp(inputs[2].c_str(), channels[i]._chpasswd.c_str(), channels[i]._chpasswd.length()))
-				{
+				if (strncmp(inputs[2].c_str(), channels[i]._chpasswd.c_str(), channels[i]._chpasswd.length())){
 					std::cout << "join if pass check!1\n"; 
 					chn = "ERROR! PLEASE JOIN WITH CHANNEL PASSWORD!\n";
-					if (send(client.fd, chn.c_str(), chn.length(), 0) < 0)
-					{
-						chn.clear();
-						throw std::runtime_error("Error!\nDidn't sended!\n");
-					}
+					send(client.fd, chn.c_str(), chn.length(), 0);
+					chn.clear();
+					return;
 				}
 			}
-			if (channels[i].chmaxuser == channels[i]._clientnum)
-			{
+			if (channels[i].maxUser == channels[i]._clientnum){
 				chn = "ERROR! YOU CANNOT JOIN THIS CHANNEL USER LIMIT REACHED\n";
-				if (send(client.fd, chn.c_str(), chn.length(), 0) < 0)
-				{
-					chn.clear();
-					throw std::runtime_error("Error!\nDidn't sended!\n");
-				}
+				send(client.fd, chn.c_str(), chn.length(), 0);
+				chn.clear();
+				return;
 			}
 			if (channels[i].ifp == 1){
 				std::cout << "ifp == 1\n";
 				if (channels[i]._whitelist.empty()){
 					chn = "ERROR! this is a invite only channel!\n";
-					if (send(client.fd, chn.c_str(), chn.length(), 0) < 0)
-					{
-						chn.clear();
-						throw std::runtime_error("Error!\nDidn't sended!\n");
-					}
+					send(client.fd, chn.c_str(), chn.length(), 0);
+					return;	
 				}
-				for (unsigned long int l = 0; l < channels[i]._whitelist.size(); l++)
-				{
+				for (unsigned long int l = 0; l < channels[i]._whitelist.size(); l++){
 					if (!strncmp(channels[i]._whitelist[l].c_str(), client._nickName.c_str(), channels[i]._whitelist[l].length()) && !channels[i]._whitelist.empty()){
 						channels[i].chnclients.push_back(client);
 						channels[i]._clientnum++;
 						chn += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
 						for (int j = 0; j < channels[i]._clientnum; j++){
-							if (send(client.fd, chn.c_str(), chn.length(), 0) < 0)
-							{
-								throw std::runtime_error("Error!\nDidn't sended!\n");
-							}
+							send(channels[i].chnclients[j].fd, chn.c_str(), chn.length(), 0);
 						}
 						chn.clear();
 						return;
 					}
 					else{
 						chn = "ERROR! this is a invite only channel!\n";
-						if (send(client.fd, chn.c_str(), chn.length(), 0) < 0)
-						{
-							chn.clear();
-							throw std::runtime_error("Error!\nDidn't sended!\n");
-						}
+						send(client.fd, chn.c_str(), chn.length(), 0);
+						return;
 					}
 				}
 			}
@@ -104,10 +242,21 @@ void	Server::join_command( Client &client )
 			std::cout << "CLNUM:" << channels[i]._clientnum << std::endl;
 			chn += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
 			for (int j = 0; j < channels[i]._clientnum; j++){
-				if (send(channels[i].chnclients[j].fd, chn.c_str(), chn.length(), 0) < 0)
-					throw std::runtime_error("Error!\nDidn't sended!\n");
+				send(channels[i].chnclients[j].fd, chn.c_str(), chn.length(), 0);
 			}
 			return;
 		}
 	}
+	Channel newch(inputs[1]);
+	if (inputs.size() == 2)
+		newch._chpasswd = inputs[2];
+	newch.chnclients.push_back(client);
+	newch._clientnum++;
+	newch._admin = client._nickName;
+	channels.push_back(newch);
+	_chNum++;
+	chn += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+	std::cout << "SENDIN USTU" << '\n';
+	send(client.fd, chn.c_str(), chn.length(), 0);
+	chn.clear();
 }
