@@ -14,7 +14,6 @@ void	Server::nick_command( Client &client )
 		client._host = inputs.at(5);
 		std::string msg = ": NICK " + client._nickName + "@" + client._host;
 		execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "ERR");
-		cout << msg
 	}
 	catch(const std::out_of_range &e)
 	{

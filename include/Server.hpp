@@ -39,7 +39,9 @@ class Server
 		void	nick_command( Client &client );
 		void	mode_command( Client &client );
 		void	pass_command( Client &client );
+		void	privmsg_command( Client &client );
 
+		int	findChannel( void );
 		Server( char **av );
 		~Server( void );
 		Server( const Server &src );

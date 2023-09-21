@@ -2,7 +2,7 @@
 
 void Server::user_command(Client &client)
 {
-	// std::cout << "IRC: Called USER command\n";
+	std::cout << "IRC: Called USER command\n";
 	// std::string msg = ":" + getprefix(client) + " " + "001 Welcome\r\n";
 	// send(client.fd, msg.c_str(), msg.size(), 0);
 	if (inputs.size() > 5)
@@ -12,17 +12,21 @@ void Server::user_command(Client &client)
 		it2 = it;
 		it++;
 
-		while (it != inputs.end()){
-			if (*it == "USER"){
+		while (it != inputs.end())
+		{
+			if (*it == "USER")
+			{
 				it++;
 				it2++;
 				client._userName = *it;
 			}
-			else if ((*it)[0] == ':'){
+			else if ((*it)[0] == ':')
+			{
 				client._host = *it2;
 				break;
 			}
-			else{
+			else
+			{
 				it++;
 				it2++;
 			}
@@ -32,7 +36,7 @@ void Server::user_command(Client &client)
 	}
 	else
 	{
-		std::string msg = "ERROR! paramaters should be like this USER <kullanıcı adı> <gerçek ad> <sunucu adı> :<kullanıcı hakkında diğer ayrıntılar>\n";
+		std::string msg = "ERROR!\n";
 		send(client.fd, msg.c_str(), msg.length(), 0);
 		msg.clear();
 	}

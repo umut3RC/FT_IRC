@@ -25,7 +25,7 @@ Server::Server( char **av )
 
 	// SILINECEK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)=/)&!'+!'^
 	int val = 1;
-	(setsockopt(this->_sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)));
+	setsockopt(this->_sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
 }
 
 void	Server::sstart( void )
@@ -45,9 +45,7 @@ void	Server::sstart( void )
 	// 	// close(_sockfd);
 	// 	// bind(_sockfd, (struct sockaddr *)&_sockAddr, sizeof(_sockAddr));
 	// }
-
-	if (listen(_sockfd, 10) == -1)
-		throw std::runtime_error("Error!\nListening failed\n");
+	execute(listen(_sockfd, 10), "Error!\nListening failed\n");
 	std::cout << "IRC: Listening on port " << _port << std::endl;
 	// client._clientFd = accept(_sockfd, (struct sockaddr *)&client._clientAddr, sizeof(client._clientAddr));
 	
@@ -125,7 +123,7 @@ void	Server::loop( void )
 					clients[_srvClientNum]._nickNamefirst = false;
 					clients[_srvClientNum].passchk = false;
 					clients[_srvClientNum].status = 2;
-					std::cout << "IRC: New client (" << clients[_srvClientNum]._nickName << ") connected\n";
+					std::cout << "IRC: New client connected.\n";
 					_srvClientNum++;
 				}
 				else

@@ -18,7 +18,9 @@
 int main()
 {
 	int socfd = socket(AF_INET, SOCK_STREAM, 0);
+
 	sockaddr_in saddr, clientAddr;
+
 	saddr.sin_family = AF_INET;
 	saddr.sin_port = htons(6667);
 	saddr.sin_addr.s_addr = INADDR_ANY;
@@ -31,18 +33,14 @@ int main()
 	int cfd;
 	socklen_t clientAddrSize = sizeof(clientAddr);
 	char buffer[1024];
-	cfd = accept(socfd, (struct sockaddr *)&clientAddr, &clientAddrSize);
+	cfd = accept(socfd, NULL, NULL);
 	std::string msg = "MERHABA!\n";
 	send(cfd, msg.c_str(), sizeof(msg), 0);
 	while (1)
 	{
 		recv(cfd, buffer, sizeof(buffer), 0);
 		std::cout << buffer << "\n";
-		if (!strcmp(buffer, "JOIN"))
-		{
-			std::string msg = ":JOIN #oda nick@host 1234\n";
-			send(cfd, msg.c_str(), sizeof(msg), 0);
-		}
 	}
+	close(socfd);
 	return (0);
 }

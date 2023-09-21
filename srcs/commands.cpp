@@ -23,7 +23,9 @@ void	Server::setCommands()
 	commands["PING"] = &Server::ping_command;
 	commands["NICK"] = &Server::nick_command;
 	commands["PASS"] = &Server::pass_command;
+	commands["PRIVMSG"] = &Server::pass_command;
 }
+
 void Server::runCommand(Client &client)
 {
 	std::string msg;
@@ -58,8 +60,6 @@ void Server::runCommand(Client &client)
 		// {
 		// 	std::cout << "Sen hayırdır.\n";
 		// }
-		if (inputs[i] == "PRIVMSG")
-			std::cout << "IRC privmsg\n";
 		if (inputs[i] == "PASS")
 			std::cout << "IRC pass\n";
 		if (inputs[i] == "KICK")
