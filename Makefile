@@ -1,19 +1,31 @@
-CC = c++
-CPPFLAG = -Wall -Wextra -Werror -std=c++98
-NAME = ircserv
-SRC = srcs/*.cpp srcs/commands/*.cpp
-HEADERS = include/*.hpp
+NAME	= ft_irc
+CC		= c++
+FLAGS	=  -Wall -Wextra -Werror -std=c++98
+RM		= rm -rf
+
+#Colors:
+GREEN		=	\e[92;5;118m
+YELLOW		=	\e[93;5;226m
+GRAY		=	\e[33;2;37m
+RESET		=	\e[0m
+CURSIVE		=	\e[33;3m
+
 
 all: $(NAME)
 
-$(NAME): $(SRC) $(HEADERS)
-	@$(CC) $(CPPFLAG) $(SRC) -o $(NAME)
+$(NAME):
+	@printf "$(CURSIVE)$(GRAY) 	- Compiling $(NAME)... $(RESET)\n"
+	@ $(CC) $(FLAGS) ./srcs/*.cpp ./srcs/commands/* -o $(NAME)
+	@printf "$(GREEN)    - Executable ready.\n$(RESET)"
+
 clean:
-	@rm -rf *.o
+	@$(RM) $(NAME)
+	@printf "$(YELLOW)    - Executable removed.$(RESET)\n"
 
-fclean: clean
-	@rm -rf $(NAME)
+fclean:
+	@$(RM) $(NAME)
+	@printf "$(YELLOW)    - Executable removed.$(RESET)\n"
 
-re: fclean $(NAME)
+re: clean all
 
-.PHONY:all re clean fclean
+.PHONY: all clean re

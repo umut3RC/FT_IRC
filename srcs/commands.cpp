@@ -16,14 +16,20 @@ void	Server::commandHandler( void )
 
 void	Server::setCommands()
 {
+	// commands["NOTICE"]	= &Server::notice;			//yok erdem
+	// commands["MODE"]	= &Server::mode;			//yok erdem
+	// commands["WHO"]		= &Server::who;				//yok erdem
+	//commands["KICK"]	= &Server::kick;			//yok umut
+	//commands["PART"]	= &Server::part;			//yok umut
+	
 	commands["CAP"] = &Server::cap_command;
-	commands["PING"] = &Server::ping_command;
-	commands["PASS"] = &Server::pass_command;
-	commands["NICK"] = &Server::nick_command;
 	commands["QUIT"] = &Server::quit_command;
-	commands["PRIVMSG"] = &Server::pass_command;
-	commands["JOIN"] = &Server::join_command;
 	commands["USER"] = &Server::user_command;
+	commands["JOIN"] = &Server::join_command;
+	commands["PING"] = &Server::ping_command;
+	commands["NICK"] = &Server::nick_command;
+	commands["PASS"] = &Server::pass_command;
+	commands["PRIVMSG"] = &Server::pass_command;
 }
 
 void Server::runCommand(Client &client)
