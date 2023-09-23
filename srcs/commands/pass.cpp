@@ -20,7 +20,9 @@ void	Server::pass_command( Client &client )
 	// 	execute(send(client.fd, msg.c_str(), msg.size(), 0), "sa");
 	// }
 	if (this->_passwd == client.c_pass)
+	{
 		client.status = 1;
+	}
 	else
 		client.status = 0;
 }

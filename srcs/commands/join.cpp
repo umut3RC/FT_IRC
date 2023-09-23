@@ -255,7 +255,7 @@ void	Server::join_command( Client &client )
 		}
 		channels[index].chnclients.push_back(client);
 		channels[index]._clientnum++;
-		std::cout << "Number of client in channel: " << channels[index]._clientnum << std::endl;
+		// std::cout << "Number of client in channel: " << channels[index]._clientnum << std::endl;
 		msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
 		for (int j = 0; j < channels[index]._clientnum; j++)
 		{

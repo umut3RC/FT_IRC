@@ -17,23 +17,23 @@ void	Server::commandHandler( void )
 void	Server::setCommands()
 {
 	commands["CAP"] = &Server::cap_command;
-	commands["QUIT"] = &Server::quit_command;
-	commands["USER"] = &Server::user_command;
-	commands["JOIN"] = &Server::join_command;
 	commands["PING"] = &Server::ping_command;
-	commands["NICK"] = &Server::nick_command;
 	commands["PASS"] = &Server::pass_command;
+	commands["NICK"] = &Server::nick_command;
+	commands["QUIT"] = &Server::quit_command;
 	commands["PRIVMSG"] = &Server::pass_command;
+	commands["JOIN"] = &Server::join_command;
+	commands["USER"] = &Server::user_command;
 }
 
 void Server::runCommand(Client &client)
 {
 	std::string msg;
 	ToUpper(inputs[0]);
-	if (sizeof(client) < 1)
-		std::cout << "hmm\n";
-	// for (unsigned long int i = 0; i < inputs.size(); i++){
-	// 	if (inputs[i] == "PASS"){
+	// for (unsigned long int i = 0; i < inputs.size(); i++)
+	// {
+	// 	if (inputs[i] == "PASS")
+	// 	{
 	// 		client.passchk = true;
 	// 		if (atoi(inputs[i + 1].c_str()) != _passwd){
 	// 			msg = "ERROR! Password incorrect\n";
@@ -46,22 +46,14 @@ void Server::runCommand(Client &client)
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;
-		std::cout << inputs[i] << "<---<*>\n";
+		std::cout << ">>>-<*>" << inputs[i] << "\n";
 		for (itCF = commands.begin(); itCF != commands.end(); ++itCF)
 		{
-			if (itCF->first.compare(inputs[i]) == 0)
+			if (!itCF->first.compare(inputs[i]))
 			{
 				(this->*(itCF->second))(client);
 			}
 		}
-		// commands[inputs[i]](client);
-
-		// if (itCF == commands.end())
-		// {
-		// 	std::cout << "Sen hayırdır.\n";
-		// }
-		if (inputs[i] == "PASS")
-			std::cout << "IRC pass\n";
 		if (inputs[i] == "KICK")
 			std::cout << "IRC kick\n";
 		if (inputs[i] == "MODE")

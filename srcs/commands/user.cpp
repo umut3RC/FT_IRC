@@ -32,7 +32,7 @@ void Server::user_command(Client &client)
 			}
 		}
 		std::string msg = "Welcome to irc server!\n";
-		send(client.fd, msg.c_str(), msg.length(), 0);
+		send(client.fd, msg.c_str(), sizeof(msg.c_str()), 0);
 	}
 	else
 	{

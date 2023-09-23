@@ -3,10 +3,10 @@
 void	Server::nick_command( Client &client )
 {
 	std::cout << "IRC: Called NICK command\n";
-	for (int i = 0; i < (int)inputs.size(); i++)
-	{
-		std::cout << i << ": " << inputs[i] << "\n";
-	}
+	// for (int i = 0; i < (int)inputs.size(); i++)
+	// {
+	// 	std::cout << i << ": " << inputs[i] << "\n";
+	// }
 	try
 	{
 		client._nickName = inputs.at(1);
