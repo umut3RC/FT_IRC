@@ -11,7 +11,9 @@ Server::~Server( void )
 
 Server::Server( char **av )
 {
-	std::cout << "IRC: Socket starting . . .\n";
+	std::cout << "/--------------------------\\\n";
+	std::cout << "|   IRC: Socket starting    |\n";
+	std::cout << "\\--------------------------/\n";
 	_port = std::atoi(av[1]);
 	_passwd = std::atoi(av[2]);
 	_sockfd = socket(AF_INET, SOCK_STREAM, 0);

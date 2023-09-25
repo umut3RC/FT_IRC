@@ -42,6 +42,9 @@ class Server
 		void	privmsg_command( Client &client );
 
 		int	findChannel( void );
+		int	GetClientFdFromName(std::string targetName);
+		bool	GetChannelFromName(std::string targetName);
+
 		Server( char **av );
 		~Server( void );
 		Server( const Server &src );

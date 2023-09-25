@@ -193,7 +193,7 @@ int	Server::findChannel( void )
 //----------------------------------------_V_simple_working_V_-------------------
 void	Server::join_command( Client &client )
 {
-	std::cout << "Client wanna join->" << client._nickName << "\n" << client._userName << "\n";
+	std::cout << "Client want join a channel->" << client._nickName << "\n" << client._userName << "\n";
 	int	index;
 	// std::string joinMessage = "JOIN #a uercan";
 	// send (client.fd, joinMessage.c_str(), joinMessage.length(), 0);

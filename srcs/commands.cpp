@@ -21,7 +21,6 @@ void	Server::setCommands()
 	// commands["WHO"]		= &Server::who;				//yok erdem
 	//commands["KICK"]	= &Server::kick;			//yok umut
 	//commands["PART"]	= &Server::part;			//yok umut
-	
 	commands["CAP"] = &Server::cap_command;
 	commands["QUIT"] = &Server::quit_command;
 	commands["USER"] = &Server::user_command;
@@ -29,30 +28,30 @@ void	Server::setCommands()
 	commands["PING"] = &Server::ping_command;
 	commands["NICK"] = &Server::nick_command;
 	commands["PASS"] = &Server::pass_command;
-	commands["PRIVMSG"] = &Server::pass_command;
+	commands["PRIVMSG"] = &Server::privmsg_command;
 }
 
 void Server::runCommand(Client &client)
 {
 	std::string msg;
 	ToUpper(inputs[0]);
-	// for (unsigned long int i = 0; i < inputs.size(); i++)
-	// {
-	// 	if (inputs[i] == "PASS")
-	// 	{
-	// 		client.passchk = true;
-	// 		if (atoi(inputs[i + 1].c_str()) != _passwd){
-	// 			msg = "ERROR! Password incorrect\n";
-	// 			send(client.fd, msg.c_str(), msg.length(), 0);
-	// 			msg.clear();
-	// 			quit_command(client);
-	// 		}
-	// 	}
-	// }
+	for (unsigned long int i = 0; i < inputs.size(); i++)
+	{
+		if (inputs[i] == "PASS")
+		{
+			client.passchk = true;
+			if (atoi(inputs[i + 1].c_str()) != _passwd)
+			{
+				msg = "ERROR! Password incorrect\n";
+				send(client.fd, msg.c_str(), msg.length(), 0);
+				quit_command(client);
+			}
+		}
+	}
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;
-		std::cout << ">>>-<*>" << inputs[i] << "\n";
+		// std::cout << ">>>-<*>" << inputs[i] << "\n";
 		for (itCF = commands.begin(); itCF != commands.end(); ++itCF)
 		{
 			if (!itCF->first.compare(inputs[i]))
