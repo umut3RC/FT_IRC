@@ -40,9 +40,10 @@ class Server
 		void	mode_command( Client &client );
 		void	pass_command( Client &client );
 		void	privmsg_command( Client &client );
+		void	tester(Client &client);
 
 		int	findChannel( void );
-		int	GetClientFdFromName(std::string targetName);
+		int	GetClientFdFromName(std::string targetName, int fd);
 		bool	GetChannelFromName(std::string targetName);
 
 		Server( char **av );

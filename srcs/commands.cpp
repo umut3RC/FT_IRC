@@ -29,6 +29,7 @@ void	Server::setCommands()
 	commands["NICK"] = &Server::nick_command;
 	commands["PASS"] = &Server::pass_command;
 	commands["PRIVMSG"] = &Server::privmsg_command;
+	commands["TESTER"] = &Server::tester;
 }
 
 void Server::runCommand(Client &client)
@@ -51,7 +52,7 @@ void Server::runCommand(Client &client)
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;
-		// std::cout << ">>>-<*>" << inputs[i] << "\n";
+		// std::cout << ">>>" << inputs[i] << "<<<\n";
 		for (itCF = commands.begin(); itCF != commands.end(); ++itCF)
 		{
 			if (!itCF->first.compare(inputs[i]))

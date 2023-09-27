@@ -193,11 +193,8 @@ int	Server::findChannel( void )
 //----------------------------------------_V_simple_working_V_-------------------
 void	Server::join_command( Client &client )
 {
-	std::cout << "Client want join a channel->" << client._nickName << "\n" << client._userName << "\n";
+	// std::cout << "Client wanna join a channel->" << client._nickName << " " << client._userName << "\n";
 	int	index;
-	// std::string joinMessage = "JOIN #a uercan";
-	// send (client.fd, joinMessage.c_str(), joinMessage.length(), 0);
-	// std::cout << "JOIN FONKSIYONU" << '\n';
 	std::string msg = getprefix(client);
 	if (inputs.size() > 3){
 		std::cerr << "join ARG Error!" << std::endl;
@@ -274,7 +271,7 @@ void	Server::join_command( Client &client )
 		channels.push_back(newChannel);
 		_chNum++;
 		msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
-		std::cout << "Join msg: " << msg << "\n";
+		// std::cout << "Join msg: " << msg << "\n";
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Not Sended!\n");
 		msg.clear();
 	}
