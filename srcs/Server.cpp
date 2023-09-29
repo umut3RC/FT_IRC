@@ -85,11 +85,10 @@ void	Server::sstart( void )
 
 std::string Server::getprefix(Client &client)
 {
-	std::string ret;
-	ret = ':' + client._nickName + '!' + client._userName;
+	std::string msg = ':' + client._nickName + '!' + client._userName;
 	if (!client._host.empty())
-		ret += '@' + client._host;
-	return (ret);
+		msg += '@' + client._host;
+	return (msg);
 }
 
 void	Server::loop( void )
