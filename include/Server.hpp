@@ -40,6 +40,8 @@ class Server
 		void	mode_command( Client &client );
 		void	pass_command( Client &client );
 		void	privmsg_command( Client &client );
+		void	part_command( Client &client );
+		void	notice_command( Client &client );
 		void	tester(Client &client);
 		
 

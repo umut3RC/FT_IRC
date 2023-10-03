@@ -28,10 +28,12 @@ void	Server::commandMsg(Client client, std::string comd)
 }
 int	Server::findMe(Client &client)
 {
-	for (int i = 0; i < (int)channels.size(); i++)
+	int i = 0;
+	while(i < (int)channels.size())
 	{
 		if (channels[i].chnName == client.nickName)
 			return (i);
+		i++;
 	}
 	return (i);
 }
