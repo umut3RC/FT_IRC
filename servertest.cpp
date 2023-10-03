@@ -22,7 +22,7 @@ int main()
 	sockaddr_in saddr, clientAddr;
 
 	saddr.sin_family = AF_INET;
-	saddr.sin_port = htons(6667);
+	saddr.sinserverPort = htons(6667);
 	saddr.sin_addr.s_addr = INADDR_ANY;
 	if (bind(socfd, (struct sockaddr *)&saddr, sizeof(saddr)) == -1)
 	{

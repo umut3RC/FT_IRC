@@ -11,12 +11,12 @@ class Client
 		int	num;
 		int	status;
 		int	c_pass;
-		bool	_nickNamefirst;
+		bool	nickNamefirst;
 		bool	passchk;
 	
-		std::string	_nickName;
-		std::string	_userName;
-		std::string	_host;
+		std::string	nickName;
+		std::string	userName;
+		std::string	host;
 
 		Client &operator=( const Client &src)
 		{
@@ -24,7 +24,7 @@ class Client
 			num = src.num;
 			status = src.status;
 			c_pass = src.c_pass;
-			_nickNamefirst = src._nickNamefirst;
+			nickNamefirst = src.nickNamefirst;
 			passchk = src.passchk;
 			return (*this);
 		}

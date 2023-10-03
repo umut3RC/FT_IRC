@@ -17,7 +17,6 @@ void	Server::commandHandler( void )
 void	Server::setCommands()
 {
 	// commands["NOTICE"]	= &Server::notice;			//yok erdem
-	// commands["MODE"]	= &Server::mode;			//yok erdem
 	// commands["WHO"]		= &Server::who;				//yok erdem
 	//commands["KICK"]	= &Server::kick;			//yok umut
 	//commands["PART"]	= &Server::part;			//yok umut
@@ -30,6 +29,7 @@ void	Server::setCommands()
 	commands["PASS"] = &Server::pass_command;
 	commands["PRIVMSG"] = &Server::privmsg_command;
 	commands["TESTER"] = &Server::tester;
+	commands["MODE"]	= &Server::mode_command;
 }
 
 void Server::runCommand(Client &client)
@@ -41,7 +41,7 @@ void Server::runCommand(Client &client)
 		if (inputs[i] == "PASS")
 		{
 			client.passchk = true;
-			if (atoi(inputs[i + 1].c_str()) != _passwd)
+			if (atoi(inputs[i + 1].c_str()) != serverPass)
 			{
 				msg = "ERROR! Password incorrect\n";
 				send(client.fd, msg.c_str(), msg.length(), 0);
@@ -62,8 +62,6 @@ void Server::runCommand(Client &client)
 		}
 		if (inputs[i] == "KICK")
 			std::cout << "IRC kick\n";
-		if (inputs[i] == "MODE")
-			std::cout << "IRC mode\n";
 		if (inputs[i] == "INVITE")
 			std::cout << "IRC invite\n";
 		if (inputs[i] == "NOTICE")

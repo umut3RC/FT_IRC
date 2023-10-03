@@ -37,7 +37,7 @@ int main() {
 
 	// Sunucu adresini ayarlama
 	serverAddr.sin_family = AF_INET;			//soket adresinin aile türünü belirtir. Burada AF_INET, IPv4 adres ailesini temsil eder. Sunucu, bu aile türünü kullanarak IPv4 adresleri ile iletişim kurar.
-	serverAddr.sin_port = htons(8080);			//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
+	serverAddr.sinserverPort = htons(8080);			//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
 	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
 
 	// Sunucu soketini bağlama
@@ -111,7 +111,7 @@ int main() {
 
 	// Sunucu adresini ayarlama
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(8080);
+	serverAddr.sinserverPort = htons(8080);
 	inet_pton(AF_INET, "127.0.0.1", &(serverAddr.sin_addr));
 
 	// Sunucuya bağlanma

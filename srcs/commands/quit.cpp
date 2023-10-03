@@ -2,26 +2,39 @@
 
 void	Server::quit_command(Client &client)
 {
-	std::vector<Client>::iterator it;
+	commandMsg(client, "QUIT");
 
-	std::cout << "IRC: Called QUIT command\n";
+	std::vector<Client>::iterator it;
 	for (unsigned long int i = 0; i < channels.size(); i++)
 	{
-		for (unsigned long int j = 0 ; j < channels[i].chnclients.size(); j++)
+		for (unsigned long int j = 0 ; j < channels[i].chnClients.size(); j++)
 		{
-			if (channels[i].chnclients[j]._nickName == client._nickName)
+			if (channels[i].chnClients[j].nickName == client.nickName)
 			{
-				if (channels[i]._admin == client._nickName)
+				// if (channels[i].chnAdmin == client.nickName)
+				// {
+				// 	std::cout << channels[i].chnAdmin << '\n';
+				// 	it = channels[i].chnClients.begin() + i;
+				// 	it++;
+				// 	channels[i].chnAdmin = it->nickName;
+				// 	std::cout << channels[i].chnAdmin << '\n';
+				// }
+				std::vector<std::string>::iterator iter;
+				iter = std::find(channels[i].chnOperators.begin(), channels[i].chnOperators.end(), client.nickName);
+				if (iter != channels[i].chnOperators.end())
 				{
-					std::cout << channels[i]._admin << '\n';
-					it = channels[i].chnclients.begin() + i;
+					// std::cout << channels[i].chnAdmin << '\n';
+					it = channels[i].chnClients.begin() + i;
 					it++;
-					channels[i]._admin = it->_nickName;
-					std::cout << channels[i]._admin << '\n';
+					// channels[i].chnAdmin = it->nickName;
+					// std::cout << channels[i].chnAdmin << '\n';
+					iter = std::find(channels[i].chnOperators.begin(), channels[i].chnOperators.end(), client.nickName);
+					channels[i].chnOperators.erase(iter);
+					channels[i].chnOperators.push_back(it->nickName);
 				}
-				channels[i].chnclients.erase(channels[i].chnclients.begin() + i);
-				channels[i]._clientnum--;
-				if (channels[i].chnclients.size() == 0)
+				channels[i].chnClients.erase(channels[i].chnClients.begin() + i);
+				channels[i].chnClientsNum--;
+				if (channels[i].chnClients.size() == 0)
 					channels.erase(channels.begin() + i);
 			}
 		}	
@@ -39,14 +52,14 @@ void	Server::quit_command(Client &client)
 		}
 	}
 
-	for (int i = 0; i < _srvClientNum; i++)
+	for (int i = 0; i < serverClntNum; i++)
 	{
-		if (clients[i]._nickName == client._nickName){
+		if (clients[i].nickName == client.nickName){
 			std::vector<Client>::iterator it;
 			it = clients.begin() + i;
-			std::cout << it->_nickName << '\n';
+			std::cout << it->nickName << '\n';
 			clients.erase(clients.begin() + i);
-			_srvClientNum--;
+			serverClntNum--;
 		}
 	}
 	return;

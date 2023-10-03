@@ -2,7 +2,7 @@
 
 void Server::user_command(Client &client)
 {
-	std::cout << "IRC: Called USER command\n";
+	commandMsg(client, "USER");
 	// std::string msg = ":" + getprefix(client) + " " + "001 Welcome\r\n";
 	// send(client.fd, msg.c_str(), msg.size(), 0);
 	if (inputs.size() > 5)
@@ -18,11 +18,11 @@ void Server::user_command(Client &client)
 			{
 				it++;
 				it2++;
-				client._userName = *it;
+				client.userName = *it;
 			}
 			else if ((*it)[0] == ':')
 			{
-				client._host = *it2;
+				client.host = *it2;
 				break;
 			}
 			else
@@ -32,7 +32,7 @@ void Server::user_command(Client &client)
 			}
 		}
 		std::string msg = "Welcome to irc server!\n";
-		// std::cout << "New Client: " << client.fd <<  client._nickName << " " << client._userName << "\n";
+		// std::cout << "New Client: " << client.fd <<  client.nickName << " " << client.userName << "\n";
 		execute(send(client.fd, msg.c_str(), sizeof(msg.c_str()), 0), "ERR\n");
 
 	}

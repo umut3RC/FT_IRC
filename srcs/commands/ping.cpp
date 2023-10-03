@@ -2,7 +2,7 @@
 
 void	Server::ping_command(Client &client)
 {
-	std::cout << "IRC: Called PING command\n";
+	commandMsg(client, "PING");
 	char buffer[1024];
 	ssize_t bytesRead;
 

@@ -9,18 +9,18 @@
 class Server
 {
 	public:
-		int	_port;
-		int	_passwd;
-		int	_sockfd;
-		int	_chNum;
-		int	_srvClientNum;
+		int	serverPort;
+		int	serverPass;
+		int	serverSockFd;
+		int	serverChnNum;
+		int	serverClntNum;
 		char	buffer[1024];
 		std::vector<std::string>				inputs;
 		std::vector<Client>						clients;
 		std::vector<pollfd>						pollFd;
 		std::vector<Channel>					channels;
 		std::map<std::string, void(Server::*)(Client &client)> commands;
-		struct sockaddr_in						_sockAddr;
+		struct sockaddr_in						serverAddr;
 
 		void	Poll( void );
 		void	loop( void );
@@ -41,11 +41,15 @@ class Server
 		void	pass_command( Client &client );
 		void	privmsg_command( Client &client );
 		void	tester(Client &client);
+		
 
 		int	findChannel( void );
 		int	GetClientFdFromName(std::string targetName, int fd);
-		bool	GetChannelFromName(std::string targetName);
-
+		int	addNewClient(pollfd pfd, Client client, int clientSockFd);
+		int	GetChannelFromName(std::string targetName);
+		int	findMe(Client &client);
+		void	printInputs( void );
+		void	commandMsg(Client client, std::string comd);
 		Server( char **av );
 		~Server( void );
 		Server( const Server &src );

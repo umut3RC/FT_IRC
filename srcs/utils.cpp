@@ -16,6 +16,26 @@ std::vector<std::string> splitString(const std::string& input, char delimiter)
 	return result;
 }
 
+void	Server::printInputs( void )
+{
+	for (int i = 0; i < (int)inputs.size(); i++)
+		std::cout << "INP: " << inputs[i] << "\n";
+}
+
+void	Server::commandMsg(Client client, std::string comd)
+{
+	std::cout << "IRC( "<< client.fd << " ): "<< comd <<" command" << std::endl;
+}
+int	Server::findMe(Client &client)
+{
+	for (int i = 0; i < (int)channels.size(); i++)
+	{
+		if (channels[i].chnName == client.nickName)
+			return (i);
+	}
+	return (i);
+}
+
 void	signalHandler( int s )
 {
 	std::cout << "Bye!\n";
