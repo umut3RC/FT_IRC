@@ -27,8 +27,8 @@ Server::Server( char **av )
 
 	// SILINECEK-V_V_V_V_V_V_V_V_V_V_V
 	int val = 1;
-	// SILINECEK-^_^_^_^_^_^_^_^_^_^_^
 	setsockopt(this->serverSockFd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
+	// SILINECEK-^_^_^_^_^_^_^_^_^_^_^
 }
 
 void	Server::sstart( void )
@@ -39,7 +39,6 @@ void	Server::sstart( void )
 	serverAddr.sin_port = htons(serverPort);	//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
 	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
 
-	// Sunucu soketini bağlama
 	execute(bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)), "Error!\nBind the server socket failed\n");
 	// if (bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1)
 	// {

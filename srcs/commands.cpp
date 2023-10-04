@@ -16,22 +16,21 @@ void	Server::commandHandler( void )
 
 void	Server::setCommands()
 {
-	// commands["WHO"]		= &Server::who;				//yok erdem
-	//commands["KICK"]	= &Server::kick;			//yok umut
 	//commands["PART"]	= &Server::part;			//yok umut
-	commands["CAP"] = &Server::cap_command;
-	commands["QUIT"] = &Server::quit_command;
-	commands["USER"] = &Server::user_command;
-	commands["JOIN"] = &Server::join_command;
-	commands["PING"] = &Server::ping_command;
-	commands["NICK"] = &Server::nick_command;
-	commands["PASS"] = &Server::pass_command;
-	commands["PRIVMSG"] = &Server::privmsg_command;
+	commands["CAP"] = &Server::cap_command;//			(1)
+	commands["QUIT"] = &Server::quit_command;//			(2)
+	commands["USER"] = &Server::user_command;//			(3)
+	commands["JOIN"] = &Server::join_command;//			(4)
+	commands["PING"] = &Server::ping_command;//			(5)
+	commands["NICK"] = &Server::nick_command;//			(6)
+	commands["PASS"] = &Server::pass_command;//			(7)
+	commands["PRIVMSG"] = &Server::privmsg_command;//	(8)
 	commands["TESTER"] = &Server::tester;
-	commands["MODE"] = &Server::mode_command;
-	commands["PART"] = &Server::part_command;
-	commands["NOTICE"] = &Server::notice_command;
-	commands["WHOIS"] = &Server::whois_command;
+	commands["MODE"] = &Server::mode_command;//			(9)
+	// commands["PART"] = &Server::part_command;//			(10)
+	commands["NOTICE"] = &Server::notice_command;//		(11)
+	commands["WHOIS"] = &Server::whois_command;//		(12)
+	commands["KICK"] = &Server::kick_command;//			(13)
 }
 
 void Server::runCommand(Client &client)
@@ -45,7 +44,7 @@ void Server::runCommand(Client &client)
 			client.passchk = true;
 			if (atoi(inputs[i + 1].c_str()) != serverPass)
 			{
-				msg = "ERROR! Password incorrect\n";
+				msg = ERRserverPassMISMATCH(client.nickName);
 				send(client.fd, msg.c_str(), msg.length(), 0);
 				quit_command(client);
 			}
@@ -62,12 +61,10 @@ void Server::runCommand(Client &client)
 				(this->*(itCF->second))(client);
 			}
 		}
-		if (inputs[i] == "KICK")
+		if (inputs[i] == "PART")
 			std::cout << "IRC kick\n";
 		if (inputs[i] == "INVITE")
 			std::cout << "IRC invite\n";
-		if (inputs[i] == "NOTICE")
-			std::cout << "IRC notice\n";
 	}
 	inputs.clear();
 }

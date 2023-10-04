@@ -91,8 +91,8 @@ int	Server::findChannel( void )
 // 					throw std::runtime_error("Error!\nDidn't sended!\n");
 // 				}
 // 			}
-// 			if (channels[i].ifp == 1){
-// 				std::cout << "ifp == 1\n";
+// 			if (channels[i].modeP == 1){
+// 				std::cout << "modeP == 1\n";
 // 				if (channels[i].whiteList.empty()){
 // 					msg = "ERROR! this is a invite only channel!\n";
 // 					if (send(client.fd, msg.c_str(), msg.length(), 0) < 0)
@@ -223,9 +223,9 @@ void	Server::join_command( Client &client )
 			execute(send(client.fd, msg.c_str(), msg.length(), 0), msg);
 			return;
 		}
-		if (channels[index].ifp)
+		if (channels[index].modeP)
 		{
-			std::cout << "ifp == 1\n";
+			std::cout << "modeP == 1\n";
 			if (channels[index].whiteList.empty()){
 				msg = "ERROR! this is a invite only channel!\n";
 				send(client.fd, msg.c_str(), msg.length(), 0);
@@ -324,8 +324,8 @@ void	Server::join_command( Client &client )
 // 					throw std::runtime_error("Error!\nDidn't sended!\n");
 // 				}
 // 			}
-// 			if (channels[i].ifp == 1){
-// 				std::cout << "ifp == 1\n";
+// 			if (channels[i].modeP == 1){
+// 				std::cout << "modeP == 1\n";
 // 				if (channels[i].whiteList.empty()){
 // 					msg = "ERROR! this is a invite only channel!\n";
 // 					if (send(client.fd, msg.c_str(), msg.length(), 0) < 0)

@@ -8,33 +8,6 @@ message
 ...
 */
 
-int	Server::GetClientFdFromName(std::string targetName, int fd)
-{
-	for (int i = 0; i < (int)clients.size(); i++)
-	{
-		if (!strncmp(clients[i].nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && clients[i].fd != fd)
-		{
-			std::cout << "IRC: Client is finded.\n";
-			std::cout << i << " " << clients[i].fd << std::endl;
-			return(clients[i].fd);
-		}
-	}
-	std::cout << "IRC: No client in this name.\n";
-	return (-1);
-}
-int	Server::GetChannelFromName(std::string targetName)
-{
-	for (int i = 0; i < (int)channels.size(); i++)
-	{
-		if (!strncmp(channels[i].chnName.c_str(), targetName.c_str(), strlen(targetName.c_str())))
-		{ 
-			std::cout << "IRC: Channel is finded.\n";
-			return(i);
-		}
-	}
-	return (-1);
-}
-
 void Server::privmsg_command(Client &client)
 {
 	commandMsg(client, "PRIVMSG");

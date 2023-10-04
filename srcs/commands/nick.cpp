@@ -4,27 +4,6 @@ void	Server::nick_command( Client &client )
 {
 	commandMsg(client, "NICK");
 	std::string	msg;
-	// // for (int i = 0; i < (int)inputs.size(); i++)
-	// // {
-	// // 	std::cout << "Nick: " << i << ": " << inputs[i] << "\n";
-	// // }
-	// try
-	// {
-	// 	client.nickName = inputs.at(1);
-	// 	client.userName = inputs.at(2);
-	// 	client.host = inputs.at(5);
-	// 	std::string msg = ": NICK " + client.nickName + "@" + client.host;
-	// 	execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "ERR");
-	// 	msg = "Nick name changed.";
-	// 	// std::cout << "New Client: " << client.nickName << " " << client.userName << "\n";
-	// 	execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "ERR");
-	// }
-	// catch(const std::out_of_range &e)
-	// {
-	// 	execute(send(client.fd, "out_of_range", strlen("out_of_range"), 0), "out_of_range");
-	// 	//"461 " + prefix + " " +  command + " :Not enough parameters"
-	// }
-	//--------------------------------------------------V
 	if (GetClientFdFromName(inputs[1], client.fd) > 0)//Nick kullanılıyorsa o nickteki fd döner.(aynı kullanıcı ismi varmı kontrolü)
 	{
 		std::cout << "Nick in use" << '\n';

@@ -8,15 +8,7 @@ End of WHOIS list.
 
 #include "../../include/Server.hpp"
 
-int	Server::GetClientIndexFromName(std::string target)
-{
-	for (int i = 0; i < (int)clients.size(); i++)
-	{
-		if (clients[i].nickName == target)
-			return (i);
-	}
-	return (-1);
-}
+
 
 void	Server::whois_command( Client &client )
 {

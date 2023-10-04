@@ -61,3 +61,68 @@ void	execute(int ret, std::string err)
 	if (ret < 0)
 		throw std::runtime_error(err);
 }
+
+int	Server::GetClientFdFromName(std::string targetName, int fd)
+{
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		if (!strncmp(clients[i].nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && clients[i].fd != fd)
+		{
+			std::cout << "IRC: Client is finded.\n";
+			std::cout << i << " " << clients[i].fd << std::endl;
+			return(clients[i].fd);
+		}
+	}
+	std::cout << "IRC: No client in this name.\n";
+	return (-1);
+}
+
+int	Server::GetChannelFromName(std::string targetName)
+{
+	for (int i = 0; i < (int)channels.size(); i++)
+	{
+		if (!strncmp(channels[i].chnName.c_str(), targetName.c_str(), strlen(targetName.c_str())))
+		{ 
+			std::cout << "IRC: Channel is finded.\n";
+			return(i);
+		}
+	}
+	return (-1);
+}
+
+int	Server::GetClientIndexFromName(std::string target)
+{
+	for (int i = 0; i < (int)clients.size(); i++)
+	{
+		if (clients[i].nickName == target)
+			return (i);
+	}
+	return (-1);
+}
+
+bool	Channel::isOperator( std::string s)
+{
+	for(int i = 0; i < (int)chnOperators.size(); i++)
+	{
+		if (chnOperators[i] == s)
+			return (true);
+	}
+	return (false);
+}
+
+void	Channel::eraseClient(std::string nick)
+{
+	for (int i = 0; i < (int)this->chnClients.size(); i++)
+	{
+		if (!strncmp(this->chnClients[i].nickName.c_str(), nick.c_str(), nick.length()))
+		{
+			this->chnClients.erase(this->chnClients.begin() + i);
+			this->chnClientsNum--;
+		}
+	}
+}
+void	Channel::brodcastMsg(std::string msg)
+{
+	for (int i = 0; i < this->chnClientsNum; i++)
+		send(this->chnClients[i].fd, msg.c_str(), msg.length(), 0);
+}

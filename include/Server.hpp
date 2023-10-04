@@ -43,6 +43,7 @@ class Server
 		void	part_command( Client &client );
 		void	notice_command( Client &client );
 		void	whois_command( Client &client );
+		void	kick_command( Client &client );
 		void	tester(Client &client);
 		
 

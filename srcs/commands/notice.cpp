@@ -1,4 +1,3 @@
-
 #include "../../include/Server.hpp"
 
 void	Server::notice_command( Client &client )
