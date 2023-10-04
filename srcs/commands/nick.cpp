@@ -3,26 +3,60 @@
 void	Server::nick_command( Client &client )
 {
 	commandMsg(client, "NICK");
-	// for (int i = 0; i < (int)inputs.size(); i++)
+	std::string	msg;
+	// // for (int i = 0; i < (int)inputs.size(); i++)
+	// // {
+	// // 	std::cout << "Nick: " << i << ": " << inputs[i] << "\n";
+	// // }
+	// try
 	// {
-	// 	std::cout << "Nick: " << i << ": " << inputs[i] << "\n";
+	// 	client.nickName = inputs.at(1);
+	// 	client.userName = inputs.at(2);
+	// 	client.host = inputs.at(5);
+	// 	std::string msg = ": NICK " + client.nickName + "@" + client.host;
+	// 	execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "ERR");
+	// 	msg = "Nick name changed.";
+	// 	// std::cout << "New Client: " << client.nickName << " " << client.userName << "\n";
+	// 	execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "ERR");
 	// }
-	try
+	// catch(const std::out_of_range &e)
+	// {
+	// 	execute(send(client.fd, "out_of_range", strlen("out_of_range"), 0), "out_of_range");
+	// 	//"461 " + prefix + " " +  command + " :Not enough parameters"
+	// }
+	//--------------------------------------------------V
+	if (GetClientFdFromName(inputs[1], client.fd) > 0)//Nick kullanılıyorsa o nickteki fd döner.(aynı kullanıcı ismi varmı kontrolü)
 	{
-		client.nickName = inputs.at(1);
-		client.userName = inputs.at(2);
-		client.host = inputs.at(5);
-		std::string msg = ": NICK " + client.nickName + "@" + client.host;
-		execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "ERR");
-		msg = "Nick name changed.";
-		// std::cout << "New Client: " << client.nickName << " " << client.userName << "\n";
-		execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "ERR");
+		std::cout << "Nick in use" << '\n';
+		msg = "ERROR! nick in use!\n";
+		send(client.fd, msg.c_str(), msg.length(), 0);
+		msg.clear();
+		if (!client.nickName.empty())
+			return;
+		else
+			quit_command(client);
 	}
-	catch(const std::out_of_range &e)
+	std::string newnick = ':' + client.nickName;
+	newnick = getprefix(client);
+	newnick += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+	send(client.fd, newnick.c_str(), newnick.length(), 0);
+	for (int k = 0; k < (int)channels.size(); k++)//kanallarda admin ise eski nicki değiştirmek içik.
 	{
-		execute(send(client.fd, "out_of_range", strlen("out_of_range"), 0), "out_of_range");
-		//"461 " + prefix + " " +  command + " :Not enough parameters"
+		for (int j = 0; j < (int)channels.size(); j++)
+		{
+			if (client.nickName == channels[k].chnOperators[j])
+			{
+				std::cout << "IRC: " << channels[k].chnName << " 's operator nick name is changed." << '\n';
+				channels[k].chnAdmin = inputs[1];
+			}
+		}
+		if (client.nickName == channels[k].chnAdmin)
+		{
+			std::cout << "ADMIN degisti" << '\n';
+			channels[k].chnAdmin = inputs[1];
+		}
 	}
+	client.nickName = inputs[1];
 }
 
 

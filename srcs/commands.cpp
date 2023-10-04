@@ -31,6 +31,7 @@ void	Server::setCommands()
 	commands["MODE"] = &Server::mode_command;
 	commands["PART"] = &Server::part_command;
 	commands["NOTICE"] = &Server::notice_command;
+	commands["WHOIS"] = &Server::whois_command;
 }
 
 void Server::runCommand(Client &client)

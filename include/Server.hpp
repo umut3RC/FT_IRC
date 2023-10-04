@@ -42,6 +42,7 @@ class Server
 		void	privmsg_command( Client &client );
 		void	part_command( Client &client );
 		void	notice_command( Client &client );
+		void	whois_command( Client &client );
 		void	tester(Client &client);
 		
 
@@ -49,6 +50,7 @@ class Server
 		int	GetClientFdFromName(std::string targetName, int fd);
 		int	addNewClient(pollfd pfd, Client client, int clientSockFd);
 		int	GetChannelFromName(std::string targetName);
+		int	GetClientIndexFromName(std::string target);
 		int	findMe(Client &client);
 		void	printInputs( void );
 		void	commandMsg(Client client, std::string comd);
