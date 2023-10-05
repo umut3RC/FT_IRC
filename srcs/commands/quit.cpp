@@ -5,6 +5,7 @@ void	Server::quit_command(Client &client)
 	commandMsg(client, "QUIT");
 
 	std::vector<Client>::iterator it;
+	std::vector<std::string>::iterator iter;
 	for (unsigned long int i = 0; i < channels.size(); i++)
 	{
 		for (unsigned long int j = 0 ; j < channels[i].chnClients.size(); j++)
@@ -19,7 +20,6 @@ void	Server::quit_command(Client &client)
 				// 	channels[i].chnAdmin = it->nickName;
 				// 	std::cout << channels[i].chnAdmin << '\n';
 				// }
-				std::vector<std::string>::iterator iter;
 				iter = std::find(channels[i].chnOperators.begin(), channels[i].chnOperators.end(), client.nickName);
 				if (iter != channels[i].chnOperators.end())
 				{

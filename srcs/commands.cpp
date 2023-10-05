@@ -31,6 +31,7 @@ void	Server::setCommands()
 	commands["NOTICE"] = &Server::notice_command;//		(11)
 	commands["WHOIS"] = &Server::whois_command;//		(12)
 	commands["KICK"] = &Server::kick_command;//			(13)
+	commands["INVITE"] = &Server::invite_command;//		(13)
 }
 
 void Server::runCommand(Client &client)

@@ -69,7 +69,7 @@ int	Server::GetClientFdFromName(std::string targetName, int fd)
 		if (!strncmp(clients[i].nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && clients[i].fd != fd)
 		{
 			std::cout << "IRC: Client is finded.\n";
-			std::cout << i << " " << clients[i].fd << std::endl;
+			// std::cout << i << " " << clients[i].fd << std::endl;
 			return(clients[i].fd);
 		}
 	}

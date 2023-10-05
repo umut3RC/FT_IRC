@@ -11,7 +11,7 @@ void	Server::mode_command( Client &client )
 		msg = "You need join a channel";
 		std::cout << msg << "\n";
 	}
-	else if (channels[chnIndex].chnAdmin == client.nickName)
+	else if (channels[chnIndex].isOperator(client.nickName))
 	{
 		if (inputs[2] == "+k")
 		{

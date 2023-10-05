@@ -6,6 +6,8 @@ Server::Server( const Server &src )
 Server::~Server( void )
 {
 	std::cout << "IRC: Server closed. Have a good day!\n";
+	// for (int i = 0; i < (int)pollFd.size(); i++)
+	// 	close(pollFd[i]);
 	close(serverSockFd);
 }
 
@@ -80,7 +82,7 @@ void	Server::sstart( void )
 	// }	
 	// Soketleri kapatma
 	// close(client._clientFd);
-	close(serverSockFd);
+	// close(serverSockFd);
 }
 
 std::string Server::getprefix(Client &client)

@@ -15,9 +15,9 @@ void Server::privmsg_command(Client &client)
 	std::string	targetName = inputs[1];
 	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
 	msg += ' ' + inputs[0] + ' ' + inputs[1] + ' ';
-	for (unsigned long int l = 2; l < inputs.size(); l++)
+	for (unsigned long int i = 2; i < inputs.size(); i++)
 	{
-		msg = msg + inputs[l];
+		msg = msg + inputs[i];
 		msg = msg + ' ';
 	}
 	msg += '\n';
