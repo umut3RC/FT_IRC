@@ -84,7 +84,30 @@ void	Server::nick_command( Client &client )
 			i++;
 		}
 		//ikinci nick komutunda yeniden buraya gelmesin diye
-		client.nickNamefirst = true;
+	}
+	else
+	{
+		msg = getprefix(client);
+		msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+		send(client.fd, msg.c_str(), msg.length(), 0);
+		for (unsigned long int k = 0; k < channels.size(); k++)
+		{
+			if (channels[k].isOperator(client.nickName))
+			{
+				// std::cout << "ADMIN degisti" << '\n';
+				// channels[k].chnAdmin = inputs[1];
+				channels[k].chnOperators
+				for (int j = 0; j < (int)channels[k].chnOperators.size(); j++)
+				{
+					if (channels[k].chnOperators[j] == client.nickName)
+					{
+						channels[k].chnOperators[j] == inputs[1];
+						break;
+					}
+				}
+			}
+		}
+		client.nickName = inputs[1];
 	}
 }
 //----------------------------
