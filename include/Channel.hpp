@@ -23,8 +23,9 @@ class Channel
 
 		Channel(std::string name) : chnName(name) {chnClientsNum = 0; hasPass = 0; maxUser = 0; modeN = 0; modeP = 0;};
 		bool	isOperator( std::string );
-		void	eraseClient( std::string nick);
-		void	brodcastMsg( std::string msg);
+		void	eraseClient( std::string nick );
+		void	brodcastMsg( std::string msg );
+		bool	isClientHere( std::string c );
 };
 
 #endif

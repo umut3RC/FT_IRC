@@ -126,3 +126,14 @@ void	Channel::brodcastMsg(std::string msg)
 	for (int i = 0; i < this->chnClientsNum; i++)
 		send(this->chnClients[i].fd, msg.c_str(), msg.length(), 0);
 }
+
+
+bool	Channel::isClientHere( std::string c )
+{
+	for (int i = 0; i < (int)chnClients.size(); i++)
+	{
+		if (chnClients[i].nickName == c)
+			return (true);
+	}
+	return (false);
+}

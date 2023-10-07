@@ -27,7 +27,7 @@ void	Server::setCommands()
 	commands["PRIVMSG"] = &Server::privmsg_command;//	(8)
 	commands["TESTER"] = &Server::tester;
 	commands["MODE"] = &Server::mode_command;//			(9)
-	// commands["PART"] = &Server::part_command;//			(10)
+	commands["PART"] = &Server::part_command;//			(10)
 	commands["NOTICE"] = &Server::notice_command;//		(11)
 	commands["WHOIS"] = &Server::whois_command;//		(12)
 	commands["KICK"] = &Server::kick_command;//			(13)
@@ -62,8 +62,6 @@ void Server::runCommand(Client &client)
 				(this->*(itCF->second))(client);
 			}
 		}
-		if (inputs[i] == "PART")
-			std::cout << "IRC kick\n";
 		if (inputs[i] == "INVITE")
 			std::cout << "IRC invite\n";
 	}

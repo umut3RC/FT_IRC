@@ -6,8 +6,8 @@ Server::Server( const Server &src )
 Server::~Server( void )
 {
 	std::cout << "IRC: Server closed. Have a good day!\n";
-	// for (int i = 0; i < (int)pollFd.size(); i++)
-	// 	close(pollFd[i]);
+	for (int i = 0; i < (int)pollFd.size(); i++)
+		close(pollFd[i].fd);
 	close(serverSockFd);
 }
 
