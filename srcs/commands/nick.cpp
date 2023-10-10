@@ -96,12 +96,12 @@ void	Server::nick_command( Client &client )
 			{
 				// std::cout << "ADMIN degisti" << '\n';
 				// channels[k].chnAdmin = inputs[1];
-				channels[k].chnOperators
+				// channels[k].chnOperators
 				for (int j = 0; j < (int)channels[k].chnOperators.size(); j++)
 				{
 					if (channels[k].chnOperators[j] == client.nickName)
 					{
-						channels[k].chnOperators[j] == inputs[1];
+						channels[k].chnOperators[j] = inputs[1];
 						break;
 					}
 				}

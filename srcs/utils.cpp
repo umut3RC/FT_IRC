@@ -127,7 +127,6 @@ void	Channel::brodcastMsg(std::string msg)
 		send(this->chnClients[i].fd, msg.c_str(), msg.length(), 0);
 }
 
-
 bool	Channel::isClientHere( std::string c )
 {
 	for (int i = 0; i < (int)chnClients.size(); i++)

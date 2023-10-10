@@ -12,22 +12,11 @@ void	Server::quit_command(Client &client)
 		{
 			if (channels[i].chnClients[j].nickName == client.nickName)
 			{
-				// if (channels[i].chnAdmin == client.nickName)
-				// {
-				// 	std::cout << channels[i].chnAdmin << '\n';
-				// 	it = channels[i].chnClients.begin() + i;
-				// 	it++;
-				// 	channels[i].chnAdmin = it->nickName;
-				// 	std::cout << channels[i].chnAdmin << '\n';
-				// }
 				iter = std::find(channels[i].chnOperators.begin(), channels[i].chnOperators.end(), client.nickName);
 				if (iter != channels[i].chnOperators.end())
 				{
-					// std::cout << channels[i].chnAdmin << '\n';
 					it = channels[i].chnClients.begin() + i;
 					it++;
-					// channels[i].chnAdmin = it->nickName;
-					// std::cout << channels[i].chnAdmin << '\n';
 					iter = std::find(channels[i].chnOperators.begin(), channels[i].chnOperators.end(), client.nickName);
 					channels[i].chnOperators.erase(iter);
 					channels[i].chnOperators.push_back(it->nickName);
@@ -45,7 +34,7 @@ void	Server::quit_command(Client &client)
 		if (client.fd == pollFd[i].fd)
 		{
 			std::string msg = ":" + getprefix(client) + " QUIT: Leaving " + inputs[inputs.size() - 1] + "\n";
-			send(client.fd, msg.c_str(), msg.length(), 0);
+			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
 			close(pollFd[i].fd);
 			pollFd.erase(pollFd.begin() + i);
 			break;
@@ -54,8 +43,8 @@ void	Server::quit_command(Client &client)
 
 	for (int i = 0; i < serverClntNum; i++)
 	{
-		if (clients[i].nickName == client.nickName){
-			std::vector<Client>::iterator it;
+		if (clients[i].nickName == client.nickName)
+		{
 			it = clients.begin() + i;
 			std::cout << it->nickName << '\n';
 			clients.erase(clients.begin() + i);

@@ -42,47 +42,12 @@ void	Server::sstart( void )
 	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
 
 	execute(bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)), "Error!\nBind the server socket failed\n");
-	// if (bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1)
-	// {
-	// 	throw std::runtime_error("Error!\nBind the server socket failed\n");
-	// 	// close(client._clientFd);
-	// 	// close(serverSockFd);
-	// 	// bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
-	// }
+
 	execute(listen(serverSockFd, 10), "Error!\nListening failed\n");
 	std::cout << "IRC: Listening on port " << serverPort << std::endl;
-	// client._clientFd = accept(serverSockFd, (struct sockaddr *)&client._clientAddr, sizeof(client._clientAddr));
 	
 	Poll();
 	loop();
-	
-	// client._clientFd = accept(serverSockFd, NULL, NULL);
-	// if (client._clientFd == -1)
-	// 	throw std::runtime_error("Error!\nAccepting client connection.\n");
-	// // İstemciden gelen veriyi okuma ve ekrana yazdırma
-	// while (1)
-	// {
-	// 	std::vector<std::string> clientMsgSplit;
-	// 	std::vector<std::string>::iterator clientMsgSplit_iter;
-	// 	recv(client._clientFd, buffer, sizeof(buffer), 0);
-	// 	// std::cout << "From client: " << buffer << std::endl;
-	// 	// std::cout << ">>****>" << buffer << "<****<<";
-
-	// 	clientMsgSplit = splitString(buffer, '\n');
-	// 	clientMsgSplit_iter = clientMsgSplit.begin();
-	// 	while (clientMsgSplit_iter != clientMsgSplit.end())
-	// 	{
-	// 		std::cout << ">>**>>" << *clientMsgSplit_iter << "<<**<<\n";
-	// 		checkServerCommands(*clientMsgSplit_iter);
-	// 		++clientMsgSplit_iter;
-	// 	}
-	// 	// İstemciye yanıt gönderme
-	// 	// const char *response = "Hello from server!";
-	// 	// send(client._clientFd, response, strlen(response), 0);
-	// }	
-	// Soketleri kapatma
-	// close(client._clientFd);
-	// close(serverSockFd);
 }
 
 std::string Server::getprefix(Client &client)
@@ -162,13 +127,12 @@ void	Server::loop( void )
 			}
 		}
 	}
-	// close(pollFd);
 }
 
 void	Server::Poll( void )
 {
 	pollfd	myPoll;
-	memset(&myPoll, 0, sizeof(myPoll));// !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	memset(&myPoll, 0, sizeof(myPoll));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	myPoll.fd = serverSockFd;
 	myPoll.events = POLLIN;
 	pollFd.push_back(myPoll);
