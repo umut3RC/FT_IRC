@@ -8,10 +8,9 @@ class Client
 	private:
 	public:
 		int	fd;
-		int	num;
 		int	status;
 		int	c_pass;
-		bool	nickNamefirst;
+		bool	isFirstNickAssigment;
 		bool	passchk;
 	
 		std::string	nickName;
@@ -21,10 +20,9 @@ class Client
 		Client &operator=( const Client &src)
 		{
 			fd = src.fd;
-			num = src.num;
 			status = src.status;
 			c_pass = src.c_pass;
-			nickNamefirst = src.nickNamefirst;
+			isFirstNickAssigment = src.isFirstNickAssigment;
 			passchk = src.passchk;
 			return (*this);
 		}

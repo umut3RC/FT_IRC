@@ -66,7 +66,7 @@ int	Server::addNewClient(pollfd pfd, Client client, int clientSockFd)
 	pollFd.push_back(pfd);
 	clients.push_back(client);
 	clients[serverClntNum].fd = clientSockFd;
-	clients[serverClntNum].nickNamefirst = false;
+	clients[serverClntNum].isFirstNickAssigment = false;
 	clients[serverClntNum].passchk = false;
 	clients[serverClntNum].status = 2;
 	std::cout << "IRC: New client connected.\n";
@@ -113,7 +113,6 @@ void	Server::loop( void )
 					else
 					{
 						buffer[retRead] = '\0';
-						clients[i - 1].num = i - 1;
 						try
 						{
 							commandHandler();
