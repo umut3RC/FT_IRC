@@ -36,6 +36,22 @@ int	Server::findChannel( void )
 	return (index);
 }
 
+void	Server::createNewChannel(Client &client)
+{
+	std::string msg = getprefix(client);
+	Channel newChannel(inputs[1]);
+	if (inputs.size() == 2)
+		newChannel.chnPass = inputs[2];
+	newChannel.chnClients.push_back(client);
+	newChannel.chnClientsNum++;
+	newChannel.chnOperators.push_back(client.nickName);
+	channels.push_back(newChannel);
+	serverChnNum++;
+	msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Not Sended!\n");
+	msg.clear();
+}
+
 void	Server::join_command( Client &client )
 {
 	commandMsg(client, "JOIN");
@@ -81,8 +97,9 @@ void	Server::join_command( Client &client )
 				if (!strncmp(channels[index].whiteList[l].c_str(), client.nickName.c_str(), channels[index].whiteList[l].length()) && !channels[index].whiteList.empty()){
 					channels[index].chnClients.push_back(client);
 					channels[index].chnClientsNum++;
-					msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
-					for (int j = 0; j < channels[index].chnClientsNum; j++){
+					msg = msg + ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
+					for (int j = 0; j < channels[index].chnClientsNum; j++)
+					{
 						send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0);
 					}
 					msg.clear();
@@ -97,28 +114,14 @@ void	Server::join_command( Client &client )
 		}
 		channels[index].chnClients.push_back(client);
 		channels[index].chnClientsNum++;
-		// std::cout << "Number of client in channel: " << channels[index].chnClientsNum << std::endl;
 		msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
 		for (int j = 0; j < channels[index].chnClientsNum; j++)
 		{
+			std::cout << "...." << channels[index].chnClients[j].fd << ":" << std::endl;
 			execute(send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0), "Cant send\n");
 		}
 		return;
 	}
 	else
-	{
-		Channel newChannel(inputs[1]);
-		if (inputs.size() == 2)
-			newChannel.chnPass = inputs[2];
-		newChannel.chnClients.push_back(client);
-		newChannel.chnClientsNum++;
-		// newChannel.chnAdmin = client.nickName;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		newChannel.chnOperators.push_back(client.nickName);
-		channels.push_back(newChannel);
-		serverChnNum++;
-		msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
-		// std::cout << "Join msg: " << msg << "\n";
-		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Not Sended!\n");
-		msg.clear();
-	}
+		createNewChannel(client);
 }

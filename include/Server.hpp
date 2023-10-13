@@ -15,12 +15,12 @@ class Server
 		int	serverChnNum;
 		int	serverClntNum;
 		char	buffer[1024];
+		struct sockaddr_in						serverAddr;
 		std::vector<std::string>				inputs;
 		std::vector<Client>						clients;
 		std::vector<pollfd>						pollFd;
 		std::vector<Channel>					channels;
 		std::map<std::string, void(Server::*)(Client &client)> commands;
-		struct sockaddr_in						serverAddr;
 
 		void	Poll( void );
 		void	loop( void );
@@ -46,7 +46,6 @@ class Server
 		void	kick_command( Client &client );
 		void	invite_command( Client &client );
 		void	tester(Client &client);
-		
 
 		int	findChannel( void );
 		int	GetClientFdFromName(std::string targetName, int fd);
@@ -56,6 +55,7 @@ class Server
 		int	findMe(Client &client);
 		void	printInputs( void );
 		void	commandMsg(Client client, std::string comd);
+		void	createNewChannel(Client &client);
 		Server( char **av );
 		~Server( void );
 		Server( const Server &src );

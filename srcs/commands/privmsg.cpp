@@ -53,6 +53,7 @@ void Server::privmsg_command(Client &client)
 	}
 	else
 	{
+		// std::cout << "nout found channnnel\n";
 		if (targetFd < 0)
 		{
 			targetFd = GetChannelFromName(inputs[1]);

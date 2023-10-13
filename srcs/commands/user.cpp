@@ -31,8 +31,8 @@ void Server::user_command(Client &client)
 				it2++;
 			}
 		}
-		std::string msg = "Welcome to irc server!\n";
-		execute(send(client.fd, msg.c_str(), sizeof(msg.c_str()), 0), "ERR\n");
+		// std::string msg = getprefix(client) + " 001 " + client.nickName + " :Welcome to ircserv";
+		// execute(send(client.fd, msg.c_str(), sizeof(msg.c_str()), 0), "ERR\n");
 	}
 	else
 	{
