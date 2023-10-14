@@ -24,10 +24,10 @@ void	Server::mode_command( Client &client )
 		{
 			channels[chnIndex].chnOperators.push_back(inputs[3]);
 		}
-		// else if (inputs[2] == "+n")
-		// {
-		// 	client
-		// }
+		else if (inputs[2] == "+n")
+		{
+			channels[chnIndex].modeN = true;
+		}
 	}
 	else
 	{

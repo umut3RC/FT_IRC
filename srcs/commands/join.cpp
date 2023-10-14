@@ -57,13 +57,6 @@ void	Server::join_command( Client &client )
 	commandMsg(client, "JOIN");
 	int	index;
 	std::string msg = getprefix(client);
-	if (inputs.size() > 3){
-		std::cerr << "join ARG Error!" << std::endl;
-		msg = "join args must be like this /join <channel> <channel passwd>\n";
-		execute(send(client.fd, msg.c_str(), msg.length(), 0), "not Sended\n");
-		msg.clear();
-		return;
-	}
 	if (inputs[1][0] != '#')
 		inputs[1] = '#' + inputs[1];
 	index = findChannel();
@@ -73,28 +66,30 @@ void	Server::join_command( Client &client )
 		{
 			if (strncmp(inputs[2].c_str(), channels[index].chnPass.c_str(), channels[index].chnPass.length())){
 				std::cout << "join if pass check!1\n"; 
-				msg = "ERROR! PLEASE JOIN WITH CHANNEL PASSWORD!\n";
+				msg = ERR_PASSWDMISMATCH(client.nickName);
 				send(client.fd, msg.c_str(), msg.length(), 0);
 				msg.clear();
 				return;
 			}
 		}
 		if (channels[index].maxUser == channels[index].chnClientsNum){
-			msg = "ERROR! YOU CANNOT JOIN THIS CHANNEL USER LIMIT REACHED\n";
+			msg = ERR_CHANNELISFULL(getprefix(client), inputs[1]);
 			execute(send(client.fd, msg.c_str(), msg.length(), 0), msg);
 			return;
 		}
 		if (channels[index].modeP)
 		{
 			std::cout << "modeP == 1\n";
-			if (channels[index].whiteList.empty()){
-				msg = "ERROR! this is a invite only channel!\n";
+			if (channels[index].whiteList.empty())
+			{
+				msg = ERR_INVITEONLYCHAN(inputs[1]);
 				send(client.fd, msg.c_str(), msg.length(), 0);
-				return;	
+				return;
 			}
 			for (unsigned long int l = 0; l < channels[index].whiteList.size(); l++)
 			{
-				if (!strncmp(channels[index].whiteList[l].c_str(), client.nickName.c_str(), channels[index].whiteList[l].length()) && !channels[index].whiteList.empty()){
+				if (!strncmp(channels[index].whiteList[l].c_str(), client.nickName.c_str(), channels[index].whiteList[l].length()) && !channels[index].whiteList.empty())
+				{
 					channels[index].chnClients.push_back(client);
 					channels[index].chnClientsNum++;
 					msg = msg + ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
@@ -106,7 +101,7 @@ void	Server::join_command( Client &client )
 					return;
 				}
 				else{
-					msg = "ERROR! this is a invite only channel!\n";
+					msg = ERR_INVITEONLYCHAN(inputs[1]);
 					send(client.fd, msg.c_str(), msg.length(), 0);
 					return;
 				}
@@ -117,8 +112,8 @@ void	Server::join_command( Client &client )
 		msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
 		for (int j = 0; j < channels[index].chnClientsNum; j++)
 		{
-			std::cout << "...." << channels[index].chnClients[j].fd << ":" << std::endl;
-			execute(send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0), "Cant send\n");
+			// std::cout << "...." << channels[index].chnClients[j].fd << ":" << std::endl;
+			execute(send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0), "ERR\n");
 		}
 		return;
 	}

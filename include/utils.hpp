@@ -21,7 +21,6 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-// #define ERR_NEEDMOREPARAMS(prefix, command) "461 " + prefix + " " +  command + " :Not enough parameters"
 
 #define ERR_UNKNOWNCOMMAND(source, command)				"421 " + source + " " + command + " :Unknown command"
 #define ERR_NEEDMOREPARAMS(source, command)				"461 " + source + " " + command + " :Not enough parameters"
@@ -42,6 +41,8 @@
 #define ERR_ERRONEUSNICKNAME(source, nick)				"432 " + source + " " + nick + " :Erroneous nickname"
 #define ERR_UMODEUNKNOWNFLAG(source, nick)				"501 " + source + " " + nick + " :Unknown MODE flag"
 #define ERR_USERSDONTMATCH(source)						"502 " + source + " :Cannot change mode for other users"
+#define ERR_NEEDMOREPARAMS(prefix, command)				"461 " + prefix + " " +  command + " :Not enough parameters"
+#define ERR_INVITEONLYCHAN(source)						"473 " + source + " :Cannot join channel (+i)"
 
 // NUMERIC REPLIES
 #define RPL_WELCOME(source, server)															"001 " + source + " :" + B_GREEN + "Welcome " + source + " to the " + server + " server!" + END
@@ -59,6 +60,7 @@
 #define RPL_LISTEND(client)																	"323 " + client + " :End of /LIST"
 #define RPL_INFO(client, string)															"371 " + client + " :" + string
 #define RPL_ENDOFINFO(client)																"374 " + client + " :End of INFO list"
+#define ERR_PASSWDMISMATCH(client)															"464 " + client + " :Password incorrect"
 //410 CAP END bilgini tekrardan istiyor.
 
 // COMMAND REPLIES
