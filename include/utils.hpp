@@ -41,7 +41,7 @@
 #define ERR_ERRONEUSNICKNAME(source, nick)				"432 " + source + " " + nick + " :Erroneous nickname"
 #define ERR_UMODEUNKNOWNFLAG(source, nick)				"501 " + source + " " + nick + " :Unknown MODE flag"
 #define ERR_USERSDONTMATCH(source)						"502 " + source + " :Cannot change mode for other users"
-#define ERR_NEEDMOREPARAMS(prefix, command)				"461 " + prefix + " " +  command + " :Not enough parameters"
+// #define ERR_NEEDMOREPARAMS(prefix, command)				"461 " + prefix + " " +  command + " :Not enough parameters"
 #define ERR_INVITEONLYCHAN(source)						"473 " + source + " :Cannot join channel (+i)"
 
 // NUMERIC REPLIES
@@ -65,7 +65,7 @@
 
 // COMMAND REPLIES
 #define RPL_JOIN(source, channel)						":" + source + " JOIN :" + channel
-#define RPL_PART(source, channel, message)				":" + source + " PART " + channel + " " + message // :" + message
+#define RPL_PART(source, channel)					":" + source + " PART :" + channel// :" + message
 #define RPL_PING(source, token)							":" + source + " PONG :" + token
 #define RPL_PONG(source, token)							":" + source + " PING :" + token
 #define RPL_PRIVMSG(source, target, message)			":" + source + " PRIVMSG " + target + " " + message // :" + message

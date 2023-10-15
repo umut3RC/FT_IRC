@@ -3,24 +3,20 @@
 //	PART #test
 //	:KullaniciAdi!KullaniciHostName PART #KanalAdi
 
-void	Server::part_command( Client &client )
-{
-	commandMsg(client, "PART");
+// void	Server::part_command( Client &client )
+// {
+// 	commandMsg(client, "PART");
 	
-	int	targetChn = GetChannelFromName(inputs[1]);
-	std::string	msg;
-	if (targetChn < 0)
-	{
-		std::cout << "IRC: You need to join a channel!\n";
-		return;
-	}
-	msg = getprefix(client) + " PART " + inputs[1] + "\r\n";
-	send(client.fd, msg.c_str(), sizeof(msg.c_str()), 0);
-}
-
-
-
-// #include "../../headers/Server.hpp"
+// 	int	targetChn = GetChannelFromName(inputs[1]);
+// 	std::string	msg;
+// 	if (targetChn < 0)
+// 	{
+// 		std::cout << "IRC: You need to join a channel!\n";
+// 		return;
+// 	}
+// 	msg = getprefix(client) + " PART " + inputs[1] + "\r\n";
+// 	send(client.fd, msg.c_str(), sizeof(msg.c_str()), 0);
+// }
 
 // void    Server::broadcastPart(const std::vector<Client *> &clientList, std::string msg, int excludeFd, std::string channelName) {
 //     for (size_t i = 0; i < clientList.size(); i++)
@@ -31,40 +27,45 @@ void	Server::part_command( Client &client )
 //     }
 // }
 
-// void	Server::part(int fd, std::vector<std::string> token) {
-//     std::string msg;
+void	Server::part_command( Client &client )
+{
+	commandMsg(client, "PART");
+	std::string msg;
+	int targetChn = GetChannelFromName(inputs[1]);
+	if (inputs.empty() or inputs.size() < 2) {
+		msg = getprefix(client) + " " + ERR_NEEDMOREPARAMS(client.nickName, "PART") + "\r\n";
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+		return;
+	}
 
-//     if (token.empty() or token.size() < 2) {
-// 		_clients[fd]->clientMsgSender(fd, ERR_NEEDMOREPARAMS(_clients[fd]->getNickName(), "PART"));
-// 		return;
-// 	}
+	if (targetChn < 0)
+	{
+		msg = getprefix(client) + " " + ERR_NOSUCHCHANNEL(client.nickName, "PART") + "\r\n";
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+		return;
+	}
 
-// 	std::string name = token[1];
-// 	Channel *channel = _channels[name];
-// 	if (!channel) {
-// 		_clients[fd]->clientMsgSender(fd, ERR_NOSUCHCHANNEL(_clients[fd]->getNickName(), "PART"));
-// 		return;
-// 	}
-
-//     size_t i;
-// 	for (i = 0 ; i < _clients[fd]->_channels.size() ; i++)
-// 		if (_clients[fd]->_channels[i]->getName() == name)
-//             break;
-
-//     if (i == _clients[fd]->_channels.size())
-//     {
-// 		_clients[fd]->clientMsgSender(fd, ERR_NOTONCHANNEL(_clients[fd]->getNickName(), "PART"));
-//         return;
-//     }
-
-//     broadcastPart(channel->_channelClients , RPL_PART(_clients[fd]->getPrefixName(), channel->getName()), fd, name);
-// 	msg = ":" + _clients[fd]->getPrefixName() + " PART " + name;
-// 	ft_write(fd, msg);
-// 	_clients[fd]->_channels[i]->leftTheChannel(_clients[fd]);
-//     _clients[fd]->_channels.erase(_clients[fd]->_channels.begin() + i);
-//     if (_clients[fd]->_channels[i]->getClientCount() == 0)
-// 	{
-// 		std::cout << _clients[fd]->_channels[i]->getName() << " Channel delete...\n";
-// 		_channels.erase(_clients[fd]->_channels[i]->getName());
-// 	}
-// }
+	if (!channels[targetChn].isClientHere(client.nickName))
+	{
+		std::cout << "IRC: Client is joined this channel.\n";
+		msg = getprefix(client) + " " + ERR_NOTONCHANNEL(client.nickName, "PART") + "\r\n";
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+		return;
+	}
+	// broadcastPart(channel->_channelClients , RPL_PART(_clients[fd]->getPrefixName(), channels[targetChn].name), fd, inputs[1]);
+	msg = getprefix(client) + " PART " + channels[targetChn].chnName + " :" + RPL_PART(getprefix(client), channels[targetChn].chnName) + "\r\n";
+	// for (int i = 0; i < (int)channels[targetChn].chnClients.size(); i++)
+	// {
+	// 	if (channels[targetChn].chnClients[i].nickName != client.nickName)
+	// 		execute(send(channels[targetChn].chnClients[i].fd, msg.c_str(), msg.length(), 0), "ERR\n");
+	// }
+	channels[targetChn].brodcastMsg(msg);
+	msg = getprefix(client) + " PART " + inputs[1];
+	execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+	channels[targetChn].eraseClient(client.nickName);
+	// if (_clients[fd]->_channels[i]->getClientCount() == 0)
+	// {
+	// 	std::cout << _clients[fd]->_channels[i]->getName() << " Channel delete...\n";
+	// 	_channels.erase(_clients[fd]->_channels[i]->getName());
+	// }
+}

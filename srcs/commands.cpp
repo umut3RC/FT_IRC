@@ -62,8 +62,6 @@ void Server::runCommand(Client &client)
 				(this->*(itCF->second))(client);
 			}
 		}
-		if (inputs[i] == "INVITE")
-			std::cout << "IRC invite\n";
 	}
 	inputs.clear();
 }

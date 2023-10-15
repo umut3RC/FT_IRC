@@ -25,23 +25,24 @@ void Server::privmsg_command(Client &client)
 	{
 		targetFd = GetChannelFromName(targetName);
 		std::string temp = channels[targetFd].chnName;
-		// if (channels[targetFd].modeN)
-		// {
-		// 	for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
-		// 	{
-		// 		if (channels[targetFd].chnClients[l].nickName == client.nickName)
-		// 		{
-		// 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
-		// 		{
-		// 			if (channels[targetFd].chnClients[k].nickName != client.nickName)
-		// 				send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
-		// 		}
-		// 		}
-		// 	}
-		// 	msg = "ERROR! You're not on that channel\n";
-		// 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
-		// 	return ;
-		// }
+		if (channels[targetFd].modeN)
+		{
+			for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
+			{
+				if (channels[targetFd].chnClients[l].nickName == client.nickName)
+				{
+					for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
+				{
+					if (channels[targetFd].chnClients[k].nickName != client.nickName)
+						send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+				}
+				}
+			}
+			msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]);
+			msg += "\r\n";
+			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
+			return ;
+		}
 		else
 		{
 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
@@ -53,7 +54,6 @@ void Server::privmsg_command(Client &client)
 	}
 	else
 	{
-		std::cout << "nout found channnnel\n";
 		if (targetFd < 0)
 		{
 			targetFd = GetChannelFromName(inputs[1]);
