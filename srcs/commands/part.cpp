@@ -54,7 +54,7 @@ void	Server::part_command( Client &client )
 	}
 	// broadcastPart(channel->_channelClients , RPL_PART(_clients[fd]->getPrefixName(), channels[targetChn].name), fd, inputs[1]);
 	msg = getprefix(client) + " PART " + channels[targetChn].chnName + " :" + RPL_PART(getprefix(client), channels[targetChn].chnName) + "\r\n";
-	// for (int i = 0; i < (int)channels[targetChn].chnClients.size(); i++)
+	// for (int i = 0; i < (int)channels[targetChn].chnClients.size(); i++)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!bi tık sıkıntımsı sanki
 	// {
 	// 	if (channels[targetChn].chnClients[i].nickName != client.nickName)
 	// 		execute(send(channels[targetChn].chnClients[i].fd, msg.c_str(), msg.length(), 0), "ERR\n");
@@ -63,9 +63,4 @@ void	Server::part_command( Client &client )
 	msg = getprefix(client) + " PART " + inputs[1];
 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
 	channels[targetChn].eraseClient(client.nickName);
-	// if (_clients[fd]->_channels[i]->getClientCount() == 0)
-	// {
-	// 	std::cout << _clients[fd]->_channels[i]->getName() << " Channel delete...\n";
-	// 	_channels.erase(_clients[fd]->_channels[i]->getName());
-	// }
 }

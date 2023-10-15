@@ -16,7 +16,6 @@ void	Server::commandHandler( void )
 
 void	Server::setCommands()
 {
-	//commands["PART"]	= &Server::part;			//yok umut
 	commands["CAP"] = &Server::cap_command;//			(1)
 	commands["QUIT"] = &Server::quit_command;//			(2)
 	commands["USER"] = &Server::user_command;//			(3)
@@ -25,13 +24,13 @@ void	Server::setCommands()
 	commands["NICK"] = &Server::nick_command;//			(6)
 	commands["PASS"] = &Server::pass_command;//			(7)
 	commands["PRIVMSG"] = &Server::privmsg_command;//	(8)
-	commands["TESTER"] = &Server::tester;
 	commands["MODE"] = &Server::mode_command;//			(9)
 	commands["PART"] = &Server::part_command;//			(10)
 	commands["NOTICE"] = &Server::notice_command;//		(11)
 	commands["WHOIS"] = &Server::whois_command;//		(12)
 	commands["KICK"] = &Server::kick_command;//			(13)
 	commands["INVITE"] = &Server::invite_command;//		(13)
+	commands["TESTER"] = &Server::tester;
 }
 
 void Server::runCommand(Client &client)

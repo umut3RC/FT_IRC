@@ -7,68 +7,67 @@ message
 message
 ...
 */
-
-void Server::privmsg_command(Client &client)
-{
-	commandMsg(client, "PRIVMSG");
-	std::string	msg = getprefix(client);
-	std::string	targetName = inputs[1];
-	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
-	msg += ' ' + inputs[0] + ' ' + inputs[1] + ' ';
-	for (unsigned long int i = 2; i < inputs.size(); i++)
-	{
-		msg = msg + inputs[i];
-		msg = msg + ' ';
-	}
-	msg += "\r\n";
-	if (inputs[1][0] == '#')
-	{
-		targetFd = GetChannelFromName(targetName);
-		std::string temp = channels[targetFd].chnName;
-		if (channels[targetFd].modeN)
-		{
-			for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
-			{
-				if (channels[targetFd].chnClients[l].nickName == client.nickName)
-				{
-					for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
-				{
-					if (channels[targetFd].chnClients[k].nickName != client.nickName)
-						send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
-				}
-				}
-			}
-			msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]);
-			msg += "\r\n";
-			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
-			return ;
-		}
-		else
-		{
-			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
-			{
-				if (channels[targetFd].chnClients[k].nickName != client.nickName)
-					send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
-			}
-		}
-	}
-	else
-	{
-		if (targetFd < 0)
-		{
-			targetFd = GetChannelFromName(inputs[1]);
-			if(targetFd < 0)
-			{
-				std::cout << "-1\n";
-				execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "Err\n");
-			}
-			execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
-		}
-		execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
-	}
-	return;
-}
-
+//--RPL_PRIVMSG----------------------------------------------------------------VLASTA-LASTA-FİNİTOSHİBAV
+// void Server::privmsg_command(Client &client)
+// {
+// 	commandMsg(client, "PRIVMSG");
+// 	std::string	msg = getprefix(client);
+// 	std::string	targetName = inputs[1];
+// 	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
+// 	msg += ' ' + inputs[0] + ' ' + inputs[1] + ' ';
+// 	for (unsigned long int i = 2; i < inputs.size(); i++)
+// 	{
+// 		msg = msg + inputs[i];
+// 		msg = msg + ' ';
+// 	}
+// 	msg += "\r\n";
+// 	if (inputs[1][0] == '#')
+// 	{
+// 		targetFd = GetChannelFromName(targetName);
+// 		std::string temp = channels[targetFd].chnName;
+// 		if (channels[targetFd].modeN)
+// 		{
+// 			for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
+// 			{
+// 				if (channels[targetFd].chnClients[l].nickName == client.nickName)
+// 				{
+// 					for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
+// 				{
+// 					if (channels[targetFd].chnClients[k].nickName != client.nickName)
+// 						send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+// 				}
+// 				}
+// 			}
+// 			msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]) + "\r\n";
+// 			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
+// 			return ;
+// 		}
+// 		else
+// 		{
+// 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
+// 			{
+// 				if (channels[targetFd].chnClients[k].nickName != client.nickName)
+// 					send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+// 			}
+// 		}
+// 	}
+// 	else
+// 	{
+// 		if (targetFd < 0)
+// 		{
+// 			targetFd = GetChannelFromName(inputs[1]);
+// 			if(targetFd < 0)
+// 			{
+// 				std::cout << "-1\n";
+// 				execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "Err\n");
+// 			}
+// 			execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
+// 		}
+// 		execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
+// 	}
+// 	return;
+// }
+//---------------------------------------------------------------------------------------^^^^^^^
 //----------------------------------------------
 // void Server::privmsg_command(Client &client)
 // {
@@ -125,3 +124,68 @@ void Server::privmsg_command(Client &client)
 // 		return;
 // 	// }
 // }
+
+
+void Server::privmsg_command(Client &client)
+{
+	commandMsg(client, "PRIVMSG");
+	std::string	msg;// = getprefix(client);
+	std::string	targetName = inputs[1];
+	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
+	// msg += ' ' + inputs[0] + ' ' + inputs[1] + ' ';
+	for (unsigned long int i = 2; i < inputs.size(); i++)
+	{
+		msg = msg + inputs[i];
+		msg = msg + ' ';
+	}
+	msg += "\r\n";
+	if (inputs[1][0] == '#')
+	{
+		targetFd = GetChannelFromName(targetName);
+		std::string temp = channels[targetFd].chnName;
+		if (channels[targetFd].modeN)
+		{
+			for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
+			{
+				if (channels[targetFd].chnClients[l].nickName == client.nickName)
+				{
+					for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
+				{
+					if (channels[targetFd].chnClients[k].nickName != client.nickName)
+						send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+				}
+				}
+			}
+			msg = RPL_PRIVMSG(getprefix(client), client.nickName, msg);
+			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
+			return ;
+		}
+		else
+		{
+			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
+			{
+				if (channels[targetFd].chnClients[k].nickName != client.nickName)
+				{
+					msg = RPL_PRIVMSG(getprefix(client), targetName, msg);
+					send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+				}
+			}
+		}
+	}
+	else
+	{
+		if (targetFd < 0)
+		{
+			targetFd = GetChannelFromName(inputs[1]);
+			if(targetFd < 0)
+			{
+				std::cout << "-1\n";
+				execute(send(client.fd, msg.c_str(), sizeof(msg), 0), "Err\n");
+			}
+			execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
+		}
+		msg = RPL_PRIVMSG(getprefix(client), client.nickName, msg);
+		execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
+	}
+	return;
+}
