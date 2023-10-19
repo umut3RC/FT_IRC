@@ -10,7 +10,7 @@ void	Server::invite_command( Client &client )
 	std::string	chn = inputs[2];
 	int	targetFd;
 	int	targetChn;
-	msg = ":" + getprefix(client) + " INVITE " + client.nickName + " " + inputs[1] + " " + chn;
+	msg = getprefix(client) + " INVITE " + client.nickName + " " + inputs[1] + " " + chn;
 	targetFd = GetClientFdFromName(inputs[1], client.fd);
 	if (targetFd < 0)
 	{
