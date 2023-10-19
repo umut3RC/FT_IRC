@@ -27,7 +27,7 @@ int	Server::findChannel( void )
 	int	index = -1;
 	for (int i = 0 ; i < (int)channels.size(); i++)
 	{
-		if (!strncmp(inputs[1].c_str(), channels[i].chnName.c_str(), inputs[1].length()))
+		if (inputs[1] == channels[i].chnName)
 		{
 			index = i;
 			return (index);
@@ -50,6 +50,7 @@ void	Server::createNewChannel(Client &client)
 	msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Not Sended!\n");
 	msg.clear();
+	std::cout << "IRC: Created a new channel\n";
 }
 
 void	Server::join_command( Client &client )
