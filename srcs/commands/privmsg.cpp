@@ -24,26 +24,32 @@ void Server::privmsg_command(Client &client)
 	if (inputs[1][0] == '#')
 	{
 		targetFd = GetChannelFromName(targetName);
-		if (channels[targetFd].modeN)
+		if (targetFd < 0)
 		{
-			for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
-			{
-				if (channels[targetFd].chnClients[l].nickName == client.nickName)
-				{
-					for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
-					{
-						if (channels[targetFd].chnClients[k].nickName != client.nickName)
-							send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
-					}
-				}
-			}
-			msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]) + "\r\n";
-			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
-			return ;
+			std::cout << "NOOOOOOO\n";
+			return;
 		}
-		else 
+		// if (channels[targetFd].modeN)
+		// {
+		// 	for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
+		// 	{
+		// 		if (channels[targetFd].chnClients[l].nickName == client.nickName)
+		// 		{
+		// 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
+		// 			{
+		// 				if (channels[targetFd].chnClients[k].nickName != client.nickName)
+		// 					send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+		// 			}
+		// 		}
+		// 	}
+		// 	msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]) + "\r\n";
+		// 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
+		// 	return ;
+		// }
+		// else 
 		if (targetFd > -1)
 		{
+			std::cout << "IRC: Sendede clients on "<< inputs[1] <<" channel.\n";
 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
 			{
 				if (channels[targetFd].chnClients[k].nickName != client.nickName)

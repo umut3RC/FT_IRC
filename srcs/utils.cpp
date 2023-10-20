@@ -19,7 +19,7 @@ std::vector<std::string> splitString(const std::string& input, char delimiter)
 void	Server::printInputs( void )
 {
 	for (int i = 0; i < (int)inputs.size(); i++)
-		std::cout << "INP: " << inputs[i] << "\n";
+		std::cout << "INP ->> " << inputs[i] << " <<-\n";
 }
 
 void	Server::commandMsg(Client client, std::string comd)
