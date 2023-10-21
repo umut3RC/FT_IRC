@@ -26,30 +26,28 @@ void Server::privmsg_command(Client &client)
 		targetFd = GetChannelFromName(targetName);
 		if (targetFd < 0)
 		{
-			std::cout << "NOOOOOOO\n";
 			return;
 		}
-		// if (channels[targetFd].modeN)
-		// {
-		// 	for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
-		// 	{
-		// 		if (channels[targetFd].chnClients[l].nickName == client.nickName)
-		// 		{
-		// 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
-		// 			{
-		// 				if (channels[targetFd].chnClients[k].nickName != client.nickName)
-		// 					send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
-		// 			}
-		// 		}
-		// 	}
-		// 	msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]) + "\r\n";
-		// 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
-		// 	return ;
-		// }
-		// else 
-		if (targetFd > -1)
+		if (channels[targetFd].modeN)
 		{
-			std::cout << "IRC: Sendede clients on "<< inputs[1] <<" channel.\n";
+			for(unsigned long int l = 0; l < channels[targetFd].chnClients.size(); l++)
+			{
+				if (channels[targetFd].chnClients[l].nickName == client.nickName)
+				{
+					for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
+					{
+						if (channels[targetFd].chnClients[k].nickName != client.nickName)
+							send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+					}
+				}
+			}
+			msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]) + "\r\n";
+			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
+			return ;
+		}
+		else if (targetFd > -1)
+		{
+			std::cout << "IRC: Sended clients on "<< inputs[1] <<" channel.\n";
 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
 			{
 				if (channels[targetFd].chnClients[k].nickName != client.nickName)
@@ -207,37 +205,38 @@ void Server::privmsg_command(Client &client)
 // 		msg = msg + ' ';
 // 	}
 // 	msg += '\n';
+// 	int inch = 0;
 // 	std::cout << msg << '\n';
 // 	if (inputs[1][0] == '#'){
 // 		for (unsigned long int j = 0; j < channels.size(); j++){
 // 			std::string temp = channels[j].chnName;
 // 			if (!strncmp(dest.c_str(), temp.c_str(), strlen(dest.c_str()))){
-// 				// if (channels[j].ifn){
-// 				// 	for(unsigned long int l = 0; l < channels[j].chnclients.size(); l++){
-// 				// 		if (channels[j].chnclients[l]._nick == client._nick)
-// 				// 			inch = 1;
-// 				// 	}
-// 				// 	if (inch){
-// 				// 		for (int k = 0; k < channels[j]._clientnum; k++){
-// 				// 			if (channels[j].chnclients[k]._nick != client._nick)
-// 				// 				send(channels[j].chnclients[k].fd, msg.c_str(), msg.length(), 0);
-// 				// 		}
-// 				// 	}
-// 				// 	else{
-// 				// 		std::cout << "CLIENT NOT IN THE SERVER CLIENT LIST !!!!!!" << '\n';
-// 				// 		msg.clear();
-// 				// 		msg = "ERROR! You're not on that channel\n";
-// 				// 		send(client.fd, msg.c_str(), msg.length(), 0);
-// 				// 		msg.clear();
-// 				// 	}
-// 				// 	return;
-// 				// }
-// 				// else{
+// 				if (channels[j].modeN){
+// 					for(unsigned long int l = 0; l < channels[j].chnClients.size(); l++){
+// 						if (channels[j].chnClients[l].nickName == client.nickName)
+// 							inch = 1;
+// 					}
+// 					if (inch){
+// 						for (int k = 0; k < channels[j].chnClientsNum; k++){
+// 							if (channels[j].chnClients[k].nickName != client.nickName)
+// 								send(channels[j].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+// 						}
+// 					}
+// 					else{
+// 						std::cout << "CLIENT NOT IN THE SERVER CLIENT LIST !!!!!!" << '\n';
+// 						msg.clear();
+// 						msg = "ERROR! You're not on that channel\n";
+// 						send(client.fd, msg.c_str(), msg.length(), 0);
+// 						msg.clear();
+// 					}
+// 					return;
+// 				}
+// 				else{
 // 					for (int k = 0; k < channels[j].chnClientsNum; k++){
 // 						if (channels[j].chnClients[k].nickName != client.nickName)
 // 							send(channels[j].chnClients[k].fd, msg.c_str(), msg.length(), 0);
 // 					}
-// 				// }
+// 				}
 // 			}
 // 		}
 // 	}
