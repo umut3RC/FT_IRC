@@ -12,7 +12,7 @@ void	Server::notice_command( Client &client )
 		msg = msg + ' ';
 	}
 	msg = msg + "\n";
-	send(GetClientFdFromName(inputs[1], client.fd) , msg.c_str(), msg.length(), 0);;
+	execute(send(GetClientFdFromName(inputs[1], client.fd) , msg.c_str(), msg.length(), 0), "Notice", 0);
 }
 
 // void	Server::notice_command( Client &client )

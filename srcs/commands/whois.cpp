@@ -36,6 +36,6 @@ void	Server::whois_command( Client &client )
 
 	// PRIVMSG Hedef :Mesaj
 	// msg = "PRIVMSG " + client.nickName + " :" + msg;
-	send(GetClientFdFromName(inputs[1], client.fd), msg.c_str(), msg.length(), 0);
+	execute(send(GetClientFdFromName(inputs[1], client.fd), msg.c_str(), msg.length(), 0), "Whois", 0);
 	// execute(send(GetClientFdFromName(inputs[1], client.fd), msg.c_str(), sizeof(msg.c_str()), 0), "ERR\n");
 }

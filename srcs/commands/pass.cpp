@@ -34,7 +34,7 @@ void	Server::pass_command( Client &client )
 			if (atoi(inputs[i + 1].c_str()) != serverPass)
 			{
 				msg = ERRserverPassMISMATCH(client.nickName);
-				execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR_PASS\n");
+				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Pass", 0);
 				quit_command(client);
 			}
 		}

@@ -31,13 +31,15 @@ void Server::user_command(Client &client)
 				it2++;
 			}
 		}
-		// std::string msg = getprefix(client) + " 001 " + client.nickName + " :Welcome to ircserv";
+		std::string msg = getprefix(client) + " :Welcome To (I)nternet (R)elay (C)hat\r\n";
 		// execute(send(client.fd, msg.c_str(), sizeof(msg.c_str()), 0), "ERR\n");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "User", 0);
 	}
 	else
 	{
 		std::string msg = "ERROR!\n";
-		send(client.fd, msg.c_str(), msg.length(), 0);
+		// send(client.fd, msg.c_str(), msg.length(), 0);
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "User", 0);
 		msg.clear();
 	}
 }

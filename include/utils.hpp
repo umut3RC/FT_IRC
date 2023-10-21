@@ -24,6 +24,7 @@
 
 #define ERR_UNKNOWNCOMMAND(source, command)				"421 " + source + " " + command + " :Unknown command"
 #define ERR_NEEDMOREPARAMS(source, command)				"461 " + source + " " + command + " :Not enough parameters"
+// #define ERR_NEEDMOREPARAMS(prefix, command)				"461 " + prefix + " " +  command + " :Not enough parameters"
 #define ERR_NOTREGISTERED(source)						"451 " + source + " :You have not registered"
 #define ERR_ALREADYREGISTERED(source)					"462 " + source + " :You may not reregister"
 #define ERRserverPassMISMATCH(source)						"464 " + source + " :Password incorrect"
@@ -35,17 +36,16 @@
 #define ERR_BADCHANNELKEY(source, channel)				"475 " + source + " " + channel + " :Cannot join channel (+k)"
 #define ERR_NOSUCHNICK(source, nickname)				"401 " + source + " " + nickname + " :No such nick/channel"
 #define ERR_USERNOTINCHANNEL(source, nickname, channel)	"441 " + source + " " + nickname + " " + channel + " :They aren't on that channel"
-#define ERR_CHANOPRIVSNEEDED(source, channel)			"482 " + source + " " + channel + " :You're not channel operator"
+#define ERR_CHANOPRIVSNEEDED(source, channel)			"482 " + source + " " + channel + " :You're not channel operator\r\n"
 #define ERR_CHANNELISFULL(source, channel)				"471 " + source + " " + channel + " :Cannot join channel (+l)"
 #define ERR_CANNOTSENDTOCHAN(source, channel)			"404 " + source + " " + channel + " :Cannot send to channel"
 #define ERR_ERRONEUSNICKNAME(source, nick)				"432 " + source + " " + nick + " :Erroneous nickname"
 #define ERR_UMODEUNKNOWNFLAG(source, nick)				"501 " + source + " " + nick + " :Unknown MODE flag"
 #define ERR_USERSDONTMATCH(source)						"502 " + source + " :Cannot change mode for other users"
-// #define ERR_NEEDMOREPARAMS(prefix, command)				"461 " + prefix + " " +  command + " :Not enough parameters"
 #define ERR_INVITEONLYCHAN(source)						"473 " + source + " :Cannot join channel (+i)"
 
 // NUMERIC REPLIES
-#define RPL_WELCOME(source, server)															"001 " + source + " :" + B_GREEN + "Welcome " + source + " to the " + server + " server!" + END
+#define RPL_WELCOME(source, server)															"001 " + source + " :" + "Welcome " + source + " to the " + server + " server!\r\n"
 #define RPL_NAMREPLY(source, channel, users)												"353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)														"366 " + source + " " + channel + " :End of /NAMES list."
 #define RPL_WHOISUSER(source, nickname, username, hostname, port, realname)					"311 " + source + " " + nickname + " ~" + username + " " + hostname + ":" + port + " * :" + realname
@@ -80,6 +80,6 @@ std::vector<std::string> splitString(const std::string& input, char delimiter);
 void	ToLower(std::string &s);
 void	ToUpper(std::string &s);
 void	signalHandler( int s );
-void	execute(int ret, std::string err);
+void	execute(int ret, std::string err, int ERR_MSG);
 
 #endif

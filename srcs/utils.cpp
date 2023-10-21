@@ -56,8 +56,20 @@ void	ToUpper(std::string &s)
 		s[i] = toupper(s[i]);
 }
 
-void	execute(int ret, std::string err)
+/*
+	0 ERR_MSG: "Failed to send in " + err +" command"
+	1 ERR_MSG: "Failed to creat in " + err"
+*/
+void	execute(int ret, std::string err, int ERR_MSG)
 {
+	std::string err_mess[2];
+	err_mess[0] = "Failed to send in " + err +" command!\n";
+	err_mess[1] = "Failed to creat in " + err"\n";
+
+	if (ret < 0 && ERR_MSG < 2 && ERR_MSG > -1)
+	{
+		throw std::runtime_error(err_mess[ERR_MSG]);
+	}
 	if (ret < 0)
 		throw std::runtime_error(err);
 }

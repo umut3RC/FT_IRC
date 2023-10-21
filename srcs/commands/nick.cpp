@@ -33,7 +33,7 @@ void	Server::nick_command( Client &client )
 	{
 		msg = getprefix(client);
 		msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
-		send(client.fd, msg.c_str(), msg.length(), 0);
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Nick", 0);
 		for (unsigned long int k = 0; k < channels.size(); k++)
 		{
 			if (channels[k].isOperator(client.nickName))

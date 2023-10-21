@@ -34,7 +34,7 @@ void	Server::quit_command(Client &client)
 		if (client.fd == pollFd[i].fd)
 		{
 			std::string msg = ":" + getprefix(client) + " QUIT: Leaving " + inputs[inputs.size() - 1] + "\n";
-			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Quit", 0);
 			close(pollFd[i].fd);
 			pollFd.erase(pollFd.begin() + i);
 			break;

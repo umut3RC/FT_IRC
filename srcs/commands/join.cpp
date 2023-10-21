@@ -48,7 +48,7 @@ void	Server::createNewChannel(Client &client)
 	channels.push_back(newChannel);
 	serverChnNum++;
 	msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
-	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Not Sended!\n");
+	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Create New Channel", 1);
 	msg.clear();
 	std::cout << "IRC: Created a new channel\n";
 }
@@ -69,7 +69,7 @@ void	Server::join_command( Client &client )
 			{
 				std::cout << "IRC: Channel has pass\n"; 
 				msg = ERR_PASSWDMISMATCH(client.nickName);
-				send(client.fd, msg.c_str(), msg.length(), 0);
+				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 				msg.clear();
 				return;
 			}
@@ -77,7 +77,7 @@ void	Server::join_command( Client &client )
 		if (channels[index].maxUser == channels[index].chnClientsNum)
 		{
 			msg = ERR_CHANNELISFULL(getprefix(client), inputs[1]);
-			execute(send(client.fd, msg.c_str(), msg.length(), 0), msg);
+			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 			return;
 		}
 		if (channels[index].modeP)
@@ -86,7 +86,7 @@ void	Server::join_command( Client &client )
 			if (channels[index].whiteList.empty())
 			{
 				msg = ERR_INVITEONLYCHAN(inputs[1]);
-				send(client.fd, msg.c_str(), msg.length(), 0);
+				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 				return;
 			}
 			for (unsigned long int l = 0; l < channels[index].whiteList.size(); l++)
@@ -106,7 +106,7 @@ void	Server::join_command( Client &client )
 				}
 				else{
 					msg = ERR_INVITEONLYCHAN(inputs[1]);
-					send(client.fd, msg.c_str(), msg.length(), 0);
+					execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 					return;
 				}
 			}
@@ -117,7 +117,7 @@ void	Server::join_command( Client &client )
 		for (int j = 0; j < channels[index].chnClientsNum; j++)
 		{
 			// std::cout << "...." << channels[index].chnClients[j].fd << ":" << std::endl;
-			execute(send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0), "ERR\n");
+			execute(send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0), "Join", 0);
 		}
 		return;
 	}

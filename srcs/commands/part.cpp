@@ -34,14 +34,14 @@ void	Server::part_command( Client &client )
 	int targetChn = GetChannelFromName(inputs[1]);
 	if (inputs.empty() or inputs.size() < 2) {
 		msg = getprefix(client) + " " + ERR_NEEDMOREPARAMS(client.nickName, "PART") + "\r\n";
-		execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Part", 0);
 		return;
 	}
 
 	if (targetChn < 0)
 	{
 		msg = getprefix(client) + " " + ERR_NOSUCHCHANNEL(client.nickName, "PART") + "\r\n";
-		execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Part", 0);
 		return;
 	}
 
@@ -49,7 +49,7 @@ void	Server::part_command( Client &client )
 	{
 		std::cout << "IRC: Client is joined this channel.\n";
 		msg = getprefix(client) + " " + ERR_NOTONCHANNEL(client.nickName, "PART") + "\r\n";
-		execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Part", 0);
 		return;
 	}
 	// broadcastPart(channel->_channelClients , RPL_PART(_clients[fd]->getPrefixName(), channels[targetChn].name), fd, inputs[1]);
@@ -61,6 +61,6 @@ void	Server::part_command( Client &client )
 	// }
 	channels[targetChn].brodcastMsg(msg);
 	msg = getprefix(client) + " PART " + inputs[1];
-	execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR\n");
+	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Part", 0);
 	channels[targetChn].eraseClient(client.nickName);
 }

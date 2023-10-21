@@ -32,5 +32,5 @@ void	Server::invite_command( Client &client )
 	channels[targetChn].whiteList.push_back(inputs[1]);
 	msg = "User "+ client.nickName +" inviting "+ inputs[1] +" to channel "+ chn +"\n";
 
-	execute(send(targetFd, msg.c_str(), msg.length(), 0), "ERR\n");
+	execute(send(targetFd, msg.c_str(), msg.length(), 0), "Invite", 0);
 }

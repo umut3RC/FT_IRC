@@ -18,7 +18,8 @@ void	Server::ping_command(Client &client)
 		if (message.substr(0, 4) == "PING") {
 			std::string pingData = message.substr(5); // PING komutunun verisini alın
 			std::string pongResponse = "PONG " + pingData + "\r\n";
-			send(client.fd, pongResponse.c_str(), pongResponse.size(), 0);
+			
+			execute(send(client.fd, pongResponse.c_str(), pongResponse.size(), 0), "Ping", 0);
 		}
 	}
 }

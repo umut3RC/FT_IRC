@@ -37,12 +37,12 @@ void Server::privmsg_command(Client &client)
 					for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
 					{
 						if (channels[targetFd].chnClients[k].nickName != client.nickName)
-							send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+							execute(send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0), "Privmsg", 0);
 					}
 				}
 			}
 			msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]) + "\r\n";
-			execute(send(client.fd, msg.c_str(), msg.length(), 0), "ERR");
+			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Privmsg", 0);
 			return ;
 		}
 		else if (targetFd > -1)
@@ -51,7 +51,7 @@ void Server::privmsg_command(Client &client)
 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
 			{
 				if (channels[targetFd].chnClients[k].nickName != client.nickName)
-					send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0);
+					execute(send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0), "Privmsg", 0);
 			}
 		}
 	}
