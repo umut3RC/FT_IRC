@@ -3,20 +3,19 @@
 void	Server::mode_command( Client &client )
 {
 	commandMsg(client, "MODE");
-	printInputs();
 	int	chnIndex = GetChannelFromName(inputs[1]);
 	std::string msg;
-	std::cout << chnIndex << "<<<<<<<<<<<<<<<<<<<<\n";
 	if (chnIndex < 0)
 	{
 		msg = "You need join a channel";
 		std::cout << msg << "\n";
 	}
-	else if (inputs[0] == "MODE" && channels[chnIndex].isOperator(client.nickName) &&
-		!strncmp(channels[chnIndex].chnName.c_str(), inputs[1].c_str(), inputs[1].length()))
+	else if (inputs[0] == "MODE" && channels[chnIndex].isOperator(client.nickName) && channels[chnIndex].chnName == inputs[1])
+		// !strncmp(channels[chnIndex].chnName.c_str(), inputs[1].c_str(), inputs[1].length()))
 	{
 		if (inputs[2] == "+k")
 		{
+			std::cout << "IRC: Channel's pass is changed.";
 			// if ((int)inputs.size() < 3)
 			// 	throw std::runtime_error("ERR");
 			channels[chnIndex].chnPass = inputs[3];
@@ -24,6 +23,7 @@ void	Server::mode_command( Client &client )
 		}
 		else if (inputs[2] == "+o")
 		{
+			std::cout << "IRC: New Operator added.";
 			channels[chnIndex].chnOperators.push_back(inputs[3]);
 		}
 		else if (inputs[2] == "+n")
@@ -32,7 +32,7 @@ void	Server::mode_command( Client &client )
 		{
 			if (channels[chnIndex].chnClientsNum > std::atoi(inputs[3].c_str()))
 			{
-				std::string msg = "ERROR! MAX USER CANNOT BE LOWER THAN EXIST USER COUNT\n";
+				std::string msg = "ERROR! MAX USER CANNOT BE LOWER THAN EXIST USER COUNT\r\n";
 				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Mode", 0);
 				return;
 			}

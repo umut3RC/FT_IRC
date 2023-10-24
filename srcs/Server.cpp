@@ -14,7 +14,7 @@ Server::~Server( void )
 Server::Server( char **av )
 {
 	std::cout << "*-\\______________________/-*\n";
-	std::cout << "|   IRC: Socket starting   |\n";
+	std::cout << "|    IRC Server Starting   |\n";
 	std::cout << "*_/----------------------\\_*\n";
 	serverPort = std::atoi(av[1]);
 	serverPass = std::atoi(av[2]);
@@ -41,9 +41,9 @@ void	Server::sstart( void )
 	serverAddr.sin_port = htons(serverPort);	//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
 	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
 
-	execute(bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)), "Error!\nBind the server socket failed\n");
+	execute(bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)), "Error!\nBind the server socket failed\n", 3);
 
-	execute(listen(serverSockFd, 10), "Error!\nListening failed\n");
+	execute(listen(serverSockFd, 10), "Error!\nListening failed\n", 3);
 	std::cout << "IRC: Listening on port " << serverPort << std::endl;
 	
 	Poll();

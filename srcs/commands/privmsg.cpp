@@ -60,7 +60,7 @@ void Server::privmsg_command(Client &client)
 		if (targetFd > -1)
 		{
 			// execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
-		execute(send(targetFd, msg.c_str(), msg.length(), 0), "Err\n");
+			execute(send(targetFd, msg.c_str(), msg.length(), 0), "Privmsg", 0);
 		}
 	}
 }

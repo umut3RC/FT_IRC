@@ -62,5 +62,8 @@ void	Server::part_command( Client &client )
 	channels[targetChn].brodcastMsg(msg);
 	msg = getprefix(client) + " PART " + inputs[1];
 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Part", 0);
+	// channels[targetChn].chnClientsNum--;
 	channels[targetChn].eraseClient(client.nickName);
+	if(channels[targetChn].chnClientsNum < 1)
+		channels.erase(channels.begin() + targetChn);
 }

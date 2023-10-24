@@ -59,14 +59,18 @@ void	ToUpper(std::string &s)
 /*
 	0 ERR_MSG: "Failed to send in " + err +" command"
 	1 ERR_MSG: "Failed to creat in " + err"
+	2 ERR_MSG: "Failed to send in " + err
+	3 ERR_MSG: error message
 */
 void	execute(int ret, std::string err, int ERR_MSG)
 {
-	std::string err_mess[2];
-	err_mess[0] = "Failed to send in " + err +" command!\n";
-	err_mess[1] = "Failed to creat in " + err"\n";
+	std::string err_mess[4];
+	err_mess[0] = "Failed to send in " + err + " command!\n";
+	err_mess[1] = "Failed to creat in " + err + "\n";
+	err_mess[2] = "Failed to send in " + err + "\n";
+	err_mess[3] = err;
 
-	if (ret < 0 && ERR_MSG < 2 && ERR_MSG > -1)
+	if (ret < 0 && ERR_MSG < 4 && ERR_MSG > -1)
 	{
 		throw std::runtime_error(err_mess[ERR_MSG]);
 	}
@@ -130,13 +134,14 @@ void	Channel::eraseClient(std::string nick)
 		{
 			this->chnClients.erase(this->chnClients.begin() + i);
 			this->chnClientsNum--;
+			break;
 		}
 	}
 }
 void	Channel::brodcastMsg(std::string msg)
 {
 	for (int i = 0; i < this->chnClientsNum; i++)
-		send(this->chnClients[i].fd, msg.c_str(), msg.length(), 0);
+		execute(send(this->chnClients[i].fd, msg.c_str(), msg.length(), 0), "brodcast", 2);
 }
 
 bool	Channel::isClientHere( std::string c )

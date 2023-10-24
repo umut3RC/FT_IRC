@@ -6,13 +6,16 @@ void	Server::kick_command( Client &client )
 {
 	commandMsg(client, "KICK");
 	std::string	msg;
+	std::string ret = inputs[3];
 	int	targetChn;
 
-	msg = getprefix(client) + " " + inputs[0] + " " + inputs[1] + " " + inputs[2] + " :" + inputs[3] + "\n";
+	for (int i = 4; i < (int)inputs.size(); i++)
+		ret += inputs[i];
+	msg = getprefix(client) + " " + inputs[0] + " " + inputs[1] + " " + inputs[2] + " :" + ret + "\r\n";
 	targetChn = GetChannelFromName(inputs[1]);
 	if(channels[targetChn].isOperator(client.nickName))
 	{
-		if (client.nickName != inputs[2] || channels[targetChn].isOperator(inputs[2]))
+		if (client.nickName != inputs[2] && !channels[targetChn].isOperator(inputs[2]))
 		{
 			channels[targetChn].brodcastMsg(msg);
 			channels[targetChn].eraseClient(msg);

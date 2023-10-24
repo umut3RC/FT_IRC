@@ -48,6 +48,8 @@ void Server::runCommand(Client &client)
 	// 	}
 	// }
 	// printInputs();
+	// if (!client.passchk)
+	// 	quit_command(client);
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;

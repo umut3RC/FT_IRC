@@ -99,7 +99,7 @@ void	Server::join_command( Client &client )
 					// msg = RPL_PRIVMSG(getprefix(client), inputs[1], )
 					for (int j = 0; j < channels[index].chnClientsNum; j++)
 					{
-						send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0);
+						execute(send(channels[index].chnClients[j].fd, msg.c_str(), msg.length(), 0), "Join", 0);
 					}
 					msg.clear();
 					return;
