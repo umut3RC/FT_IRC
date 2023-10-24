@@ -47,7 +47,7 @@ void Server::privmsg_command(Client &client)
 		}
 		else if (targetFd > -1)
 		{
-			std::cout << "IRC: Sended clients on "<< inputs[1] <<" channel.\n";
+			std::cout << "IRC: Sended to clients on "<< inputs[1] <<" channel.\n";
 			for (int k = 0; k < channels[targetFd].chnClientsNum; k++)
 			{
 				if (channels[targetFd].chnClients[k].nickName != client.nickName)

@@ -34,19 +34,19 @@ void Server::runCommand(Client &client)
 {
 	std::string msg;
 	ToUpper(inputs[0]);
-	// for (unsigned long int i = 0; i < inputs.size(); i++)
-	// {
-	// 	if (inputs[i] == "PASS")
-	// 	{
-	// 		client.passchk = true;
-	// 		if (atoi(inputs[i + 1].c_str()) != serverPass)
-	// 		{
-	// 			msg = ERRserverPassMISMATCH(client.nickName);
-	// 			send(client.fd, msg.c_str(), msg.length(), 0);
-	// 			quit_command(client);
-	// 		}
-	// 	}
-	// }
+	for (unsigned long int i = 0; i < inputs.size(); i++)
+	{
+		if (inputs[i] == "PASS")
+		{
+			client.passchk = true;
+			if (atoi(inputs[i + 1].c_str()) != serverPass)
+			{
+				msg = ERRserverPassMISMATCH(client.nickName);
+				send(client.fd, msg.c_str(), msg.length(), 0);
+				quit_command(client);
+			}
+		}
+	}
 	// printInputs();
 	// if (!client.passchk)
 	// 	quit_command(client);

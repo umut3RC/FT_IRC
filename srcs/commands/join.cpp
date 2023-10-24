@@ -80,9 +80,9 @@ void	Server::join_command( Client &client )
 			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 			return;
 		}
-		if (channels[index].modeP)
+		std::cout << "JOIN: " << channels[index].modeP << "\n";
+		if (channels[index].modeP == true)
 		{
-			std::cout << "modeP == 1\n";
 			if (channels[index].whiteList.empty())
 			{
 				msg = ERR_INVITEONLYCHAN(inputs[1]);

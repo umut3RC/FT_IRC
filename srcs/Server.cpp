@@ -14,7 +14,7 @@ Server::~Server( void )
 Server::Server( char **av )
 {
 	std::cout << "*-\\______________________/-*\n";
-	std::cout << "|    IRC Server Starting   |\n";
+	std::cout << "|   IRC Server Starting   |\n";
 	std::cout << "*_/----------------------\\_*\n";
 	serverPort = std::atoi(av[1]);
 	serverPass = std::atoi(av[2]);
