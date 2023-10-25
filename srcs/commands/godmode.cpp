@@ -1,8 +1,8 @@
 #include "../../include/Server.hpp"
 
-void	Server::tester(Client &client)
+void	Server::godmode(Client &client)
 {
-	commandMsg(client, "TESTER");
+	commandMsg(client, "godmode");
 	for (int i = 0; i < (int)inputs.size(); i++)
 	{
 		std::cout << "Inputs: " << inputs[i] << "\n";
@@ -14,7 +14,13 @@ void	Server::tester(Client &client)
 	std::vector<Client>::iterator it = clients.begin();
 	while (it != clients.end())
 	{
-		std::cout << "C: " << it->nickName << "\n";
+		std::cout << "Clt: " << it->nickName << "\n";
 		it++;
+	}
+	std::vector<Channel>::iterator it2 = channels.begin();
+	while (it2 != channels.end())
+	{
+		std::cout << "Chn: " << it2->chnName << "\n";
+		it2++;
 	}
 }

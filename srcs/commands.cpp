@@ -2,7 +2,6 @@
 
 void	Server::commandHandler( void )
 {
-	// std::cout << "BUF->" << buffer << "<-\n";
 	char* str = strtok(buffer, " \n");
 	while (str != NULL)
 	{
@@ -27,7 +26,7 @@ void	Server::setCommands()
 	commands["WHOIS"] = &Server::whois_command;//		(12)
 	commands["KICK"] = &Server::kick_command;//			(13)
 	commands["INVITE"] = &Server::invite_command;//		(14)
-	commands["TESTER"] = &Server::tester;//				(*_*)
+	commands["GODMODE"] = &Server::godmode;//			(*_*)
 }
 
 void Server::runCommand(Client &client)
@@ -48,8 +47,8 @@ void Server::runCommand(Client &client)
 		}
 	}
 	// printInputs();
-	if (!client.passchk || client.nickName.empty())
-		quit_command(client);
+	// if (!client.passchk || client.nickName.empty())
+	// 	quit_command(client);
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;

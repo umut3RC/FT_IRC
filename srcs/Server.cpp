@@ -42,6 +42,7 @@ void	Server::sstart( void )
 	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
 
 	execute(bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)), "Error!\nBind the server socket failed\n", 3);
+
 	execute(listen(serverSockFd, 10), "Error!\nListening failed\n", 3);
 	std::cout << "IRC: Listening on port " << serverPort << std::endl;
 	Poll();
@@ -111,7 +112,8 @@ void	Server::loop( void )
 					else
 					{
 						buffer[retRead] = '\0';
-						try{
+						try
+						{
 							commandHandler();
 							runCommand(clients[i - 1]);
 						}

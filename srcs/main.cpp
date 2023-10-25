@@ -14,9 +14,3 @@ int	main (int argc, char **argv)
 		std::cerr << "Error!\nUnkown error\n";}
 	return (0);
 }
-/*
-notice hata mesajı hatalı
-part çıktından sonra geç giriyor
-yetkisiz kick bozuk gibi
-whois mesajı doğru deil
-*/
