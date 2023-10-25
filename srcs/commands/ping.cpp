@@ -3,23 +3,10 @@
 void	Server::ping_command(Client &client)
 {
 	commandMsg(client, "PING");
-	char buffer[1024];
-	ssize_t bytesRead;
-
-	// İstemciden gelen veriyi okuyun
-	bytesRead = recv(client.fd, buffer, sizeof(buffer), 0);
-
-	if (bytesRead > 0)
+	if (inputs.size() > 1)
 	{
-		buffer[bytesRead] = '\0'; // Verinin sonunu işaretleyin
-		std::string message(buffer);
-
-		// PING komutunu işleme
-		if (message.substr(0, 4) == "PING") {
-			std::string pingData = message.substr(5); // PING komutunun verisini alın
-			std::string pongResponse = "PONG " + pingData + "\r\n";
-			
-			execute(send(client.fd, pongResponse.c_str(), pongResponse.size(), 0), "Ping", 0);
-		}
+		std::string msg;
+		msg = getprefix(client) + " PONG :" + inputs[1] + "\n";
+		execute(send(client.fd, msg.c_str(), msg.size(), 0), "Ping", 0);
 	}
 }

@@ -80,7 +80,6 @@ void	Server::join_command( Client &client )
 			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 			return;
 		}
-		std::cout << "JOIN: " << channels[index].modeP << "\n";
 		if (channels[index].modeP == true)
 		{
 			if (channels[index].whiteList.empty())

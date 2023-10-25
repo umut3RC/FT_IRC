@@ -27,7 +27,7 @@ void	Server::setCommands()
 	commands["WHOIS"] = &Server::whois_command;//		(12)
 	commands["KICK"] = &Server::kick_command;//			(13)
 	commands["INVITE"] = &Server::invite_command;//		(14)
-	commands["TESTER"] = &Server::tester;
+	commands["TESTER"] = &Server::tester;//				(*_*)
 }
 
 void Server::runCommand(Client &client)
@@ -48,8 +48,8 @@ void Server::runCommand(Client &client)
 		}
 	}
 	// printInputs();
-	// if (!client.passchk)
-	// 	quit_command(client);
+	if (!client.passchk)
+		quit_command(client);
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;

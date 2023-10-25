@@ -24,5 +24,9 @@ void	Server::kick_command( Client &client )
 			std::cout << "IRC: You can't kick an Operator!\n";
 	}
 	else
-		throw std::runtime_error(ERR_CHANOPRIVSNEEDED(client.nickName, channels[targetChn].chnName));
+		// throw std::runtime_error(ERR_CHANOPRIVSNEEDED(client.nickName, channels[targetChn].chnName));
+	{
+		msg = ERR_CHANOPRIVSNEEDED(getprefix(client), channels[targetChn].chnName);
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Kick", 0);
+	}
 }
