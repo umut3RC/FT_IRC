@@ -48,7 +48,7 @@ void Server::runCommand(Client &client)
 		}
 	}
 	// printInputs();
-	if (!client.passchk)
+	if (!client.passchk || client.nickName.empty())
 		quit_command(client);
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
