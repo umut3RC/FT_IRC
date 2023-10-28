@@ -14,10 +14,10 @@ Server::~Server( void )
 Server::Server( char **av )
 {
 	std::cout << "*-\\______________________/-*\n";
-	std::cout << "|   IRC Server Starting   |\n";
+	std::cout << "|   IRC Server Starting    |\n";
 	std::cout << "*_/----------------------\\_*\n";
 	serverPort = std::atoi(av[1]);
-	serverPass = std::atoi(av[2]);
+	serverPass = av[2];
 	serverSockFd = socket(AF_INET, SOCK_STREAM, 0);
 	serverClntNum = 0;
 	serverChnNum = 0;
@@ -69,6 +69,8 @@ int	Server::addNewClient(pollfd pfd, Client client, int clientSockFd)
 	clients[serverClntNum].passchk = false;
 	clients[serverClntNum].status = 2;
 	std::cout << "IRC: New client connected.\n";
+	// std::string msg = getprefix(client) + " :Welcome To (I)nternet (R)elay (C)hat\r\n";
+	// execute(send(client.fd, msg.c_str(), msg.length(), 0), "The new client is can not added!\n", 3);
 	return (1);
 }
 
@@ -80,7 +82,7 @@ void	Server::loop( void )
 	int	retRead;
 	while (1)
 	{
-		if (poll(pollFd.data(), pollFd.size(), -1) == -1)
+		if (poll(pollFd.data(), pollFd.size(), 0) == -1)
 			throw std::runtime_error("Error!\npoll didn't listen.\n");
 		for (size_t i = 0; i < pollFd.size(); ++i)
 		{
@@ -134,6 +136,40 @@ void	Server::Poll( void )
 	myPoll.fd = serverSockFd;
 	myPoll.events = POLLIN;
 	pollFd.push_back(myPoll);
+}
+
+bool	Server::clientAuthentication(Client client)
+{
+	bool	ret = false;
+	std::string	firstCmds[4];
+	firstCmds[0] = "CAP";
+	firstCmds[1] = "PASS";
+	firstCmds[2] = "NICK";
+	firstCmds[3] = "USER";
+	std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;
+	if (!ret || !client.passchk || client.nickName.empty())
+	{
+		for (int j = 0; j < (int)inputs.size(); j++)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (inputs[j] == firstCmds[i])
+				{
+					for (itCF = commands.begin(); itCF != commands.end(); ++itCF)
+					{
+						if (!itCF->first.compare(firstCmds[i]))
+						{
+							(this->*(itCF->second))(client);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	if (client.passchk && !client.nickName.empty())
+		ret = true;
+	return (ret);
 }
 
 Server	&Server::operator=( const Server &src)

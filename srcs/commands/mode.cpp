@@ -3,6 +3,10 @@
 void	Server::mode_command( Client &client )
 {
 	commandMsg(client, "MODE");
+	if (inputs.size() < 3)//!!!!!!!!!!!!!!!!!!!!!ERR
+	{
+		return;
+	}
 	int	chnIndex = GetChannelFromName(inputs[1]);
 	std::string msg;
 	if (chnIndex < 0)

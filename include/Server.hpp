@@ -10,11 +10,11 @@ class Server
 {
 	public:
 		int	serverPort;
-		int	serverPass;
 		int	serverSockFd;
 		int	serverChnNum;
 		int	serverClntNum;
 		char	buffer[1024];
+		std::string	serverPass;
 		struct sockaddr_in						serverAddr;
 		std::vector<std::string>				inputs;
 		std::vector<Client>						clients;
@@ -53,6 +53,7 @@ class Server
 		int	GetChannelFromName(std::string targetName);
 		int	GetClientIndexFromName(std::string target);
 		int	findMe(Client &client);
+		bool	clientAuthentication(Client client);
 		void	printInputs( void );
 		void	commandMsg(Client client, std::string comd);
 		void	createNewChannel(Client &client);

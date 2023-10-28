@@ -4,6 +4,13 @@
 void	Server::nick_command( Client &client )
 {
 	std::string msg;
+	if (inputs.size() < 2)
+	{
+		msg = ERR_NONICKNAMEGIVEN(client.nickName);
+		std::cout << "IRC: " << msg << '\n';
+		msg += "\r\n";
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "NICK", 0);
+	}
 	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
 	int nindex = 0;
 	if (targetFd > 0)
@@ -48,6 +55,14 @@ void	Server::nick_command( Client &client )
 							break;
 						}
 					}
+				}
+			}
+			for (unsigned long int j = 0; j < channels[k].whiteList.size(); j++)
+			{
+				if (channels[k].whiteList[j] == client.nickName)
+				{
+					channels[k].whiteList[j] = inputs[1];
+					break;
 				}
 			}
 		}

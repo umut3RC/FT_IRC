@@ -3,40 +3,57 @@
 void	Server::pass_command( Client &client )
 {
 	commandMsg(client, "PASS");
-	// for (int i = 0; i < (int)inputs.size(); i++)
-	// {
-	// 	std::cout << i << ": " << inputs[i] << "\n";
-	// }
-	// try
-	// {
-	// 	// client.c_pass = inputs.at(1);
-	// 	// client.userName = inputs.at(2);
-	// 	// client.userName = inputs.at(2);
-	// 	// client.host = inputs.at(5);
-	// }
-	// catch(const std::out_of_range &e)
-	// {
-	// 	std::string msg = ERR_NEEDMOREPARAMS(getprefix(client), inputs[0]);
-	// 	execute(send(client.fd, msg.c_str(), msg.size(), 0), "sa");
-	// }
 	std::string	msg;
-	if (this->serverPass == client.c_pass)
-	{
-		client.status = 1;
-	}
-	else
-		client.status = 0;
 	for (unsigned long int i = 0; i < inputs.size(); i++)
 	{
-		if (inputs[i] == "PASS")
+		if (inputs[i] == "PASS" && !client.passchk)
 		{
-			client.passchk = true;
-			if (atoi(inputs[i + 1].c_str()) != serverPass)
+			// std::cout << "IRC: Your pass->" << inputs[i + 1] << "<-\n";
+			if (strncmp(inputs[i + 1].c_str(), serverPass.c_str(), strlen(serverPass.c_str())))
 			{
 				msg = ERRserverPassMISMATCH(client.nickName);
+				msg += "\r\n";
+				std::cout << "IRC: Password incorrect!\n";
 				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Pass", 0);
 				quit_command(client);
 			}
+			else
+			{
+				client.passchk = true;
+				client.cltPass = inputs[i + 1];
+				std::cout << "IRC: Password is correct.\n";
+				// msg =ERR_PASSWDMISMATCH(getprefix(client));
+				// execute(send(client.fd, msg.c_str(), msg.length(), 0), "Pass", 0);
+			}
 		}
 	}
+	// std::string	msg;
+	// if (this->serverPass == client.cltPass)
+	// {
+	// 	client.status = 1;
+	// }
+	// else
+	// 	client.status = 0;
+	// for (unsigned long int i = 0; i < inputs.size(); i++)
+	// {
+	// 	if (inputs[i] == "PASS")
+	// 	{
+	// 		if (inputs[i + 1] != serverPass)
+	// 		{
+	// 			msg = ERRserverPassMISMATCH(client.nickName);
+	// 			msg += "\r\n";
+	// 			std::cout << "IRC: Password incorrect!\n";
+	// 			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Pass", 0);
+	// 			quit_command(client);
+	// 		}
+	// 		else
+	// 		{
+	// 			client.passchk = true;
+	// 			client.cltPass = inputs[i + 1];
+	// 			std::cout << "IRC: Password is correct.\n";
+	// 			// msg =ERR_PASSWDMISMATCH(getprefix(client));
+	// 			// execute(send(client.fd, msg.c_str(), msg.length(), 0), "Pass", 0);
+	// 		}
+	// 	}
+	// }
 }

@@ -85,6 +85,7 @@ void	Server::join_command( Client &client )
 			if (channels[index].whiteList.empty())
 			{
 				msg = ERR_INVITEONLYCHAN(inputs[1]);
+				msg += "\r\n";
 				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 				return;
 			}

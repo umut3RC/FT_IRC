@@ -9,10 +9,10 @@ class Client
 	public:
 		int	fd;
 		int	status;
-		int	c_pass;
 		bool	isFirstNickAssigment;
 		bool	passchk;
 	
+		std::string	cltPass;
 		std::string	nickName;
 		std::string	userName;
 		std::string	host;
@@ -21,7 +21,7 @@ class Client
 		{
 			fd = src.fd;
 			status = src.status;
-			c_pass = src.c_pass;
+			cltPass = src.cltPass;
 			isFirstNickAssigment = src.isFirstNickAssigment;
 			passchk = src.passchk;
 			return (*this);

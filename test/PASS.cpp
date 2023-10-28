@@ -21,7 +21,7 @@
 
 void Server::pass(Client &client){
 	std::cout << "PASS FUNC" << '\n';
-	if (this->_passwd == client.c_pass){
+	if (this->_passwd == client.cltPass){
 		client.status = 1;
 	}
 	else

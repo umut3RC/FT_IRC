@@ -80,14 +80,13 @@ void	execute(int ret, std::string err, int ERR_MSG)
 
 int	Server::GetClientFdFromName(std::string targetName, int fd)
 {
-	for (int i = 0; i < (int)clients.size(); i++)
+	std::vector<Client>::iterator it = clients.begin();
+	while (it != clients.end())
 	{
-		if (!strncmp(clients[i].nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && clients[i].fd != fd)
-		{
-			std::cout << "IRC: Client is finded.\n";
-			// std::cout << i << " " << clients[i].fd << std::endl;
-			return(clients[i].fd);
-		}
+		std::cout << "TARGET>->" << it->nickName << "<-<\n";
+		if (!strncmp(it->nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && it->fd != fd)
+			return (it->fd);
+		it++;
 	}
 	std::cout << "IRC: No client in this name.\n";
 	return (-1);
