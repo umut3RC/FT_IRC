@@ -35,7 +35,10 @@ void Server::runCommand(Client &client)
 	ToUpper(inputs[0]);
 	if (!clientAuthentication(client))
 	{
-		std::cout << "IRC: Authentication failed\n";
+		msg = "IRC: Authentication failed!\nYou need pass and nick name.\nUse this format for first connect to server(Without '<','>'):\nPASS <server_pass> NICK <your nick name>\r\n";
+		std::cout << msg;
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Cant Sended on commands!\n", 3);
+		inputs.clear();
 		return;
 	}
 	for(unsigned long int i = 0; i < inputs.size(); i++)

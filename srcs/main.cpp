@@ -14,3 +14,6 @@ int	main (int argc, char **argv)
 		std::cerr << "Error!\nUnkown error\n";}
 	return (0);
 }
+/*	ERRRRRR
+pass yanlış şifre verince tıkanıyor
+*/

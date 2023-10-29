@@ -21,6 +21,7 @@ Server::Server( char **av )
 	serverSockFd = socket(AF_INET, SOCK_STREAM, 0);
 	serverClntNum = 0;
 	serverChnNum = 0;
+	// inputs[0] = "IRCSERV";
 	setCommands();
 	if (serverSockFd == -1)
 		throw std::runtime_error("Error!\nSocket could not be created!\n");
@@ -37,9 +38,9 @@ void	Server::sstart( void )
 {
 	signal(SIGINT, signalHandler);
 	std::cout << "IRC: Socket connecting.\n";
-	serverAddr.sin_family = AF_INET;	//soket adresinin aile türünü belirtir. Burada AF_INET, IPv4 adres ailesini temsil eder. Sunucu, bu aile türünü kullanarak IPv4 adresleri ile iletişim kurar.
-	serverAddr.sin_port = htons(serverPort);	//sunucunun hangi port üzerinden bağlantıları dinleyeceğini belirtir. Burada htons işlevi (host to network short), 16 bitlik bir değeri ağ baytlarına (network byte order) dönüştürür. Bu nedenle 8080 portunu ağ baytlarına dönüştürerek kullanılır.
-	serverAddr.sin_addr.s_addr = INADDR_ANY;	//sunucunun hangi IP adresini dinleyeceğini belirtir. INADDR_ANY, sunucunun mevcut tüm ağ arayüzleri üzerinden gelen bağlantıları kabul edeceği anlamına gelir. Bu, sunucunun herhangi bir IP adresi ile gelen bağlantıları dinlemesini sağlar ve bu şekilde sunucunun herhangi bir ağ arabirimi veya IP adresine bağlanmasına izin verir.
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_port = htons(serverPort);
+	serverAddr.sin_addr.s_addr = INADDR_ANY;
 
 	execute(bind(serverSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)), "Error!\nBind the server socket failed\n", 3);
 
@@ -86,7 +87,8 @@ void	Server::loop( void )
 			throw std::runtime_error("Error!\npoll didn't listen.\n");
 		for (size_t i = 0; i < pollFd.size(); ++i)
 		{
-			if (pollFd[i].revents & POLLHUP)
+			// if (pollFd[i].revents & POLLHUP)
+			if (pollFd[i].revents & (POLLHUP | POLLERR))
 			{
 				quit_command(clients[i - 1]);
 				break;
@@ -167,6 +169,7 @@ bool	Server::clientAuthentication(Client client)
 			}
 		}
 	}
+	// std::cout << client.passchk << "<-*->" << client.nickName.empty() << "<-\n";
 	if (client.passchk && !client.nickName.empty())
 		ret = true;
 	return (ret);

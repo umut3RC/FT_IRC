@@ -83,7 +83,6 @@ int	Server::GetClientFdFromName(std::string targetName, int fd)
 	std::vector<Client>::iterator it = clients.begin();
 	while (it != clients.end())
 	{
-		std::cout << "TARGET>->" << it->nickName << "<-<\n";
 		if (!strncmp(it->nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && it->fd != fd)
 			return (it->fd);
 		it++;
