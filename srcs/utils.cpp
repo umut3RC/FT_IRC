@@ -44,6 +44,11 @@ void	signalHandler( int s )
 	exit(s);
 }
 
+std::string	strCleaner(std::string s)
+{
+	return (s.erase(s.find_last_not_of(" \n\r\t")+1));
+}
+
 void	ToLower(std::string &s)
 {
 	for (int i=0; s[i]; i++)
@@ -101,6 +106,7 @@ int	Server::GetChannelFromName(std::string targetName)
 			return(i);
 		}
 	}
+	std::cout << "IRC: Channel is not finded.\n";
 	return (-1);
 }
 

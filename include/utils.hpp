@@ -81,5 +81,6 @@ void	ToLower(std::string &s);
 void	ToUpper(std::string &s);
 void	signalHandler( int s );
 void	execute(int ret, std::string err, int ERR_MSG);
+std::string	strCleaner(std::string s);
 
 #endif

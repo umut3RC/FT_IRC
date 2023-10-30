@@ -19,9 +19,9 @@ class Channel
 		int							chnClientsNum;
 		bool						hasPass;
 		bool						modeN;
-		bool						modeP;
+		bool						modeI;
 
-		Channel(std::string name) : chnName(name) {chnClientsNum = 0; hasPass = 0; maxUser = 0; modeN = 0; modeP = 0;};
+		Channel(std::string name) : chnName(name) {chnClientsNum = 0; hasPass = 0; maxUser = 0; modeN = 0; modeI = 0;};
 		bool	isOperator( std::string );
 		bool	isClientHere( std::string c );
 		void	eraseClient( std::string nick );

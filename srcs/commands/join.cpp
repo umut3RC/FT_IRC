@@ -38,7 +38,8 @@ void	Server::join_command( Client &client )
 	std::string msg = getprefix(client);
 	if (inputs[1][0] != '#')
 		inputs[1] = '#' + inputs[1];
-	inputs[1].erase(inputs[1].find_last_not_of(" \n\r\t")+1);
+	// inputs[1].erase(inputs[1].find_last_not_of(" \n\r\t")+1);
+	inputs[1] = strCleaner(inputs[1]);
 	index = findChannel();
 	if (index > -1)
 	{
@@ -59,7 +60,7 @@ void	Server::join_command( Client &client )
 			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 			return;
 		}
-		if (channels[index].modeP == true)
+		if (channels[index].modeI == true)
 		{
 			if (channels[index].whiteList.empty())
 			{
@@ -84,6 +85,7 @@ void	Server::join_command( Client &client )
 				}
 				else{
 					msg = ERR_INVITEONLYCHAN(inputs[1]);
+					msg += "\r\n";
 					execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 					return;
 				}

@@ -8,7 +8,8 @@ void	Server::pass_command( Client &client )
 	{
 		if (inputs[i] == "PASS" && !client.passchk)
 		{
-			inputs[i + 1].erase(inputs[i + 1].find_last_not_of(" \n\r\t")+1);
+			// inputs[i + 1].erase(inputs[i + 1].find_last_not_of(" \n\r\t")+1);
+			inputs[i + 1] = strCleaner(inputs[i + 1]);
 			if (inputs[i + 1] ==  serverPass)
 			{
 				client.passchk = true;

@@ -3,7 +3,7 @@
 void	Server::mode_command( Client &client )
 {
 	commandMsg(client, "MODE");
-	int	chnIndex = GetChannelFromName(inputs[1]);
+	int	chnIndex = GetChannelFromName(strCleaner(inputs[1]));
 	std::string msg;
 	if (chnIndex < 0)
 	{
@@ -15,17 +15,20 @@ void	Server::mode_command( Client &client )
 	{
 		if (!strncmp(inputs[2].c_str(), "+k", strlen("+k")))
 		{
-			std::cout << "IRC: Channel's pass is changed.";
+			std::cout << "IRC: Channel's pass is changed.\n";
 			channels[chnIndex].chnPass = inputs[3];
 			channels[chnIndex].hasPass = true;
 		}
 		else if (!strncmp(inputs[2].c_str(), "+o", strlen("+o")))
 		{
-			std::cout << "IRC: New Operator added.";
+			std::cout << "IRC: New Operator added.\n";
 			channels[chnIndex].chnOperators.push_back(inputs[3]);
 		}
 		else if (!strncmp(inputs[2].c_str(), "+n", strlen("+n")))
+		{
+			std::cout << "IRC: +n activited for channel.\n";
 			channels[chnIndex].modeN = true;
+		}
 		else if (!strncmp(inputs[2].c_str(), "+l", strlen("+l")))
 		{
 			if (channels[chnIndex].chnClientsNum > std::atoi(inputs[3].c_str()))
@@ -39,12 +42,13 @@ void	Server::mode_command( Client &client )
 				return;
 			}
 		}
-		else if (!strncmp(inputs[2].c_str(), "+p", strlen("+p")))
+		else if (!strncmp(inputs[2].c_str(), "+i", strlen("+p")))
 		{
-			channels[chnIndex].modeP = true;
+			std::cout << "IRC: +p activited for channel.\n";
+			channels[chnIndex].modeI = true;
 		}
 	}
-	else if (!channels[chnIndex].isOperator(client.nickName))
+	else if (!channels[chnIndex].isOperator(client.nickName) && inputs.size() > 2)
 	{
 		msg = ERR_CHANOPRIVSNEEDED(client.nickName, inputs[1]);
 		std::cout << msg << '\n';

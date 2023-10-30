@@ -7,7 +7,11 @@ void	Server::invite_command( Client &client )
 {
 	commandMsg(client, "INVITE");
 	std::string	msg;
-	std::string	chn = inputs[2].erase(inputs[2].find_last_not_of(" \n\r\t")+1);;
+	// std::string	chn = inputs[2].erase(inputs[2].find_last_not_of(" \n\r\t")+1);
+	// inputs[1] = strCleaner(inputs[2]);
+	std::string	chn = strCleaner(inputs[2]);
+	// inputs[1].erase(inputs[1].find_last_not_of(" \n\r\t")+1);
+	inputs[1] = strCleaner(inputs[1]);
 	int	targetFd;
 	int	targetChn;
 	msg = getprefix(client) + " INVITE " + client.nickName + " " + inputs[1] + " " + chn;
@@ -16,7 +20,7 @@ void	Server::invite_command( Client &client )
 	{
 		std::cout << "IRC: Client is not founded" << std::endl;
 		return;
-	}
+	} 
 	targetChn = GetChannelFromName(chn);
 	if (targetChn < 0)
 	{
