@@ -100,7 +100,7 @@ int	Server::GetClientFdFromName(std::string targetName, int fd)
 			&&clients[i].fd != fd)
 		{
 			std::cout << "IRC: Client is finded.\n";
-			return (i);
+			return (clients[i].fd);
 		}
 	}
 	std::cout << "IRC: No client in this name.\n";
