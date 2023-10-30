@@ -4,6 +4,7 @@
 void	Server::nick_command( Client &client )
 {
 	std::string msg;
+	commandMsg(client, "NICK");
 	if (inputs.size() < 2)
 	{
 		msg = ERR_NONICKNAMEGIVEN(client.nickName);
@@ -12,7 +13,6 @@ void	Server::nick_command( Client &client )
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "NICK", 0);
 	}
 	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
-	int nindex = 0;
 	if (targetFd > 0)
 	{
 		std::cout << "IRC: Nick is already used!\n";
@@ -26,7 +26,13 @@ void	Server::nick_command( Client &client )
 		{
 			if (inputs[i] == "NICK")
 			{
-				nindex = i + 1;
+				// if (i < inputs.size() - 1)
+				// {
+				// 	msg = "IRC: You must enter a nick!\n";
+				// 	std::cout << msg;
+				// 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Nick", 0);
+				// 	return;
+				// }
 				client.nickName = inputs[i + 1];
 			}
 			if (inputs[i] == "USER")

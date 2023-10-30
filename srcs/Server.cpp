@@ -1,5 +1,7 @@
 #include "../include/Server.hpp"
 
+static bool	ret = false;
+
 Server::Server( const Server &src )
 {*this = src;}
 
@@ -87,8 +89,8 @@ void	Server::loop( void )
 			throw std::runtime_error("Error!\npoll didn't listen.\n");
 		for (size_t i = 0; i < pollFd.size(); ++i)
 		{
-			// if (pollFd[i].revents & POLLHUP)
-			if (pollFd[i].revents & (POLLHUP | POLLERR))
+			if (pollFd[i].revents & POLLHUP)
+			// if (pollFd[i].revents & (POLLHUP | POLLERR))
 			{
 				quit_command(clients[i - 1]);
 				break;
@@ -142,7 +144,6 @@ void	Server::Poll( void )
 
 bool	Server::clientAuthentication(Client client)
 {
-	bool	ret = false;
 	std::string	firstCmds[4];
 	firstCmds[0] = "CAP";
 	firstCmds[1] = "PASS";

@@ -1,20 +1,20 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
-#include <iostream> //cout, cin, cerr
-#include <sys/socket.h> // socket, setsockopt, getsockname, bind, connect, listen, accept, send, recv
-#include <unistd.h> // close
-#include <netdb.h> // getprotobyname, gethostbyname, freeaddrinfo, getaddrinfo
-#include <arpa/inet.h> // htonl, htons, ntohs, ntohl, inet_addr, inet_ntoa,
-#include <signal.h> // signal
-#include <fcntl.h> // lseek, fstat, fcntl
-#include <poll.h> // poll
-#include <netinet/in.h> // struct sockaddr_in
+#include <iostream>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <poll.h>
+#include <netinet/in.h>
 #include <vector>
 #include <map>
 #include <functional>
-#include <algorithm> // std::transform
-#include <cctype>	// std::toupper
+#include <algorithm>
+#include <cctype>
 #include <string>
 #include <cstring>
 #include "Server.hpp"

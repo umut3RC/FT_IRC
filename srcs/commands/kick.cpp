@@ -29,6 +29,7 @@ void	Server::kick_command( Client &client )
 		{
 			msg = ERR_USERNOTINCHANNEL(getprefix(client), client.nickName, inputs[1]);
 			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Kick", 0);
+			return;
 		}
 		std::vector<std::string>::iterator	whiteList_iter;
 		whiteList_iter = std::find(channels[targetChn].whiteList.begin(), channels[targetChn].whiteList.end(), inputs[2]);

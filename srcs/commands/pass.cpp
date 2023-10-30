@@ -8,6 +8,8 @@ void	Server::pass_command( Client &client )
 	{
 		if (inputs[i] == "PASS" && !client.passchk)
 		{
+			inputs[i + 1].erase(inputs[i + 1].find_last_not_of(" \n\r\t")+1);
+			// s.erase(s.find_last_not_of(" \n\r\t")+1);
 			// std::cout << "IRC: Your pass->" << inputs[i + 1] << "<-\n";
 			// std::cout << strncmp(inputs[i + 1].c_str(), serverPass.c_str(), strlen(serverPass.c_str())) << ">->servpass->" << serverPass << "<->" << inputs[i + 1] << "<<<-\n";
 			// if (!strncmp(inputs[i + 1].c_str(), serverPass.c_str(), strlen(serverPass.c_str())))
