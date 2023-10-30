@@ -9,7 +9,7 @@ class Client
 	public:
 		int	fd;
 		int	status;
-		bool	isFirstNickAssigment;
+		bool	isVerified;
 		bool	passchk;
 	
 		std::string	cltPass;
@@ -22,7 +22,7 @@ class Client
 			fd = src.fd;
 			status = src.status;
 			cltPass = src.cltPass;
-			isFirstNickAssigment = src.isFirstNickAssigment;
+			isVerified = src.isVerified;
 			passchk = src.passchk;
 			return (*this);
 		}

@@ -3,8 +3,6 @@
 void Server::user_command(Client &client)
 {
 	commandMsg(client, "USER");
-	// std::string msg = ":" + getprefix(client) + " " + "001 Welcome\r\n";
-	// send(client.fd, msg.c_str(), msg.size(), 0);
 	if (inputs.size() > 5)
 	{
 		std::vector<std::string>::iterator it = inputs.begin();
@@ -35,7 +33,6 @@ void Server::user_command(Client &client)
 	else
 	{
 		std::string msg = "ERROR!\n";
-		// send(client.fd, msg.c_str(), msg.length(), 0);
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "User", 0);
 		msg.clear();
 	}

@@ -23,7 +23,6 @@ Server::Server( char **av )
 	serverSockFd = socket(AF_INET, SOCK_STREAM, 0);
 	serverClntNum = 0;
 	serverChnNum = 0;
-	// inputs[0] = "IRCSERV";
 	setCommands();
 	if (serverSockFd == -1)
 		throw std::runtime_error("Error!\nSocket could not be created!\n");
@@ -68,12 +67,10 @@ int	Server::addNewClient(pollfd pfd, Client client, int clientSockFd)
 	pollFd.push_back(pfd);
 	clients.push_back(client);
 	clients[serverClntNum].fd = clientSockFd;
-	clients[serverClntNum].isFirstNickAssigment = false;
+	clients[serverClntNum].isVerified = false;
 	clients[serverClntNum].passchk = false;
 	clients[serverClntNum].status = 2;
 	std::cout << "IRC: New client connected.\n";
-	// std::string msg = getprefix(client) + " :Welcome To (I)nternet (R)elay (C)hat\r\n";
-	// execute(send(client.fd, msg.c_str(), msg.length(), 0), "The new client is can not added!\n", 3);
 	return (1);
 }
 
@@ -85,12 +82,11 @@ void	Server::loop( void )
 	int	retRead;
 	while (1)
 	{
-		if (poll(pollFd.data(), pollFd.size(), 0) == -1)
+		if (poll(pollFd.data(), pollFd.size(), -1) == -1)
 			throw std::runtime_error("Error!\npoll didn't listen.\n");
 		for (size_t i = 0; i < pollFd.size(); ++i)
 		{
 			if (pollFd[i].revents & POLLHUP)
-			// if (pollFd[i].revents & (POLLHUP | POLLERR))
 			{
 				quit_command(clients[i - 1]);
 				break;
@@ -170,9 +166,12 @@ bool	Server::clientAuthentication(Client client)
 			}
 		}
 	}
-	// std::cout << client.passchk << "<-*->" << client.nickName.empty() << "<-\n";
+	// std::cout << client.passchk << client.nickName.empty() << '\n';
 	if (client.passchk && !client.nickName.empty())
+	{
+		client.isVerified = true;
 		ret = true;
+	}
 	return (ret);
 }
 
@@ -185,5 +184,3 @@ Server	&Server::operator=( const Server &src)
 	this->serverChnNum = src.serverChnNum;
 	return (*this);
 }
-
-

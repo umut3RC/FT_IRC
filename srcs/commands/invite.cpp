@@ -25,7 +25,6 @@ void	Server::invite_command( Client &client )
 	}
 	if (!channels[targetChn].isOperator(client.nickName))
 	{
-		// std::cout << "IRC: You are not an Operator!\n";
 		std::cout << "IRC: You are not an Operator!\n";
 		return;
 	}

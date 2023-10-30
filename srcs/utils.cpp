@@ -12,7 +12,7 @@ std::vector<std::string> splitString(const std::string& input, char delimiter)
 			token.clear();
 		}
 	}
-	result.push_back(token); // Son kelimeyi ekle
+	result.push_back(token);
 	return result;
 }
 

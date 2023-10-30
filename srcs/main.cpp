@@ -6,7 +6,7 @@ int	main (int argc, char **argv)
 	{
 		if (argc != 3)
 			throw std::runtime_error("Error!\nInvalid input format! (exp: ./ircserv <port> <password>)\n");
-		Server	server(argv);// <-- soket oluşturuldu;
+		Server	server(argv);
 		server.sstart();
 	}catch(const std::exception &e){
 		std::cerr << e.what();
@@ -14,6 +14,3 @@ int	main (int argc, char **argv)
 		std::cerr << "Error!\nUnkown error\n";}
 	return (0);
 }
-/*	ERRRRRR
-pass yanlış şifre verince tıkanıyor
-*/
