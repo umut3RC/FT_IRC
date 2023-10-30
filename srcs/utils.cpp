@@ -85,12 +85,23 @@ void	execute(int ret, std::string err, int ERR_MSG)
 
 int	Server::GetClientFdFromName(std::string targetName, int fd)
 {
-	std::vector<Client>::iterator it = clients.begin();
-	while (it != clients.end())
+	// std::vector<Client>::iterator it = clients.begin();
+	// while (it != clients.end())
+	// {
+	// 	if (!strncmp(it->nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && it->fd != fd)
+	// 		return (it->fd);
+	// 	it++;
+	// }
+	// std::cout << "IRC: No client in this name.\n";
+	// return (-1);
+	for (unsigned long int i = 0; i < clients.size(); i++)
 	{
-		if (!strncmp(it->nickName.c_str(), targetName.c_str(), strlen(targetName.c_str())) && it->fd != fd)
-			return (it->fd);
-		it++;
+		if (!strncmp(targetName.c_str(), clients[i].nickName.c_str(), targetName.length())
+			&&clients[i].fd != fd)
+		{
+			std::cout << "IRC: Client is finded.\n";
+			return (i);
+		}
 	}
 	std::cout << "IRC: No client in this name.\n";
 	return (-1);
@@ -98,12 +109,23 @@ int	Server::GetClientFdFromName(std::string targetName, int fd)
 
 int	Server::GetChannelFromName(std::string targetName)
 {
-	for (int i = 0; i < (int)channels.size(); i++)
+	// for (int i = 0; i < (int)channels.size(); i++)
+	// {
+	// 	if (!strncmp(channels[i].chnName.c_str(), targetName.c_str(), strlen(targetName.c_str())))
+	// 	{ 
+	// 		std::cout << "IRC: Channel is finded.\n";
+	// 		return(i);
+	// 	}
+	// }
+	// std::cout << "IRC: Channel is not finded.\n";
+	// return (-1);
+
+	for (unsigned long int i = 0; i < channels.size(); i++)
 	{
-		if (!strncmp(channels[i].chnName.c_str(), targetName.c_str(), strlen(targetName.c_str())))
-		{ 
+		if (!strncmp(targetName.c_str(), channels[i].chnName.c_str(), targetName.length()))
+		{
 			std::cout << "IRC: Channel is finded.\n";
-			return(i);
+			return (i);
 		}
 	}
 	std::cout << "IRC: Channel is not finded.\n";

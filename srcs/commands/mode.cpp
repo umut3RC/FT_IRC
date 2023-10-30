@@ -42,9 +42,9 @@ void	Server::mode_command( Client &client )
 				return;
 			}
 		}
-		else if (!strncmp(inputs[2].c_str(), "+i", strlen("+p")))
+		else if (!strncmp(inputs[2].c_str(), "+i", strlen("+i")))
 		{
-			std::cout << "IRC: +p activited for channel.\n";
+			std::cout << "IRC: +i activited for channel.\n";
 			channels[chnIndex].modeI = true;
 		}
 	}

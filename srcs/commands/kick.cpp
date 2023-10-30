@@ -71,6 +71,10 @@ void	Server::kick_command( Client &client )
 	{
 		if (client.nickName != inputs[2] && !channels[targetChn].isOperator(inputs[2]))
 		{
+			std::vector<std::string>::iterator	whiteList_iter;
+			whiteList_iter = std::find(channels[targetChn].whiteList.begin(), channels[targetChn].whiteList.end(), inputs[2]);
+			if (whiteList_iter != channels[targetChn].whiteList.end())
+				channels[targetChn].whiteList.erase(whiteList_iter);
 			channels[targetChn].brodcastMsg(msg);
 			channels[targetChn].eraseClient(msg);
 		}
