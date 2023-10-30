@@ -11,7 +11,7 @@ void	Server::mode_command( Client &client )
 		std::cout << msg << "\n";
 	}
 	else if (inputs[0] == "MODE" && channels[chnIndex].isOperator(client.nickName) &&
-		!strncmp(channels[chnIndex].chnName.c_str(), inputs[1].c_str(), inputs[1].length()))//channels[chnIndex].chnName == inputs[1])
+		!strncmp(channels[chnIndex].chnName.c_str(), inputs[1].c_str(), inputs[1].length()))
 	{
 		if (!strncmp(inputs[2].c_str(), "+k", strlen("+k")))
 		{
@@ -43,5 +43,11 @@ void	Server::mode_command( Client &client )
 		{
 			channels[chnIndex].modeP = true;
 		}
+	}
+	else if (!channels[chnIndex].isOperator(client.nickName))
+	{
+		msg = ERR_CHANOPRIVSNEEDED(client.nickName, inputs[1]);
+		std::cout << msg << '\n';
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Mode", 0);
 	}
 }

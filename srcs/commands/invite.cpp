@@ -7,7 +7,7 @@ void	Server::invite_command( Client &client )
 {
 	commandMsg(client, "INVITE");
 	std::string	msg;
-	std::string	chn = inputs[2];
+	std::string	chn = inputs[2].erase(inputs[2].find_last_not_of(" \n\r\t")+1);;
 	int	targetFd;
 	int	targetChn;
 	msg = getprefix(client) + " INVITE " + client.nickName + " " + inputs[1] + " " + chn;

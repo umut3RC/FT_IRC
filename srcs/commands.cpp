@@ -2,7 +2,7 @@
 
 void	Server::commandHandler( void )
 {
-	char* str = strtok(buffer, " \n");
+	char* str = strtok(buffer, " \r\n");
 	while (str != NULL)
 	{
 		inputs.push_back(str);
