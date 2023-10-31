@@ -138,19 +138,20 @@ void	Server::Poll( void )
 	pollFd.push_back(myPoll);
 }
 
-bool	Server::clientAuthentication(Client client)
+bool	Server::clientAuthentication(Client &client)
 {
-	std::string	firstCmds[4];
+	std::string	firstCmds[5];
 	firstCmds[0] = "CAP";
 	firstCmds[1] = "PASS";
 	firstCmds[2] = "NICK";
 	firstCmds[3] = "USER";
+	firstCmds[4] = "QUIT";
 	std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;
 	if (!ret || !client.passchk || client.nickName.empty())
 	{
 		for (int j = 0; j < (int)inputs.size(); j++)
 		{
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < 5; i++)
 			{
 				if (inputs[j] == firstCmds[i])
 				{
@@ -166,8 +167,9 @@ bool	Server::clientAuthentication(Client client)
 			}
 		}
 	}
-	// std::cout << client.passchk << client.nickName.empty() << '\n';
-	if (client.passchk && !client.nickName.empty())
+	std::cout << client.passchk << client.nickName.empty() << '\n';
+	std::string checkName = client.nickName.erase(client.nickName.find_last_not_of(" \n\r\t")+1);
+	if (client.passchk && !checkName.empty())
 	{
 		client.isVerified = true;
 		ret = true;

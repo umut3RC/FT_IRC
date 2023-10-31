@@ -7,10 +7,12 @@ void	Server::invite_command( Client &client )
 {
 	commandMsg(client, "INVITE");
 	std::string	msg;
-	// std::string	chn = inputs[2].erase(inputs[2].find_last_not_of(" \n\r\t")+1);
+	if (inputs.size() < 3)
+	{
+		msg = ERR_NEEDMOREPARAMS(getprefix(client), "invite");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Invite", 0);
+	}
 	std::string	chn = inputs[2];
-	// inputs[1] = strCleaner(inputs[2]);
-	// inputs[1].erase(inputs[1].find_last_not_of(" \n\r\t")+1);
 	int	targetFd;
 	int	targetChn;
 	msg = getprefix(client) + " INVITE " + client.nickName + " " + inputs[1] + " " + chn;

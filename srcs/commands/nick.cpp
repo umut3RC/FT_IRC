@@ -15,7 +15,11 @@ void	Server::nick_command( Client &client )
 	if (targetFd > 0)
 	{
 		std::cout << "IRC: Nick is already used!\n";
-		quit_command(client);
+		msg = ERRnickNameINUSE(client.nickName);
+		msg += "\r\n";
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Nick", 0);
+		return;
+		// quit_command(client);
 	}
 	if ((int)inputs.size() > 3)
 	{
@@ -57,6 +61,14 @@ void	Server::nick_command( Client &client )
 				if (channels[k].whiteList[j] == client.nickName)
 				{
 					channels[k].whiteList[j] = inputs[1];
+					break;
+				}
+			}
+			for (unsigned long int j = 0; j < channels[k].chnClients.size(); j++)
+			{
+				if (channels[k].chnClients[j].nickName == client.nickName)
+				{
+					channels[k].chnClients[j].nickName = inputs[1];
 					break;
 				}
 			}

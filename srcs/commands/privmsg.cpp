@@ -14,6 +14,11 @@ void Server::privmsg_command(Client &client)
 	std::string	targetName = inputs[1];
 	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
 	msg += ' ' + inputs[0] + ' ' + inputs[1] + ' ';
+	if (inputs.size() < 2)
+	{
+		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Join");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
+	}
 	for (unsigned long int i = 2; i < inputs.size(); i++)
 	{
 		msg = msg + inputs[i];

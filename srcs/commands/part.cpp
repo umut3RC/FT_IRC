@@ -8,7 +8,8 @@ void	Server::part_command( Client &client )
 	commandMsg(client, "PART");
 	std::string msg;
 	int targetChn = GetChannelFromName(inputs[1]);
-	if (inputs.empty() or inputs.size() < 2) {
+	if (inputs.empty() || inputs.size() < 2)
+	{
 		msg = getprefix(client) + " " + ERR_NEEDMOREPARAMS(client.nickName, "PART") + "\r\n";
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Part", 0);
 		return;

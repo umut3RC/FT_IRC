@@ -3,6 +3,7 @@
 void	Server::commandHandler( void )
 {
 	char* str = strtok(buffer, " \r\n");
+	inputs.clear();
 	while (str != NULL)
 	{
 		inputs.push_back(strCleaner(str));
@@ -33,13 +34,14 @@ void Server::runCommand(Client &client)
 {
 	std::string msg;
 	ToUpper(inputs[0]);
-	// if (!clientAuthentication(client))
-	// {
-	// 	msg = "IRC: Authentication failed!\nYou need pass and nick name.\nUse this format for first connect to server(Without '<','>'):\nPASS <server_pass> NICK <your nick name>\r\n";
-	// 	std::cout << msg;
-	// 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Cant Sended on commands!\n", 3);
-	// 	return;
-	// }
+	printInputs();
+	if (!clientAuthentication(client))
+	{
+		msg = "IRC: Authentication failed!\nYou need pass and nick name.\nUse this format for first connect to server(Without '<','>'):\nPASS <server_pass> NICK <your nick name>\r\n";
+		std::cout << msg;
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Cant Sended on commands!\n", 3);
+		return;
+	}
 	for(unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		std::map<std::string, void(Server::*)(Client &client)>::iterator itCF;

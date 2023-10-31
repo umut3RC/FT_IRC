@@ -53,7 +53,7 @@ class Server
 		int	GetChannelFromName(std::string targetName);
 		int	GetClientIndexFromName(std::string target);
 		int	findMe(Client &client);
-		bool	clientAuthentication(Client client);
+		bool	clientAuthentication(Client &client);
 		void	printInputs( void );
 		void	commandMsg(Client client, std::string comd);
 		void	createNewChannel(Client &client);

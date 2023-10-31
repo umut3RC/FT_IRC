@@ -13,6 +13,11 @@ void	Server::whois_command( Client &client )
 	commandMsg(client, "WHOIS");
 	std::string msg = getprefix(client);
 	int target = GetClientIndexFromName(inputs[1]);
+	if (inputs.size() < 2)
+	{
+		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Whois");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Whois", 0);
+	}
 	if (target < 0)
 	{
 		std::cout << "IRC: Client is not online.\n";

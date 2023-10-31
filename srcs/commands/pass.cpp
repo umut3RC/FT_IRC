@@ -4,6 +4,11 @@ void	Server::pass_command( Client &client )
 {
 	commandMsg(client, "PASS");
 	std::string	msg;
+	if (inputs.size() < 2)
+	{
+		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Join");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
+	}
 	for (unsigned long int i = 0; i < inputs.size(); i++)
 	{
 		if (inputs[i] == "PASS" && !client.passchk)

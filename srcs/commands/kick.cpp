@@ -59,6 +59,11 @@ void	Server::kick_command( Client &client )
 	std::string ret = "(undefined)";
 	int	targetChn;
 
+	if (inputs.size() < 2)
+	{
+		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Kick");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Kick", 0);
+	}
 	if (inputs.size() > 3)
 	{
 		ret = inputs[3];

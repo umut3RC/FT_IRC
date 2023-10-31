@@ -1,8 +1,15 @@
 #include "../../include/Server.hpp"
 
+//JOIN #Oda_adi PASS
+
 int	Server::findChannel( void )
 {
 	int	index = -1;
+	if (inputs.size() < 2)
+	{
+		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Join");
+		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
+	}
 	for (int i = 0 ; i < (int)channels.size(); i++)
 	{
 		if (inputs[1] == channels[i].chnName)
@@ -13,7 +20,6 @@ int	Server::findChannel( void )
 	}
 	return (index);
 }
-
 void	Server::createNewChannel(Client &client)
 {
 	std::string msg = getprefix(client);
@@ -36,15 +42,20 @@ void	Server::join_command( Client &client )
 	commandMsg(client, "JOIN");
 	int	index;
 	std::string msg = getprefix(client);
+	index = findChannel();
 	if (inputs[1][0] != '#')
 		inputs[1] = '#' + inputs[1];
 	// inputs[1].erase(inputs[1].find_last_not_of(" \n\r\t")+1);
 	inputs[1] = strCleaner(inputs[1]);
-	index = findChannel();
 	if (index > -1)
 	{
 		if (channels[index].hasPass)
 		{
+			if (inputs.size() < 3)
+			{
+				msg = ERR_NEEDMOREPARAMS(getprefix(client), "Join");
+				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
+			}
 			if (strncmp(inputs[2].c_str(), channels[index].chnPass.c_str(), channels[index].chnPass.length()))
 			{
 				std::cout << "IRC: Channel has pass\n"; 
