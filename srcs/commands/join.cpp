@@ -54,6 +54,7 @@ void	Server::join_command( Client &client )
 			if (inputs.size() < 3)
 			{
 				msg = ERR_NEEDMOREPARAMS(getprefix(client), "Join");
+				msg += "\r\n";
 				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 			}
 			if (strncmp(inputs[2].c_str(), channels[index].chnPass.c_str(), channels[index].chnPass.length()))
@@ -69,6 +70,7 @@ void	Server::join_command( Client &client )
 		if (channels[index].maxUser == channels[index].chnClientsNum)
 		{
 			msg = ERR_CHANNELISFULL(getprefix(client), inputs[1]);
+			msg += "\r\n";
 			execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 			return;
 		}

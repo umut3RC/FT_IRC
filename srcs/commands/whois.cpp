@@ -16,7 +16,9 @@ void	Server::whois_command( Client &client )
 	if (inputs.size() < 2)
 	{
 		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Whois");
+		msg += "\r\n";
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Whois", 0);
+		return;
 	}
 	if (target < 0)
 	{

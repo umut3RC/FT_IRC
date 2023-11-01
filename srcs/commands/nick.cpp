@@ -10,6 +10,7 @@ void	Server::nick_command( Client &client )
 		std::cout << "IRC: " << msg << '\n';
 		msg += "\r\n";
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "NICK", 0);
+		return;
 	}
 	int	targetFd = GetClientFdFromName(inputs[1], client.fd);
 	if (targetFd > 0)

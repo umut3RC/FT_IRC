@@ -10,7 +10,9 @@ void	Server::invite_command( Client &client )
 	if (inputs.size() < 3)
 	{
 		msg = ERR_NEEDMOREPARAMS(getprefix(client), "invite");
+		msg += "\r\n";
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Invite", 0);
+		return;
 	}
 	std::string	chn = inputs[2];
 	int	targetFd;
@@ -34,7 +36,7 @@ void	Server::invite_command( Client &client )
 		return;
 	}
 	channels[targetChn].whiteList.push_back(inputs[1]);
-	msg = "You have been invited to channel " + chn + " you can type /join to join that channel\n";
+	msg = "You have been invited to channel " + chn + " you can type /join to join that channel\r\n";
 	execute(send(targetFd, msg.c_str(), msg.length(), 0), "Invite", 0);
 }
 

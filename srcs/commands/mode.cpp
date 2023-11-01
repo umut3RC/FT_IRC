@@ -66,6 +66,7 @@ void	Server::mode_command( Client &client )
 	else if (!channels[chnIndex].isOperator(client.nickName) && inputs.size() > 2)
 	{
 		msg = ERR_CHANOPRIVSNEEDED(client.nickName, inputs[1]);
+		msg += "\r\n";
 		std::cout << msg << '\n';
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Mode", 0);
 	}

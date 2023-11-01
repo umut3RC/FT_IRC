@@ -8,6 +8,7 @@ void	Server::pass_command( Client &client )
 	{
 		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Join");
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
+		return;
 	}
 	for (unsigned long int i = 0; i < inputs.size(); i++)
 	{

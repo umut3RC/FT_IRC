@@ -8,8 +8,12 @@ void	Server::notice_command( Client &client )
 	if (inputs.size() < 2)
 	{
 		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Notice");
+		msg += "\r\n";
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Notice", 0);
+		return;
 	}
+	if (targetFd < 0)
+		return;
 	msg += ' ' + inputs[0] + ' ' + targetFd + ' ';
 	for (int i = 2; i < (int)inputs.size(); i++)
 	{
@@ -17,6 +21,5 @@ void	Server::notice_command( Client &client )
 		msg = msg + ' ';
 	}
 	msg = msg + "\r\n";
-	if ()
 	execute(send(targetFd , msg.c_str(), msg.length(), 0), "Notice", 0);
 }
