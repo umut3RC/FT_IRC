@@ -168,7 +168,7 @@ bool	Server::clientAuthentication(Client &client)
 	std::cout << client.passchk << client.nickName.empty() << '\n';
 	// std::string checkName = client.nickName.erase(client.nickName.find_last_not_of(" \n\r\t")+1);
 	std::string checkName = strCleaner(client.nickName);
-	if (client.passchk&& checkName.empty())
+	if (client.passchk == true && checkName.empty() == false)
 	{
 		client.isVerified = true;
 		ret = true;

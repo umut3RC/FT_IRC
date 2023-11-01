@@ -19,6 +19,11 @@ void	Server::mode_command( Client &client )
 			channels[chnIndex].chnPass = inputs[3];
 			channels[chnIndex].hasPass = true;
 		}
+		else if (!strncmp(inputs[2].c_str(), "-k", strlen("-k")))
+		{
+			std::cout << "IRC: Channel's pass is closed.\n";
+			channels[chnIndex].hasPass = false;
+		}
 		else if (!strncmp(inputs[2].c_str(), "+o", strlen("+o")))
 		{
 			std::cout << "IRC: New Operator added.\n";
@@ -28,6 +33,11 @@ void	Server::mode_command( Client &client )
 		{
 			std::cout << "IRC: +n activited for channel.\n";
 			channels[chnIndex].modeN = true;
+		}
+		else if (!strncmp(inputs[2].c_str(), "-n", strlen("-n")))
+		{
+			std::cout << "IRC: -n de-activited for channel.\n";
+			channels[chnIndex].modeN = false;
 		}
 		else if (!strncmp(inputs[2].c_str(), "+l", strlen("+l")))
 		{
@@ -46,6 +56,11 @@ void	Server::mode_command( Client &client )
 		{
 			std::cout << "IRC: +i activited for channel.\n";
 			channels[chnIndex].modeI = true;
+		}
+		else if (!strncmp(inputs[2].c_str(), "-i", strlen("-i")))
+		{
+			std::cout << "IRC: -i de-activited for channel.\n";
+			channels[chnIndex].modeI = false;
 		}
 	}
 	else if (!channels[chnIndex].isOperator(client.nickName) && inputs.size() > 2)

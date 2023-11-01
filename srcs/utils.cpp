@@ -148,7 +148,7 @@ bool	Channel::isOperator( std::string s)
 	{
 		if (chnOperators[i] == s)
 		{
-			std::cout << "IRC: Client is an operator.";
+			std::cout << "IRC: Client is an operator.\n";
 			return (true);
 		}
 	}

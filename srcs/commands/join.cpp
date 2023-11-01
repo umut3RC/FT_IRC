@@ -26,6 +26,9 @@ void	Server::createNewChannel(Client &client)
 	newChannel.chnClients.push_back(client);
 	newChannel.chnClientsNum++;
 	newChannel.chnOperators.push_back(client.nickName);
+	newChannel.hasPass = false;
+	newChannel.modeN = true;
+	newChannel.modeI = false;
 	channels.push_back(newChannel);
 	serverChnNum++;
 	msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
@@ -57,6 +60,7 @@ void	Server::join_command( Client &client )
 			{
 				std::cout << "IRC: Channel has pass\n"; 
 				msg = ERR_PASSWDMISMATCH(client.nickName);
+				msg += "\r\n";
 				execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
 				msg.clear();
 				return;
