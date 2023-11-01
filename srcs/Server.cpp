@@ -1,7 +1,5 @@
 #include "../include/Server.hpp"
 
-static bool	ret = false;
-
 Server::Server( const Server &src )
 {*this = src;}
 
@@ -105,11 +103,10 @@ void	Server::loop( void )
 					retRead = recv(pollFd[i].fd, buffer, sizeof(buffer), 0);
 					if (retRead == -1)
 						throw std::runtime_error("Error!\nCan't read from the client.\n");
-					else if (retRead == 0)
+					else if (retRead == 0 || retRead == '\0')
 					{
-						std::cerr << "IRC: Client connection closed." << std::endl;
+						std::cout << "IRC: Client connection closed." << std::endl;
 						quit_command(clients[i - 1]);
-						return;
 					}
 					else
 					{
@@ -141,6 +138,7 @@ void	Server::Poll( void )
 bool	Server::clientAuthentication(Client &client)
 {
 	std::string	firstCmds[5];
+	bool	ret = false;
 	firstCmds[0] = "CAP";
 	firstCmds[1] = "PASS";
 	firstCmds[2] = "NICK";
@@ -168,8 +166,9 @@ bool	Server::clientAuthentication(Client &client)
 		}
 	}
 	std::cout << client.passchk << client.nickName.empty() << '\n';
-	std::string checkName = client.nickName.erase(client.nickName.find_last_not_of(" \n\r\t")+1);
-	if (client.passchk && !checkName.empty())
+	// std::string checkName = client.nickName.erase(client.nickName.find_last_not_of(" \n\r\t")+1);
+	std::string checkName = strCleaner(client.nickName);
+	if (client.passchk&& checkName.empty())
 	{
 		client.isVerified = true;
 		ret = true;

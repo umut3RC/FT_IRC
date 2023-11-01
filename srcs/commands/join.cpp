@@ -6,10 +6,7 @@ int	Server::findChannel( void )
 {
 	int	index = -1;
 	if (inputs.size() < 2)
-	{
-		msg = ERR_NEEDMOREPARAMS(getprefix(client), "Join");
-		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Join", 0);
-	}
+		return(index);
 	for (int i = 0 ; i < (int)channels.size(); i++)
 	{
 		if (inputs[1] == channels[i].chnName)
@@ -34,7 +31,7 @@ void	Server::createNewChannel(Client &client)
 	msg += ' ' + inputs[0] + ' ' + inputs[1] + "\r\n";
 	execute(send(client.fd, msg.c_str(), msg.length(), 0), "Create New Channel", 1);
 	msg.clear();
-	std::cout << "IRC: Created a new channel\n";
+	std::cout << "IRC: New Channel created.\n";
 }
 
 void	Server::join_command( Client &client )
