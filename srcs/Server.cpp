@@ -34,6 +34,7 @@ Server::Server( char **av )
 void	Server::sstart( void )
 {
 	signal(SIGINT, signalHandler);
+	signal(SIGTSTP, signalHandler);
 	std::cout << "IRC: Socket connecting.\n";
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_port = htons(serverPort);

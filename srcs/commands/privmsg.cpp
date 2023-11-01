@@ -44,6 +44,7 @@ void Server::privmsg_command(Client &client)
 						if (channels[targetFd].chnClients[k].nickName != client.nickName)
 							execute(send(channels[targetFd].chnClients[k].fd, msg.c_str(), msg.length(), 0), "Privmsg", 0);
 					}
+					return;
 				}
 			}
 			msg = msg +  " " + ERR_NOTONCHANNEL(client.nickName, inputs[1]) + "\r\n";
