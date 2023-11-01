@@ -27,7 +27,7 @@ void	Server::createNewChannel(Client &client)
 	newChannel.chnClientsNum++;
 	newChannel.chnOperators.push_back(client.nickName);
 	newChannel.hasPass = false;
-	newChannel.modeN = true;
+	newChannel.modeN = false;
 	newChannel.modeI = false;
 	channels.push_back(newChannel);
 	serverChnNum++;

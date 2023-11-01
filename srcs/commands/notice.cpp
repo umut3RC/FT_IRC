@@ -14,7 +14,7 @@ void	Server::notice_command( Client &client )
 	}
 	if (targetFd < 0)
 		return;
-	msg += ' ' + inputs[0] + ' ' + targetFd + ' ';
+	msg += ' ' + inputs[0] + ' ' + inputs[1] + ' ';
 	for (int i = 2; i < (int)inputs.size(); i++)
 	{
 		msg = msg + inputs[i];

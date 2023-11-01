@@ -21,16 +21,14 @@ Server::Server( char **av )
 	serverSockFd = socket(AF_INET, SOCK_STREAM, 0);
 	serverClntNum = 0;
 	serverChnNum = 0;
+	int val = 1;
 	setCommands();
 	if (serverSockFd == -1)
 		throw std::runtime_error("Error!\nSocket could not be created!\n");
 	else
 		std::cout << "IRC: Socket created successfully!\n";
-
-	// SILINECEK-V_V_V_V_V_V_V_V_V_V_V
-	int val = 1;
 	setsockopt(this->serverSockFd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
-	// SILINECEK-^_^_^_^_^_^_^_^_^_^_^
+	execute(fcntl(serverSockFd, F_SETFL, O_NONBLOCK), "Error: failed non-blocking.", 3);
 }
 
 void	Server::sstart( void )
