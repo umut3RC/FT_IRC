@@ -27,7 +27,6 @@ void	Server::setCommands()
 	commands["WHOIS"] = &Server::whois_command;
 	commands["KICK"] = &Server::kick_command;
 	commands["INVITE"] = &Server::invite_command;
-	commands["GODMODE"] = &Server::godmode;
 }
 
 void Server::runCommand(Client &client)

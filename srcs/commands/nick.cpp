@@ -20,7 +20,6 @@ void	Server::nick_command( Client &client )
 		msg += "\r\n";
 		execute(send(client.fd, msg.c_str(), msg.length(), 0), "Nick", 0);
 		return;
-		// quit_command(client);
 	}
 	if ((int)inputs.size() > 3)
 	{

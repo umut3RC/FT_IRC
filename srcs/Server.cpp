@@ -79,7 +79,7 @@ void	Server::loop( void )
 	int	retRead;
 	while (1)
 	{
-		if (poll(pollFd.data(), pollFd.size(), -1) == -1)
+		if (poll(pollFd.data(), pollFd.size(), 0) == -1)
 			throw std::runtime_error("Error!\npoll didn't listen.\n");
 		for (size_t i = 0; i < pollFd.size(); ++i)
 		{
@@ -128,7 +128,7 @@ void	Server::loop( void )
 void	Server::Poll( void )
 {
 	pollfd	myPoll;
-	memset(&myPoll, 0, sizeof(myPoll));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	memset(&myPoll, 0, sizeof(myPoll));
 	myPoll.fd = serverSockFd;
 	myPoll.events = POLLIN;
 	pollFd.push_back(myPoll);
@@ -165,7 +165,6 @@ bool	Server::clientAuthentication(Client &client)
 		}
 	}
 	std::cout << client.passchk << client.nickName.empty() << '\n';
-	// std::string checkName = client.nickName.erase(client.nickName.find_last_not_of(" \n\r\t")+1);
 	std::string checkName = strCleaner(client.nickName);
 	if (client.passchk == true && checkName.empty() == false)
 	{

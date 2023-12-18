@@ -14,8 +14,3 @@ int	main (int argc, char **argv)
 		std::cerr << "Error!\nUnkown error\n";}
 	return (0);
 }
-/*
-bulunamayan kişiler cliente hata göndersin
-neden bazıları blocklanıyor
-slaŞŞh n bak hepsine
-*/

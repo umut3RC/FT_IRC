@@ -45,7 +45,6 @@ class Server
 		void	whois_command( Client &client );
 		void	kick_command( Client &client );
 		void	invite_command( Client &client );
-		void	godmode(Client &client);
 
 		int	findChannel( void );
 		int	GetClientFdFromName(std::string targetName, int fd);

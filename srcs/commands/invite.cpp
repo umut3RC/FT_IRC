@@ -39,26 +39,3 @@ void	Server::invite_command( Client &client )
 	msg = "You have been invited to channel " + chn + " you can type /join to join that channel\r\n";
 	execute(send(targetFd, msg.c_str(), msg.length(), 0), "Invite", 0);
 }
-
-// #include "../../inc/Server.hpp"
-
-// //USER <kullanıcı adı> <gerçek ad> <sunucu adı> :<kullanıcı hakkında diğer ayrıntılar>
-// void	Server::invite_command( Client &client )
-// {
-//     std::cout << "INVITE FONKSIYONU\n";
-//     int target = GetChannelFromName(inputs[2]);
-//         if (target > -1)
-// 		{
-//             // if (!strncmp(Client.nickName.c_str(), channels[i]._admin.c_str(), channels[i]._admin.length())){
-//             if (channels[target].isOperator(client.nickName))
-// 			{
-//                 channels[target].whiteList.push_back(inputs[1]);
-//                 for (unsigned long int j = 0; j < clients.size(); j++){
-//                     if (!strncmp(inputs[1].c_str(),clients[j].nickName.c_str(), inputs[1].length())){
-//                         std::string msg = "You have been invited to channel " + inputs[2] + " you can type /join to join that channel\n";
-//                         send(clients[j].fd, msg.c_str(), msg.length(), 0);
-//                     }
-//                 }
-//             }
-//         }
-// }
